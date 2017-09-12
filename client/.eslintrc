@@ -1,0 +1,18 @@
+{
+  "plugins": [
+    "react",
+    "eslint-plugin-promise",
+    "eslint-plugin-react"
+  ],
+  "parserOptions": {
+    "ecmaFeatures": {
+     // 启用 JSX
+     "jsx": true      
+    }    
+  },
+  "rules": {
+    "react/jsx-uses-react": [ "error" ],
+    "react/jsx-uses-vars": [ "error" ],
+    "react/react-in-jsx-scope": [ "error" ]
+  }
+}

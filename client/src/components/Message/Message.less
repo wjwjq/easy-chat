@@ -1,0 +1,40 @@
+.message-card{
+    &-item{
+        padding:.05rem .1rem;
+        border-bottom: 1px solid #eee;
+        > a{
+            display: flex;
+        }
+    }
+    &-avatar{
+        width: .37rem;
+        height: .37rem;
+    }
+    &-content{
+        flex: 1;
+        padding-left: .1rem;
+        dt{
+            display: flex;
+            line-height: .2rem;
+            strong{
+                font-size: .14rem;
+                flex: .6;
+                color: #333;
+                font-weight: 700;
+            }
+            i{
+                font-size: .1rem;
+                flex: .4;
+                text-align: right;
+            }
+        }
+        dd{
+            height: .17rem;
+            line-height: .17rem;
+            font-size: .12rem;
+            color: #333;
+            overflow: hidden;
+        }
+        
+    }
+}

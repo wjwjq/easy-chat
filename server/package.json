@@ -1,0 +1,22 @@
+{
+  "name": "easychatserver",
+  "version": "1.0.0",
+  "description": "easy talk server app",
+  "main": "server.js",
+  "author": "eagleagle",
+  "license": "MIT",
+  "scripts": {
+    "start": "node server",
+    "cluster": "node server_cluster"
+  },
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "cross-env": "^5.0.5",
+    "ejs": "^2.5.7",
+    "express": "^4.15.4",
+    "express-session": "^1.15.5",
+    "mysql2": "^1.4.2",
+    "sequelize": "^4.8.0",
+    "vhost": "^3.0.2"
+  }
+}

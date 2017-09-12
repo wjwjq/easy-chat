@@ -1,0 +1,146 @@
+.message {
+    &-box {
+        &-container {
+            .msg {
+                position: relative;
+                padding: 0 .1rem;
+                margin-top: .1rem;
+                .avatar {
+                    position: absolute;
+                    top: 0;
+                    width: .3rem;
+                    height: .3rem;
+                    img {
+                        display: block;
+                        width: 100%;
+                        height: 100%;
+                    }
+                }
+                p {
+                    position: relative;
+                    border-radius: .05rem;
+                    line-height: .2rem;
+                    padding: .05rem .08rem .05rem .07rem;
+                    font-size: .12rem;
+                    border: 1px solid #e9e9e9;
+                    background-color: #fff;
+                    color: #333;
+                    text-align: justify;
+                    word-break: break-word;
+                    &::before,
+                    &::after {
+                        position: absolute;
+                        top: .07rem;
+                        content: '';
+                        width: 0;
+                        height: 0;
+                        border-width: .06rem;
+                        border-style: solid;
+                    }
+                }
+                &-left {
+                    padding-left: .48rem;
+                    padding-right: .6rem;
+                    .avatar {
+                        left: .1rem;
+                    }
+                    p {
+                        &::before {
+                            left: -0.12rem;
+                            border-color: transparent #e9e9e9 transparent transparent;
+                        }
+                        &::after {
+                            left: -0.1rem;
+                            border-color: transparent #fff transparent transparent;
+                        }
+                    }
+                }
+                &-right {
+                    padding-left: .6rem;
+                    padding-right: .48rem;
+                    p {
+                        background-color: #9AEBA7;
+                        &::before {
+                            right: -0.12rem;
+                            border-color: transparent transparent transparent #e9e9e9;
+                        }
+                        &::after {
+                            right: -0.1rem;
+                            border-color: transparent transparent transparent #9AEBA7;
+                        }
+                    }
+                    .avatar {
+                        right: .1rem;
+                    }
+                }
+            }
+        }
+    }
+    &-send {
+        position: absolute;
+        bottom: 0;
+        z-index: 101;
+        width: 100%;
+        display: flex;
+        padding: .05rem 0;
+        border-top: .01rem solid #e9e9e9;
+        align-items: flex-end;
+        &-options-btn{
+            flex: .1;
+            text-align: center;
+            line-height: .3rem;
+            height: .3rem;
+            .icon{
+                font-size: .18rem;
+                &-micro{
+                    color: #09b323;
+                }
+                &-emoji{
+                    color: #f5e620;
+                }
+            }
+        }
+        &-input-box{
+            position: relative;
+            flex: .8;
+        }
+        &-input{
+            // position: absolute;
+            // top: 0;
+            // bottom: 0;
+            // left: 0;
+            // right: 0;
+           // opacity: 0;
+            display: block;
+            width: 100%;
+            word-break: break-word;
+            background-color: #fff; 
+            max-height: 1rem;
+            min-height: .3rem;
+            height: .3rem;
+            line-height: .18rem;
+            font-size: .12rem;
+            color: #434343;
+            padding: .05rem .1rem;
+            border: .01rem solid #999;
+            border-radius: .05rem;
+            &:focus{
+                border-radius: .05rem;
+            }
+        }
+        &-text{
+            display: block;
+            width: 100%;
+            word-break: break-word;
+            background-color: #fff; 
+            max-height: 1rem;
+            min-height: .3rem;
+            line-height: .2rem;
+            font-size: .12rem;
+            color: #434343;
+            padding: .05rem .1rem;
+            border: .01rem solid #999;
+            border-radius: .05rem;
+        }
+    }
+}

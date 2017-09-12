@@ -1,0 +1,39 @@
+nav {
+    position: fixed;
+    display: flex;
+    bottom: 0;
+    border-top: 1px solid #e7e7e7;
+    background-color: #fff;
+    width: 100%;
+    z-index: 100;
+    a{
+        padding-top:  .03rem;
+        flex: 1;
+        font-size: .14rem;
+        text-align: center;
+        display: block;
+        .icon{
+            display: none;
+            font-size: .16rem;
+            line-height: .16rem;
+            &:first-child{
+                display: block;
+            }
+        }
+        span{
+            display: block;
+            line-height: .24rem;
+        }
+        &.active{
+            color: #056805;
+            .icon{
+                &:last-of-type{
+                        display: block;
+                }
+                &:first-child{
+                    display: none;                        
+                }
+            }
+        }
+    }
+}
