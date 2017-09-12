@@ -21,7 +21,7 @@ export default class MessagesBoxView extends Component {
 
         return (
             <div>
-                <Header showTitle={friendInfo.remark || friendInfo.nickname} showBackButton={true} />
+                <Header title={friendInfo.remark || friendInfo.nickname} showBackButton={true} />
                 <MessageBox {...friendInfo} />
             </div>
         );

@@ -11,7 +11,7 @@ export default class Header extends Component {
     }
 
     render() {
-        const { showTitle, showBackButton } = this.props;
+        const { title, showBackButton } = this.props;
         return (
             <header>
                 <div className="handles left-handles">
@@ -19,7 +19,7 @@ export default class Header extends Component {
                 </div>
                 <div className="center-text">
                     <span>
-                        {showTitle || '消息'}
+                        {title || '消息'}
                     </span>    
                 </div>
                 <div className="handles right-handles">

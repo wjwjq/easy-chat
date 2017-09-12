@@ -32,7 +32,7 @@ export default class FriendDetailView extends Component {
         const { remark, nickname } = this.state.details;
         return (
             <div>
-                <Header showTitle={remark || nickname} showBackButton={true} />
+                <Header title={remark || nickname} showBackButton={true} />
                 <FriendDetail { ...this.state.details}/>
             </div>
         );

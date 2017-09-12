@@ -9,7 +9,7 @@ export default class FriendListView extends Component {
     render() {
         return (
             <div className="container messages">
-                <Header showTitle="好友"/>
+                <Header title="好友"/>
                 <FriendList />
                 <Nav />
             </div>

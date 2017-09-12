@@ -13,7 +13,7 @@ export default class MyView extends Component {
     render() {
         return (
             <div className="container messages">
-                <Header showTitle="我"/>
+                <Header title="我"/>
                 <My />
                 <Nav />
             </div>

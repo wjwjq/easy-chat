@@ -9,7 +9,7 @@ export default class MessageListView extends Component {
     render() {
         return (
             <div className="container messages">
-                <Header showTitle="消息"/>
+                <Header title="消息"/>
                 <MessageList />
                 <Nav />
             </div>
