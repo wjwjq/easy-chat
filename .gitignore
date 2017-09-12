@@ -4,4 +4,9 @@ typings
 tsconfig.json
 *.log
 dist
+server/public/app.*
+server/public/common.*
+server/public/index.*
+server/public/runtime.*
+server/public/style.*
 
