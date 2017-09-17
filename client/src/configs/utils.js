@@ -1,12 +1,3 @@
-export function query(data, userId) {
-    for (let j = 0; j < data.length; j++) {
-        if (data[j].userId === userId) {
-            return data[j];
-        }
-    }
-    return {};
-}
-
 export function dataFormat(date) {
     var o = {
         'M+': date.getMonth() + 1, //月份 

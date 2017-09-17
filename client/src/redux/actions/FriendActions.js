@@ -1,18 +1,31 @@
 import axios from 'axios';
 import api  from '../../configs/api';
 
+import {
+    FETCH_FRIENDS_REJECTED,
+    FETCH_FRIENDS_FULFILLED,
+    QUERY_FRIEND_REJECTED,
+    QUERY_FRIEND_FULFILLED,
+    ADD_FRIEND_REJECTED,
+    ADD_FRIEND_FULFILLED,
+    UPDATE_FRIEND_REJECTED,
+    UPDATE_FRIEND_FULFILLED,
+    DELETE_FRIEND_REJECTED,
+    DELETE_FRIEND_FULFILLED
+} from '../constant/';
+
 //获取当期用户所有的好友
 export function fetchFriends() {
     return function (dispatch){
         axios
             .get(api.friends)
             .then((res) => dispatch({
-                type: 'FETCH_FRIENDS_FULFILLED',
+                type: FETCH_FRIENDS_FULFILLED,
                 payload: res.data
             }))
             .catch((err) =>
                 dispatch({
-                    type: 'FETCH_FRIENDS_REJECTED',
+                    type: FETCH_FRIENDS_REJECTED,
                     payload: err
                 })
             );
@@ -27,18 +40,18 @@ export function queryFriend(userId) {
             .then((res) =>  {     
                 if (res.status = 'ok') {
                     dispatch({
-                        type: 'QUERY_FRIEND_FULFILLED',
+                        type: QUERY_FRIEND_FULFILLED,
                         payload: res.data
                     });
                 } else {
                     dispatch({
-                        type: 'QUERY_FRIEND_REJECTED',
+                        type: QUERY_FRIEND_REJECTED,
                         payload: res.data
                     });
                 }
             })
             .catch((err) => dispatch({
-                type: 'ADD_FRIEND_REJECTED',
+                type: QUERY_FRIEND_REJECTED,
                 payload: err
             }));
     };
@@ -52,18 +65,18 @@ export function addFriend(userId) {
             .then((res) =>  {     
                 if (res.status = 'ok') {
                     dispatch({
-                        type: 'ADD_FRIEND_FULFILLED',
+                        type: ADD_FRIEND_FULFILLED,
                         payload: res.data
                     });
                 } else {
                     dispatch({
-                        type: 'ADD_FRIEND_REJECTED',
+                        type: ADD_FRIEND_REJECTED,
                         payload: err
                     });
                 }
             })
             .catch((err) => dispatch({
-                type: 'ADD_FRIEND_REJECTED',
+                type: ADD_FRIEND_REJECTED,
                 payload: err
             }));
     };
@@ -79,18 +92,18 @@ export function updateFriend(userId, data) {
             .then((res) => {
                 if (res.status = 'ok') {
                     dispatch({
-                        type: 'UPDATE_FRIEND_FULFILLED',
+                        type: UPDATE_FRIEND_FULFILLED,
                         payload: res.data
                     });
                 } else {
                     dispatch({
-                        type: 'UPDATE_FRIEND_REJECTED',
-                        payload: 'fail'
+                        type: UPDATE_FRIEND_REJECTED,
+                        payload: fail
                     });                   
                 }
             })
             .catch((err) => dispatch({
-                type: 'UPDATE_FRIEND_REJECTED',
+                type: UPDATE_FRIEND_REJECTED,
                 payload: err
             }));
     };
@@ -104,19 +117,19 @@ export function deleteFriend(userId) {
             .then((res) => {
                 if (res.status = 'ok') {
                     dispatch({
-                        type: 'DELETE_FRIEND_FULFILLED',
+                        type: DELETE_FRIEND_FULFILLED,
                         payload: 'ok'
                     });
                 } else {
                     dispatch({
-                        type: 'DELETE_FRIEND_REJECTED',
+                        type: DELETE_FRIEND_REJECTED,
                         payload: 'fail'
                     });    
                 }
                
             })
             .catch((err) => dispatch({
-                type: 'DELETE_FRIEND_REJECTED',
+                type: DELETE_FRIEND_REJECTED,
                 payload: err
             }));
     };

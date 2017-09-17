@@ -1,6 +1,7 @@
 const webpack = require('webpack');
 const Merge = require('webpack-merge');
 const commonConfig = require('./webpack.common');
+const HtmlWebpackPlugin = require('html-webpack-plugin'); //生成index.html
 
 
 const getLocalIPv4 = () => {
@@ -28,9 +29,32 @@ const getPort = () => {
     return port;
 };
 
-
 module.exports = Merge(commonConfig, {
-
+    module: {
+        rules: [
+            {
+                test: /\.(png|jpg|gif|jpeg|svg)$/,
+                use: [{
+                    loader: 'url-loader',
+                    options: {
+                        limit: 8192,
+                        name: 'images/[hash:8].[name].[ext]'
+                    }
+                }],
+                exclude: /^node_modules$/
+            },
+            {
+                test: /\.(woff|woff2|eot|ttf)$/,
+                use: [{
+                    loader: 'url-loader',
+                    options: {
+                        limit: 100000,
+                        name: 'fonts/[name].[ext]'
+                    }
+                }]
+            }
+        ]
+    },
     devtool: 'inline-source-map',
     devServer: {
         proxy: { // proxy URLs to backend development server
@@ -38,6 +62,10 @@ module.exports = Merge(commonConfig, {
                 target: 'http://localhost:3000',
                 changeOrigin: true
                 // pathRewrite: { '^/api': '' }
+            },
+            '/images':{
+                target: 'http://localhost:3000',
+                changeOrigin: true
             }
         },
         host: '0.0.0.0',
@@ -58,6 +86,11 @@ module.exports = Merge(commonConfig, {
 
     //插件项
     plugins: [
+        new HtmlWebpackPlugin({
+            title: 'app',
+            template: './index.html',
+            chunksSortMode: 'dependency'
+        }),
         new webpack.HotModuleReplacementPlugin(),
         new webpack.NoEmitOnErrorsPlugin()
     ]

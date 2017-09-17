@@ -4,6 +4,9 @@ import Nav from '../../components/Nav/';
 import Header from '../../components/Header/Header';
 import FriendList from '../../components/Friend/List';
 
+import authenticate from '../../components/Auth/Auth';
+
+@authenticate
 export default class FriendListView extends Component {
     
     render() {

@@ -7,7 +7,8 @@
     "start": "yarn run dev",
     "dev": "cross-env NODE_ENV=development ./node_modules/.bin/webpack-dev-server --config webpack.dev.js  --progress --color",
     "build": "cross-env NODE_ENV=production ./node_modules/.bin/webpack -p --config webpack.prod.js --progress --colors",
-    "mv:dist": "find ../server/public/* | grep -v images | xargs rm -f && mv dist/* ../server/public/ && rm -rf dist"
+    "mv:dist": "find ../server/public/easychat/* | xargs rm -rf && mv dist/* ../server/public/ && rm -rf dist",
+    "build:mv": "yarn run build && yarn run mv:dist"
   },
   "license": "MIT",
   "dependencies": {

@@ -4,19 +4,22 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import config from '../../configs/config';
-import { query } from '../utils/';
+import _ from 'lodash';
 
-@connect((store) => {
-    return {
-        friends: store.friends.friends
-    };
-})
+import config from '../../configs/config';
+import pathConfigs from '../../routes/path';
+
+
+@connect((store, ownProps) => (
+    {
+        friend: _.find(store.friends.friends, { userId: ownProps.userId })
+    }
+))
 export default class MessageCard extends Component {
 
     static propTypes = {
         userId: PropTypes.string.isRequired,
-        msg: PropTypes.arrayOf(PropTypes.shape({
+        msgs: PropTypes.arrayOf(PropTypes.shape({
             content: PropTypes.string,
             publishTime: PropTypes.string
         }))
@@ -28,9 +31,9 @@ export default class MessageCard extends Component {
 
     render() {
 
-        const { friends, userId, msgs } = this.props;
+        const { friend, userId, msgs } = this.props;
         
-        const { avatarUrl, nickname, remark } = query(friends, userId);
+        const { avatarUrl, nickname, remark } = friend;
 
         const classPrefix = 'message-card';
 
@@ -38,7 +41,7 @@ export default class MessageCard extends Component {
         
         return (
             <li className={`${classPrefix}-item`}>
-                <Link to={`/messages/${userId}`}>
+                <Link to={`${pathConfigs.messages}/${userId}`}>
                     <img src={avatarUrl || config.defaultAvatar} className={`${classPrefix}-avatar`}/>
                     <dl className={`${classPrefix}-content`}>
                         <dt>

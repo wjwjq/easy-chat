@@ -1,0 +1,100 @@
+.user {
+    &-info {
+        &-item {
+            padding: .07rem .1rem;
+            border-bottom: .01rem solid #eee;
+            display: flex;
+            position: relative;
+        }
+        &-avatar {
+            width: .5rem;
+            height: .5rem;
+        }
+        &-content {
+            flex: 1;
+            padding-left: .1rem;
+            dt {
+                display: flex;
+                line-height: .2rem;
+                strong {
+                    font-size: .14rem;
+                    color: #333;
+                    font-weight: 700;
+                }
+                i {
+                    font-size: .12rem;
+                    margin-left: 0.05rem;
+                }
+                .icon {
+                    &-male {
+                        color: #2088e4;
+                    }
+                    &-female {
+                        color: #e43320;
+                    }
+                }
+            }
+            dd {
+                font-size: .1rem;
+                color: #666;
+                line-height: .15rem;
+            }
+        }
+        .user-icon-arrow-right {
+            line-height: .5rem;
+        }
+        &-contact {
+            margin: .1rem 0;
+            padding: .05rem 0 .05rem .1rem;
+            border-bottom: 1px solid #eee;
+            border-top: 1px solid #eee;
+            p {
+                display: flex;
+                border-bottom: 1px solid #eee;
+                font-size: .12rem;
+                &:last-child {
+                    border-bottom: none;
+                }
+                span {
+                    width: .5rem;
+                }
+                i {
+                    padding-left: .1rem;
+                    flex: .7;
+                }
+                a {
+                    text-decoration: underline;
+                    color: #2088e4
+                }
+            }
+        }
+    }
+
+    .user-icon-arrow-right {
+        position: absolute;
+        right: .1rem;
+        font-size: .16rem;
+        color: #454545;
+    }
+
+    &-line-wrap{
+        margin-top: .2rem; 
+        padding-left: .1rem;
+        border-top: .01rem solid #eee;
+        border-bottom: .01rem solid #eee;
+    }
+    &-line{
+        position: relative;
+        border-bottom: .01rem solid #eee;
+        padding: .07rem .1rem .07rem 0;
+        line-height: .22rem;
+        font-size: .14rem;
+        color: #333;
+        a{
+            display: block;
+        }
+        &:last-child{
+            border-bottom: none;
+        }
+    }
+}

@@ -28,8 +28,7 @@ if (process.env.NODE_ENV !== 'production'){
     middlewares =     applyMiddleware(
         historyMiddleware,
         promiseMiddleware(), 
-        thunkMiddleware, 
-        createLogger()
+        thunkMiddleware
     );
 }
 

@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import classnames from 'classnames';
 
 import { Link } from 'react-router-dom';
+import pathConfigs from '../../routes/path';
 
 export default class MessageShow extends Component {
 
@@ -29,7 +30,7 @@ export default class MessageShow extends Component {
                                 <div className={msgClasses} key={`userId-${msg.publishTime}`}>
                                     <p>{msg.content}</p>
                                     <div className="avatar">
-                                        <Link to={`/friends/${userId}`}>
+                                        <Link to={`${pathConfigs.friends}/${userId}`}>
                                             <img src={avatarUrl}/>
                                         </Link>
                                     </div>

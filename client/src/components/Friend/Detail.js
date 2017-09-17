@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import './Detail.less';
 
 import config from '../../configs/config';
+import pathConfigs from '../../routes/path';
 
 export default class FriendDetail extends Component {
     
@@ -30,7 +31,7 @@ export default class FriendDetail extends Component {
         const { avatarUrl, nickname, remark, telephone, address, gender, userId, username } = this.props;
         
         const genderClasses = classnames({
-            iconfont: true,
+            icon: true,
             'icon-male': !gender,
             'icon-female': gender
         });
@@ -38,7 +39,7 @@ export default class FriendDetail extends Component {
         return (
             <div className="detail-info">
                 <div className="detail-info-item">
-                    <img src={avatarUrl || config.defaultAvatarUrl}  className="detail-info-avatar"/>
+                    <img src={avatarUrl || config.defaultAvatar}  className="detail-info-avatar"/>
                     <dl className="detail-info-content">
                         <dt>{remark || nickname} <i className={genderClasses}></i></dt>
                         <dd>用户号: {username}</dd>
@@ -56,7 +57,7 @@ export default class FriendDetail extends Component {
                     </p>
                 </div>
                 <div className="btn-group">
-                    <Link to={`/messages/${userId}`} className="btn btn-green">发消息</Link>
+                    <Link to={`${pathConfigs.messages}/${userId}`} className="btn btn-green">发消息</Link>
                 </div>
             </div>
         );

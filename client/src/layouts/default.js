@@ -9,7 +9,7 @@ export default class Layout extends Component {
     render() {
         return (
             <section className="section">
-                {this.props.children}
+                { this.props.children }
             </section>
         );
     }

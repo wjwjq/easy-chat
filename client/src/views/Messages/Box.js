@@ -1,28 +1,30 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import Header from '../../components/Header/Header';
 import MessageBox from '../../components/Message/Box';
 
-import { query } from '../../components/utils/';
+import _ from 'lodash';
 
-@connect((store) => {
+@connect((store, ownProps) => {
     return {
-        friends: store.friends.friends
+        friend: _.find(store.friends.friends, { userId: ownProps.match.params.id }) 
     };
 })
 export default class MessagesBoxView extends Component {
+    
+    static propTypes = {
+        friend: PropTypes.object
+    }
 
     render() {
-        const { friends, match } = this.props;
-        const { id } = match.params;
-
-        const friendInfo = query(friends, id);
-
+        const { friend } = this.props;
+  
         return (
             <div>
-                <Header title={friendInfo.remark || friendInfo.nickname} showBackButton={true} />
-                <MessageBox {...friendInfo} />
+                <Header title={friend.remark || friend.nickname} showBackButton={true} />
+                <MessageBox {...friend} />
             </div>
         );
     }

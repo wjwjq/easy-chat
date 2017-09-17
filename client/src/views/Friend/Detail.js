@@ -4,36 +4,25 @@ import { connect } from 'react-redux';
 import Header from '../../components/Header/Header';
 import FriendDetail from '../../components/Friend/Detail';
 
-import { query } from '../../components/utils/';
+import _ from 'lodash';
 
-@connect((store) => {
+@connect((store, ownProps) => {
     return {
-        friends: store.friends.friends
+        friend: _.find(store.friends.friends, { userId: ownProps.match.params.id }) 
     };
 })
 export default class FriendDetailView extends Component {
     
     constructor(props) {
         super(props);
-        this.state = {
-            details: {}
-        };
-    }
-
-    componentDidMount() {
-        const { friends, match } = this.props;
-        const { id } = match.params;
-        this.setState({
-            details: query(friends, id)
-        });
     }
 
     render() {
-        const { remark, nickname } = this.state.details;
+        const { friend } = this.props;
         return (
             <div>
-                <Header title={remark || nickname} showBackButton={true} />
-                <FriendDetail { ...this.state.details}/>
+                <Header title={ friend.remark || friend.nickname} showBackButton={true} />
+                <FriendDetail { ...friend}/>
             </div>
         );
     }

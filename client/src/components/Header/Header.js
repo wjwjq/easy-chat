@@ -23,7 +23,6 @@ export default class Header extends Component {
                     </span>    
                 </div>
                 <div className="handles right-handles">
-                    ...
                 </div>
             </header>
         );

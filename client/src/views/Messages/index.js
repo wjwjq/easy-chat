@@ -4,6 +4,9 @@ import Nav from '../../components/Nav/';
 import Header from '../../components/Header/Header';
 import MessageList from '../../components/Message/List';
 
+import authenticate from '../../components/Auth/Auth';
+
+@authenticate
 export default class MessageListView extends Component {
 
     render() {

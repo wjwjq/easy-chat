@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 import config from '../../configs/config';
+import pathConfigs from '../../routes/path';
 
 export default class FriendCard extends Component {
     
@@ -25,7 +26,7 @@ export default class FriendCard extends Component {
         
         return (
             <li className={`${classPrefix}-item`}>
-                <Link to={`/friends/${userId}`}>
+                <Link to={`${pathConfigs.friends}/${userId}`}>
                     <img src={avatarUrl || config.defaultAvatar} className={`${classPrefix}-avatar`}/>
                     <dl className={`${classPrefix}-content`}>
                         <dt><strong>{remark || nickname}</strong></dt>

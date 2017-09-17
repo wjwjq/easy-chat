@@ -1,7 +1,9 @@
 import React from 'react';
-import createHistory from 'history/createBrowserHistory';
-const history = createHistory();
+import history from '../lib/history';
 
-export default function Back() {
+
+const Back = () => {
     return <i className="icon icon-arrow-left go-back" onClick={history.goBack}>返回</i>;
-}
+};
+
+export default Back;

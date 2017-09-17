@@ -1,5 +1,4 @@
 const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin'); //生成index.html
 const CleanWebpackPlugin = require('clean-webpack-plugin'); //在每次build之前，清空dist目录及其子目录
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const webpack = require('webpack');
@@ -35,6 +34,7 @@ module.exports = {
         chunkFilename: '[name].[hash].js'
     },
 
+    //配置文件模块解析
     module: {
         rules: [{
             test: /\.(js|jsx)$/,
@@ -70,28 +70,6 @@ module.exports = {
             include: [APP_PATH]
         },
         {
-            test: /\.(png|jpg|gif|jpeg)$/,
-            use: [{
-                loader: 'url-loader',
-                options: {
-                    limit: 8192,
-                    name: 'images/[hash:8].[name].[ext]'
-                }
-            }],
-            include: [APP_PATH],
-            exclude: /^node_modules$/
-        },
-        {
-            test: /\.(woff|woff2|eot|ttf|svg)$/,
-            use: {
-                loader: 'url-loader',
-                options: {
-                    limit: 100000,
-                    name: 'fonts/[name].[ext]'
-                }
-            }
-        },
-        {
             test: /\.html$/,
             use: ['html-loader'],
             include: [APP_PATH]
@@ -107,6 +85,8 @@ module.exports = {
     resolve: {
         extensions: ['.js', '.jsx', '.less', '.css'] //后缀名自动补全
     },
+    
+    //插件
     plugins: [
         // new webpack.ProvidePlugin({
         //     $: 'jquery',
@@ -119,11 +99,6 @@ module.exports = {
         }),
         new webpack.optimize.CommonsChunkPlugin({
             name: 'runtime'
-        }),
-        new HtmlWebpackPlugin({
-            title: 'app',
-            template: './index.html',
-            chunksSortMode: 'dependency'
         })
     ]
 };

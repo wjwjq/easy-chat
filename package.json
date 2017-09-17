@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "i:server": "cd client/ && yarn i",
+    "i:client": "cd server/ && yarn i",
+    "client": "cd client/ && yarn start",
+    "server": "cd server/ && yarn start"
   },
   "author": "eagleagle",
   "homepage": "",

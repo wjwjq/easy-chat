@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import classnames from 'classnames';
 
-import { dataFormat } from '../utils/';
+import { dataFormat } from '../../configs/utils';
 
 export default class MessageSend extends Component {
 
