@@ -1,7 +1,7 @@
 /**
  * 全局APP配置
  *          作用于： src/routes/path.js 、 webpack.prod.js
- * activeSubdomain
+ * activeServerSubdomain
  *          是否否端启动子域访问app,直接同APPNAME一起用于前端路由生成与访问规则
  *          详见：src/routes/path.js
  * APPNAME 
@@ -11,6 +11,6 @@
  */
 
 module.exports = {
-    activeSubdomain: true,
+    activeServerSubdomain: true,
     APPNAME : 'easychat'
 };

@@ -156,7 +156,7 @@ easychat.post('/api/auth/valid', (req, res) => {
     res.send(data);
 });
 
-easychat.post('/api/auth/signin', (req, res) => {
+easychat.post('/api/auth/signup', (req, res) => {
     const data = {
         'status': 'ok',
         'error': '',
@@ -164,7 +164,7 @@ easychat.post('/api/auth/signin', (req, res) => {
     };
     res.send(data);
 });
-easychat.post('/api/auth/signup', (req, res) => {
+easychat.post('/api/auth/signin', (req, res) => {
     const data = {
         'status': 'ok',
         'token': '123456aavss',

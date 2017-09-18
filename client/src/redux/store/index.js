@@ -14,7 +14,7 @@ export const history = createHistory();
 
 const historyMiddleware = routerMiddleware(history);
 let middlewares;
-if (process.env.NODE_ENV !== 'production'){
+if (process.env.NODE_ENV !== 'production') {
     middlewares = compose(
         applyMiddleware(
             historyMiddleware,

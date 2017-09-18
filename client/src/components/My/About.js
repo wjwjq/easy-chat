@@ -3,7 +3,7 @@ import React, { PureComponent } from 'react';
 import './About.less';
 
 export default class About extends PureComponent {
-    render(){
+    render() {
         return (
             <article className="about">
                 <p className="center">关于Easy Chat</p>

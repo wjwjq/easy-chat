@@ -16,7 +16,7 @@ import {
 
 //获取当期用户所有的好友
 export function fetchFriends() {
-    return function (dispatch){
+    return function (dispatch) {
         axios
             .get(api.friends)
             .then((res) => dispatch({

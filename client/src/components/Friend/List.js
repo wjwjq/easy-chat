@@ -38,7 +38,7 @@ export default class FriendList extends Component {
     friendsSort() {
         const { friends } = this.props;
         let tempFriends =  {};
-        for (let i =0; i < friends.length; i++){
+        for (let i =0; i < friends.length; i++) {
             if (tempFriends[friends[i].order]) {
                 tempFriends[friends[i].order].push(friends[i]);
             } else {

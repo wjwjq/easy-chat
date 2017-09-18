@@ -9,7 +9,7 @@ const getLocalIPv4 = () => {
     const interfaces = os.networkInterfaces();
     let details;
     for (let key in interfaces) {
-        for (let i = 0; i < interfaces[key].length; i++){
+        for (let i = 0; i < interfaces[key].length; i++) {
             details = interfaces[key][i];
             if (details.family === 'IPv4' && (key === 'eth0' || key === '以太网')) {
                 return details.address;

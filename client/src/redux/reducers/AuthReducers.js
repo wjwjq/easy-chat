@@ -21,13 +21,13 @@ import {
 export default function reducers(state = initalState, action) {
     switch (action.type) {
         //登录
-        case SIGN_UP_REJECTED:
+        case SIGN_IN_REJECTED:
             return {
                 ...state,
                 logining: false,
                 error: action.payload
             };
-        case SIGN_UP_FULFILLED:
+        case SIGN_IN_FULFILLED:
             return {
                 ...state,
                 logined: true,
@@ -36,12 +36,12 @@ export default function reducers(state = initalState, action) {
                 isLogined: true
             };
         //注册
-        case SIGN_IN_REJECTED:
+        case SIGN_UP_REJECTED:
             return {
                 ...state,
                 error: action.payload
             };
-        case SIGN_IN_FULFILLED:
+        case SIGN_UP_FULFILLED:
             return {
                 ...state,
                 isRegistered: action.payload

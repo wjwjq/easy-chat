@@ -9,7 +9,7 @@ import authenticate from '../../components/Auth/Auth';
 @authenticate
 export default class MyView extends Component {
     
-    constructor(props){
+    constructor(props) {
         super(props);
     }
 

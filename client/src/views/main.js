@@ -5,7 +5,7 @@ import Nav from '../../components/Nav/';
 
 export default class MyView extends Component {
     
-    constructor(props){
+    constructor(props) {
         super(props);
     }
 

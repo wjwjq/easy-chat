@@ -1,7 +1,7 @@
 const global  = require('../../global');
 let route;
 
-if (global.activeSubdomain){
+if (global.activeServerSubdomain) {
     route = {
         welcome: '/welcome',
         signup: '/signup',

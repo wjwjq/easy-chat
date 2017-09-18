@@ -14,16 +14,16 @@ import {
 } from '../constant/';
 
 //登录
-export function signUp(userInfo){
-    return function (dispatch){
+export function signIn(userInfo) {
+    return function (dispatch) {
         axios
-            .post(api.auth.signup,{
+            .post(api.auth.signin,{
                 data: userInfo
             })
             .then((res) => {
 
           
-                if (res.data.status === 'ok'){
+                if (res.data.status === 'ok') {
                     const token = res.data.token;
                     
                     //须确保 好友数据返回必须优先于消息数据返回
@@ -34,42 +34,12 @@ export function signUp(userInfo){
                     dispatch(fetchMessages());
                     
                     dispatch({
-                        type: SIGN_UP_FULFILLED,
+                        type: SIGN_IN_FULFILLED,
                         payload: { token,  user : Object.assign({}, userInfo.user, res.data.user) }
                     });
 
                     //todo: setCookies Or localStorage
                    
-                } else {
-                    dispatch({
-                        type: SIGN_UP_REJECTED,
-                        payload: res.data.error
-                    });
-                }
-            })
-            .catch((err) => {
-                dispatch({
-                    type: SIGN_UP_REJECTED,
-                    payload: err.message
-                });
-            });        
-    };
-}
-
-//注册
-export function signIn(userInfo){
-    return function (dispatch){
-        axios
-            .post(api.auth.signin,{
-                data: userInfo
-            })
-            .then((res) => {
-          
-                if (res.data.status === 'ok'){
-                    dispatch({
-                        type: SIGN_IN_FULFILLED,
-                        payload: true
-                    });
                 } else {
                     dispatch({
                         type: SIGN_IN_REJECTED,
@@ -86,16 +56,46 @@ export function signIn(userInfo){
     };
 }
 
+//注册
+export function signUp(userInfo) {
+    return function (dispatch) {
+        axios
+            .post(api.auth.signup,{
+                data: userInfo
+            })
+            .then((res) => {
+          
+                if (res.data.status === 'ok') {
+                    dispatch({
+                        type: SIGN_UP_FULFILLED,
+                        payload: true
+                    });
+                } else {
+                    dispatch({
+                        type: SIGN_UP_REJECTED,
+                        payload: res.data.error
+                    });
+                }
+            })
+            .catch((err) => {
+                dispatch({
+                    type: SIGN_UP_REJECTED,
+                    payload: err.message
+                });
+            });        
+    };
+}
+
 //获取验证码
-export function getValid(username, type){
-    return function (dispatch){
+export function getValid(username, type) {
+    return function (dispatch) {
         axios
             .post(api.auth.valid,{
                 username,
                 type
             })
             .then((res) => {
-                if (res.data.status === 'ok'){
+                if (res.data.status === 'ok') {
                     dispatch({
                         type: GET_VALID_FULFILLED,
                         payload: res.data.valid

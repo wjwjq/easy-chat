@@ -12,7 +12,7 @@ import {
 
 //抓取所有信息列表
 export function fetchMessages() {
-    return function (dispatch){
+    return function (dispatch) {
         axios
             .get(api.messages)
             .then((res) => {
@@ -33,7 +33,7 @@ export function fetchMessages() {
 
 //添加信息
 export function addMessage(userId, data) {
-    return function (dispatch){
+    return function (dispatch) {
         axios
             .post(`${api.messages}/${userId}`,{
                 data
@@ -63,7 +63,7 @@ export function addMessage(userId, data) {
 
 //删除信息
 export function deleteMessage(userId) {
-    return function (dispatch){
+    return function (dispatch) {
         axios
             .post(`${api.messages}/${userId}`,{
                 data

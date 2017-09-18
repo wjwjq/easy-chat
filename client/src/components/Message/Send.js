@@ -33,8 +33,8 @@ export default class MessageSend extends Component {
     }
 
 
-    handleKeydown(e){
-        if (e.keyCode === 13){
+    handleKeydown(e) {
+        if (e.keyCode === 13) {
             e.preventDefault();
             const data = {
                 from: 0,

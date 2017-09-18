@@ -23,7 +23,7 @@ export default class FriendDetail extends Component {
         address: PropTypes.string
     }
 
-    constructor(props){
+    constructor(props) {
         super(props);
     }
 

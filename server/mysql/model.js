@@ -1,3 +1,4 @@
+//MySql 暂未使用
 const dbConfig = require('./configs.js').db;
 const Sequelize = require('sequelize');
 const sequelize = new Sequelize(dbConfig.dbname, dbConfig.username, dbConfig.password, dbConfig.connect);

@@ -5,7 +5,7 @@ import './styles.less';
 import pathConfigs from '../../routes/path';
 
 export default class Nav extends Component {
-    constructor(props){
+    constructor(props) {
         super(props);
     }
 
