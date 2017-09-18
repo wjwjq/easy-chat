@@ -1,7 +1,7 @@
 //MySql 暂未使用
-const dbConfig = require('./configs.js').db;
+const dbConfig = require('./configs.js').mysql;
 const Sequelize = require('sequelize');
-const sequelize = new Sequelize(dbConfig.dbname, dbConfig.username, dbConfig.password, dbConfig.connect);
+const sequelize = new Sequelize(dbConfig.database, dbConfig.username, dbConfig.password, dbConfig.connect);
 
 //用户表
 const User = sequelize.define('user', {

@@ -1,4 +1,4 @@
-# Easy Chat
+# Easy Chat (developing)
 
 ## [前端](./client)
 

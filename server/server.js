@@ -3,8 +3,31 @@ const path = require('path');
 const favicon = require('serve-favicon');
 const express = require('express');
 const bodyParser = require('body-parser');
-// const session = require('express-session');
+const session = require('express-session');
 const vhost = require('vhost');
+
+global.dbHelper = require('./mongodb/dbHelper');
+
+// const Users = global.dbHelper.getModel('users');
+// const user = new Users();
+// Object.assign(user, {
+//     'address': '四川 成都',
+//     'avatarUrl': '',
+//     'gender': 1,
+//     'nickname': 'test A-1',
+//     'order': 'A',
+//     'password': '',
+//     'remark': '风',
+//     'telephone': '18990655830',
+//     'userId': '5',
+//     'username': 'eagle@easychat.com'
+// });
+// user.save((err) => {
+//     console.info(err);
+// });
+// Users.find({}, (err, data) => {
+//     console.info(data);
+// });
 
 const app = express();
 
@@ -28,7 +51,6 @@ app.use(vhost('admin.*', admin));
 admin.get('/', (req, res) => {
     res.send('hello admin');
 });
-
 
 var easychat = express.Router();
 app.use(vhost('easychat.*', easychat));
@@ -146,6 +168,10 @@ easychat.get('/api/friends', (req, res) => {
     }, 300);
 });
 
+easychat.post('/api/users', (req, res) => {
+
+});
+
 easychat.post('/api/auth/valid', (req, res) => {
     const data = {
         'status': 'ok',
@@ -165,24 +191,27 @@ easychat.post('/api/auth/signup', (req, res) => {
     res.send(data);
 });
 easychat.post('/api/auth/signin', (req, res) => {
-    const data = {
-        'status': 'ok',
-        'token': '123456aavss',
-        'expires': '2600',
-        'user': {
-            'address': '四川 成都',
-            'avatarUrl': '',
-            'gender': 1,
-            'nickname': 'test A-1',
-            'order': 'A',
-            'password': '',
-            'remark': '风',
-            'telephone': '18990655830',
-            'userId': '5',
-            'username': 'eagle@easychat.com'
+    const body = req.body;
+    console.info(body);
+    const Users = dbHelper.getModel('users');
+    const user = new Users();
+    Object.assign(user, body);
+    user.save().then((err, msg) => {
+        console.info(msg);
+        let data;
+        if (err) {
+            data = {
+                'status': 'error',
+                'error': '注册失败'
+            };
+        } else {
+            data = {
+                'status': 'ok',
+                'error': ''
+            };
         }
-    };
-    res.send(data);
+        res.send(data);
+    });
 });
 
 // create easychat routes; these can be defined anywhere
@@ -190,9 +219,6 @@ easychat.get('*', (req, res) => {
     console.info('loading from easychat domain');
     res.sendFile(path.resolve(__dirname) + '/public/easychat/index.html');
 });
-
-
-
 
 app.post('/api/messages/:id', (req, res) => {
     const data = {
@@ -307,7 +333,7 @@ app.get('/api/friends', (req, res) => {
         res.json(data);
     }, 300);
 });
-
+const valid = '1234';
 app.post('/api/auth/valid', (req, res) => {
     const data = {
         'status': 'ok',
@@ -318,33 +344,71 @@ app.post('/api/auth/valid', (req, res) => {
     res.send(data);
 });
 
+//登录
 app.post('/api/auth/signin', (req, res) => {
-    const data = {
-        'status': 'ok',
-        'error': '',
-        'token': '123456aavss'
-    };
-    res.send(data);
+    const userInfo = req.body.data.user;
+    const postValid = req.body.data.valid;
+    if (postValid === valid) {
+        const Users = dbHelper.getModel('users');
+        Users.findOne({ username: userInfo.username },function (err, user) {
+            let data;
+            if (err) {
+                data = {
+                    'status': 'error',
+                    'error': '登录失败'
+                };
+            } 
+            if (user && user.password === userInfo.password) {
+                data = {
+                    'status': 'ok',
+                    'error': '',
+                    'token': 'aaa1234'
+                };
+            } else {
+                data = {
+                    'status': 'error',
+                    'error': '账号或密码错误'
+                };
+            }
+            res.send(data);
+        });
+    } else {
+        res.send({
+            'status': 'error',
+            'error': '验证码已过期或错误'
+        });
+    }
 });
+//注册
 app.post('/api/auth/signup', (req, res) => {
-    const data = {
-        'status': 'ok',
-        'token': '123456aavss',
-        'expires': '2600',
-        'user': {
-            'address': '四川 成都',
-            'avatarUrl': '',
-            'gender': 1,
-            'nickname': 'test A-1',
-            'order': 'A',
-            'password': '',
-            'remark': '风',
-            'telephone': '18990655830',
-            'userId': '5',
-            'username': 'eagle@easychat.com'
-        }
-    };
-    res.send(data);
+    const userInfo = req.body.data.user;
+    const postValid = req.body.data.valid;
+    if (postValid === valid) {
+        const Users = dbHelper.getModel('users');
+        const user = new Users();
+        Object.assign(user, userInfo);
+        user.save((err, msg) => {
+            console.info(msg);
+            let data;
+            if (err) {
+                data = {
+                    'status': 'error',
+                    'error': '注册失败'
+                };
+            } else {
+                data = {
+                    'status': 'ok',
+                    'error': ''
+                };
+            }
+            res.send(data);
+        });
+    } else {
+        res.send({
+            'status': 'error',
+            'error': '验证码已过期或错误'
+        });
+    }
 });
 
 //出现无限死循环 应改为前端渲染

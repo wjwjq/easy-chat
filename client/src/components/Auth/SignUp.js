@@ -181,9 +181,7 @@ export default class SignUp extends Component {
         
     }
     componentWillReceiveProps(nextProps) {
-        console.info(this.props);
-        console.info(nextProps.isRegistered);
-        nextProps.isRegistered && this.props.history.push('signup');
+        nextProps.isRegistered && this.props.history.push('signin');
     }
 
     render() {

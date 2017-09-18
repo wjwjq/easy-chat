@@ -12,7 +12,7 @@ module.exports = {
         'username': String
     },
     messages: {
-        'from': String, 
+        'from': String,
         'to': String,
         'content': String,
         'publishTime': String
