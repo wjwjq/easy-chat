@@ -4,15 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "i:server": "cd client/ && yarn i",
-    "i:client": "cd server/ && yarn i",
+    "i:server": "cd client/ && yarn install",
+    "i:client": "cd server/ && yarn install",
     "client": "cd client/ && yarn start",
-    "server": "cd server/ && yarn start"
+    "server": "cd ../server/ && yarn start"
   },
-  "author": "eagleagle",
+  "author": "wjwjq",
   "homepage": "",
   "repository": {
-    "url": "https://github.com/eagleagle/easy-chat"
+    "url": "https://github.com/wjwjq/easy-chat"
   },
   "engines": {
     "node": ">=8.0.0"

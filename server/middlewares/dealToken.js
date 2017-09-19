@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const credentials =  require('../credentials');
 const parseToken = (req) =>  (req.body &&  req.body.access_token) || (req.query && req.query.access_token) || (req.headers['x-access-token']);
+
 exports.hasToken = function (token) {
     /* todo: 1. 验证token是否存在
      *         2. token是否过期

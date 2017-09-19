@@ -1,5 +1,6 @@
 import axios from 'axios';
 import api  from '../../configs/api';
+import storage from '../../configs/storage';
 
 import {
     FETCH_FRIENDS_REJECTED,
@@ -13,6 +14,8 @@ import {
     DELETE_FRIEND_REJECTED,
     DELETE_FRIEND_FULFILLED
 } from '../constant/';
+
+axios.defaults.headers.common['x-access-token'] = storage.getItem('access_token');
 
 //获取当期用户所有的好友
 export function fetchFriends() {

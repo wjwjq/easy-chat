@@ -1,6 +1,6 @@
 import axios from 'axios';
 import api  from '../../configs/api';
-
+// import { getToken }  from '../../configs/storage';
 import {
     FETCH_MESSAGES_REJECTED,
     FETCH_MESSAGES_FULFILLED,

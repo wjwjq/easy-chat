@@ -3,6 +3,7 @@ import axios from 'axios';
 
 import { fetchFriends } from './FriendActions';
 import { fetchMessages } from './MessageActions';
+import storage from '../../configs/storage';
 
 import {
     SIGN_UP_REJECTED,
@@ -21,31 +22,35 @@ export function signIn(userInfo) {
                 data: userInfo
             })
             .then((res) => {
-
-          
-                if (res.data.status === 200) {
-                    const token = res.data.token;
-                    
-                    //须确保 好友数据返回必须优先于消息数据返回
-                    //抓取用户好友
-                    dispatch(fetchFriends());
-                     
-                    //抓取用户已有消息历史
-                    dispatch(fetchMessages());
-                    
-                    dispatch({
-                        type: SIGN_IN_FULFILLED,
-                        payload: { token,  user : Object.assign({}, userInfo.user, res.data.user) }
-                    });
-
-                    //todo: setCookies Or localStorage
-                   
-                } else {
-                    dispatch({
+                if (res.data.status === 204) {
+                    return dispatch({
                         type: SIGN_IN_REJECTED,
-                        payload: res.data.error
+                        payload: '重定向'
                     });
                 }
+                
+                if (res.data.status !== 200) {
+                    return dispatch({
+                        type: SIGN_IN_REJECTED,
+                        payload: res.data.message
+                    });
+                } 
+
+                const token = res.data.token;
+                //setCookies Or localStorage
+                storage.setItem('access_token', token);
+
+                dispatch({
+                    type: SIGN_IN_FULFILLED,
+                    payload: { token,  user : Object.assign({}, userInfo.user, res.data.user) }
+                });
+
+                //须确保 好友数据返回必须优先于消息数据返回
+                //抓取用户好友
+                dispatch(fetchFriends());
+                 
+                //抓取用户已有消息历史
+                dispatch(fetchMessages());
             })
             .catch((err) => {
                 dispatch({
@@ -73,7 +78,7 @@ export function signUp(userInfo) {
                 } else {
                     dispatch({
                         type: SIGN_UP_REJECTED,
-                        payload: res.data.error
+                        payload: res.data.message
                     });
                 }
             })
@@ -104,7 +109,7 @@ export function getValid(username, type) {
                 } else {
                     dispatch({
                         type: GET_VALID_REJECTED,
-                        payload: res.data.error
+                        payload: res.data.message
                     });
                 }
             })
