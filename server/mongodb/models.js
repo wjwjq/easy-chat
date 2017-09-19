@@ -9,7 +9,10 @@ module.exports = {
         'telephone': String,
         'userId': String,
         'password': String,
-        'username': String
+        'username': {
+            type: String,
+            unique: true
+        }
     },
     messages: {
         'from': String,

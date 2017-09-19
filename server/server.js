@@ -26,6 +26,21 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 app.use(bodyParser.json());
+app.use(require('cookie-parser')(credentials.cookieSecret));
+app.use(session({
+    resave: false,
+    saveUninitialized: false,
+    secret: credentials.cookieSecret
+    // store: new MongoStore({
+    //     url: credentials.mongo.development.connectionString
+    // })
+}));
+//prevent CSRF
+app.use(require('csurf')());
+app.use(function (req, res, next) {
+    res.locals._csrfToken = req.csrfToken;
+    next();
+});
 //解析favicon
 app.use(favicon(__dirname + '/public/images/favicon.ico'));
 //设置静态资源路径
@@ -47,13 +62,21 @@ app.use(vhost('easychat.*', easychat));
 
 //注入路由
 appRoutes(easychat);
+easychat.get('*', (req, res) => {
+    console.info('loading from easychat domain');
+    res.sendFile(path.resolve(__dirname) + '/public/easychat/index.html');
+});
+
 appRoutes(app);
 
 //网站主页
 app.get('/', (req, res) => {
-    res.locals.title = 'server';
-    // res.render('index');
-    res.redirect('http://easychat.localhost:3000/welcome');
+    res.locals.title = "wjq\'s blog";
+    res.locals.items = [{
+        href: 'http://easychat.localhost:3000/welcome',
+        name: 'easychat'
+    }];
+    res.render('index');
 });
 
 app.use(function (req, res, next) {
@@ -61,7 +84,6 @@ app.use(function (req, res, next) {
     err.status = 404;
     next(err);
 });
-
 
 app.use(function (err, req, res) {
     // set locals, only providing error in development

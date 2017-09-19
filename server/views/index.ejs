@@ -4,7 +4,15 @@
     <title><%= title %></title>
   </head>
   <body>
-    <h1><%= title %></h1>
     <p>Welcome to <%= title %></p>
+    <ul>
+      <% for(var i = 0; i < items.length; i++) {%>
+        <li>
+          <a href=<%= items[i].href %> >
+            <%= items[i].name %>
+          </a>
+        </li>
+        <%} %>
+    </ul>
   </body>
 </html>

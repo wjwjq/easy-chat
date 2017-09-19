@@ -2,6 +2,7 @@
 const auth = require('../handlers/auth');
 const friends = require('../handlers/friends');
 const messages = require('../handlers/messages');
+const users = require('../handlers/users');
 const upgradeYourBrowser = require('../handlers/upgradeYourBrowser');
 
 module.exports = function (app) {
@@ -17,7 +18,9 @@ module.exports = function (app) {
     app.put('/api/friends/:id', friends.putFriend);
     app.delete('/api/friends/:id', friends.deleteFriend);
     app.get('/api/friends', friends.getFriends);
-  
+    
+    //获取某个用户是否存在
+    app.get('/api/users/:id', users.getUser);
 
     //messages
     app.get('/api/messages/:id', messages.getMessage);

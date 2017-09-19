@@ -47,7 +47,7 @@ exports.getMessage = function (req, res) {
 //添加指定好友
 exports.postMessage = function (req, res) {
     const data = {
-        status: 'ok'
+        status: 200
     };
     res.json(data);
 };
