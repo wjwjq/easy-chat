@@ -8,6 +8,9 @@
   "scripts": {
     "start": "node server",
     "cluster": "node server_cluster",
+    "server": "pm2 server",
+    "server:cluster": "pm2 server_cluster",
+    "hot": "nodemon server",
     "clear:public": "find ./public/* | grep -v images |xargs rm -f"
   },
   "dependencies": {

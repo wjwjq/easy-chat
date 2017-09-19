@@ -4,3 +4,4 @@ typings
 tsconfig.json
 *.log
 dist
+backup.js
