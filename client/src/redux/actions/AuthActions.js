@@ -38,6 +38,7 @@ export function signIn(userInfo) {
 
                 const token = res.data.token;
                 //setCookies Or localStorage
+                console.info(res.data);
                 storage.setItem('access_token', token);
 
                 dispatch({

@@ -1,17 +1,12 @@
 // 返回本地存储对象方法
 export default {
-    setItem: function () {
-        const args = Aarry.prototype.slice(arguments);
-        const len = args.length;
-        if (Object.prototype.toString()) {
-            args.map(function (item) {
+    setItem: function (key, value) {
+        if (key && value) {
+            localStorage.setItem(key, value);
+        } else {
+            key.length &&  key.map(function (item) {
                 localStorage.setItem(item['key'], item['value']);
             });
-        } else {
-            if (len < 2) {
-                throw new Error('need two params; one for key, another for value');
-            }
-            localStorage.setItem(args[0], args[1]);
         }
     },
     getItem: function () {
