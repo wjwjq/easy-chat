@@ -1,3 +1,4 @@
+//格式化用户信息
 exports.formatUserData = function (obj, key) {
     if (Array.isArray(key)) {
         key.map((k) => {
@@ -11,8 +12,9 @@ exports.formatUserData = function (obj, key) {
     return obj;
 };
 
+//验证相关
 exports.validFunc = {
     phoneNumber: function (phoneNumber) {
-        return /assxx/g.test(phoneNumber);
+        return /^1[345789][\d]{9}$/g.test(phoneNumber);
     }
 };

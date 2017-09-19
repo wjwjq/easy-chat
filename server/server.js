@@ -5,7 +5,16 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const vhost = require('vhost');
-global.dbHelper = require('./mongodb/dbHelper');
+const credentials = require('./credentials');
+const mongoose = require('mongoose');
+//链接MongoDB
+const mongo = require('./configs').mongo;
+//const url = `mongodb://${mongo.username}:${mongo.password}@${mongo.host}:${mongo.port}/${mongo.database}`,{ useMongoClient: true };
+const url = `mongodb://${mongo.host}:${mongo.port}/${mongo.database}`;
+global.db = mongoose.connect(url,{ useMongoClient: true });
+mongoose.connection.on('error', function () {
+    console.info('Error: Could not connect to MongoDB. Did you forget to run `mongod`?');
+});
 
 //引入前端路由
 const appRoutes = require('./app/routes/');
@@ -36,11 +45,11 @@ app.use(session({
     // })
 }));
 //prevent CSRF
-app.use(require('csurf')());
-app.use(function (req, res, next) {
-    res.locals._csrfToken = req.csrfToken;
-    next();
-});
+// app.use(require('csurf')());
+// app.use(function (req, res, next) {
+//     res.locals._csrfToken = req.csrfToken;
+//     next();
+// });
 //解析favicon
 app.use(favicon(__dirname + '/public/images/favicon.ico'));
 //设置静态资源路径

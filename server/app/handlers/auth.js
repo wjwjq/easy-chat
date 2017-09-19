@@ -1,54 +1,75 @@
-const valid = '1234';
-const utils = require('../../utils');
-
+const Users = require('../../models/user');
+const jwt = require('jsonwebtoken');
+const utils = require('../../utils/');
 const formatUserData = utils.formatUserData;
 const validFunc = utils.validFunc;
-
+const credentials = require('../../credentials');
+const valid = '1234';
 //登录
-exports.signin =  function (req, res) {
-    const { username, password } = req.body.data.user;
+exports.signin = function (req, res) {
+    const {
+        username,
+        password
+    } = req.body.data.user;
     const postValid = req.body.data.valid;
+
+    if (username === '' || password === '') {
+        return res.json({
+            'status': 204,
+            'message': '账号或密码错误'
+        });
+    }
     //验证是否正确
-    if (postValid === valid) {
-        //手机号格式验证
-        if (validFunc.phoneNumber(username)) {
-            const Users = dbHelper.getModel('users');
-            Users.findOne({ username },function (err, user) {
-                let data;
-                if (err) {
-                    data = {
-                        'status': 204,
-                        'message': '账号或密码不正确'
-                    };
-                } 
-                //密码验证
-                if (user && user.password === password) {
-                    data = {
-                        'status': 200,
-                        'message': '登录成功',
-                        'token': 'aaa1234',
-                        'user': formatUserData(user._doc, 'password')
-                    };
-                } else {
-                    data = {
-                        'status': 204,
-                        'message': '账号或密码不正确'
-                    };
-                }
-                res.send(data);
-            });
-        } else {
-            res.send({
-                'status': 204,
-                'message': '用户名格式错误'
-            });
-        }
-    } else {
-        res.send({
+    if (postValid !== valid) {
+        return res.json({
             'status': 204,
             'message': '验证码已过期或错误'
         });
     }
+    //手机号格式验证
+    if (!validFunc.phoneNumber(username)) {
+        return res.json({
+            'status': 204,
+            'message': '用户名格式错误'
+        });
+    }
+
+    //密码验证
+    Users.findOne({
+        username
+    }, function (err, user) {
+        if (err) {
+            return res.json({
+                'status': 204,
+                'message': '账号或密码不正确'
+            });
+        }
+        //密码验证
+        user.comparePassword(password, function (isMatch) {
+            if (!isMatch) {
+                return res.json({
+                    'status': 204,
+                    'message': '账号或密码不正确'
+                });
+            }
+            //生成token
+            const token = jwt.sign({
+                username,
+                password,
+                iat: Math.floor(Date.now() / 1000) - 30
+            }, credentials.token.secret, {
+                expiresIn: credentials.token.expires
+            });
+            
+            console.info('genrator', token);
+            return res.json({
+                'status': 200,
+                'message': '登录成功',
+                'user': formatUserData(user._doc, 'password'),
+                token
+            });
+        });
+    });
 };
 
 //注册
@@ -56,41 +77,36 @@ exports.signup = function (req, res) {
     const userInfo = req.body.data.user;
     const postValid = req.body.data.valid;
     //验证是否正确
-    if (postValid === valid) {
-        const Users = dbHelper.getModel('users');
-        const user = new Users();
-        Object.assign(user, userInfo);
-        user.save((err, msg) => {
-            console.info(msg);
-            let data;
-            if (err) {
-                data = {
-                    'status': 204,
-                    'message': '用户名已存在'
-                };
-            } else {
-                data = {
-                    'status': 200,
-                    'message': '注册成功'
-                };
-            }
-            res.send(data);
-        });
-    } else {
-        res.send({
+    if (postValid !== valid) {
+        return res.json({
             'status': 204,
             'message': '验证码已过期或错误'
         });
     }
+    //创建用户
+    const user = new Users();
+    Object.assign(user, userInfo);
+    user.save((err, msg) => {
+        console.info(msg);
+        if (err) {
+            return res.json({
+                'status': 204,
+                'message': '用户名已存在'
+            });
+        }
+        return res.json({
+            'status': 200,
+            'message': '注册成功'
+        });
+    });
 };
 
 //验证码
 exports.valid = function (req, res) {
-    const data = {
+    res.json({
         'status': 200,
         'token': '123456aavss',
         'valid': '123456',
         'exprires': '300'
-    };
-    res.send(data);
+    });
 };

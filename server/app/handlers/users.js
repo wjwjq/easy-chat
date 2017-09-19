@@ -1,7 +1,7 @@
+const Users = require('../../models/user');
 
 exports.getUser = function (req, res) {
     const { username } = req.body;
-    const Users = dbHelper.getModel('users');
     Users.findOne({ username }, function (err, data) {
         if (err) {
             console.info(err);

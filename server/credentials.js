@@ -1,4 +1,8 @@
 //服务器端验证加密凭证
-mmodule.exports = {
-    cookieSecret: 'cookiesecret'
+module.exports = {
+    cookieSecret:  'easychat',
+    token: {
+        secret:  'easychat',
+        expires: 1000 * 60 * 3
+    }
 };
