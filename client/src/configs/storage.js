@@ -5,7 +5,7 @@ export default {
         const len = args.length;
         if (Object.prototype.toString()) {
             args.map(function (item) {
-                localStorage.setItem(item['key'], item[value]);
+                localStorage.setItem(item['key'], item['value']);
             });
         } else {
             if (len < 2) {
