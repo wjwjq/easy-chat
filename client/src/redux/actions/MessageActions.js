@@ -39,7 +39,7 @@ export function addMessage(userId, data) {
                 data
             })
             .then((res) => {
-                if (res.data.status === 'ok') {
+                if (res.data.status === 200) {
                     dispatch({
                         type: ADD_MESSAGE_FULFILLED,
                         payload: {
@@ -69,7 +69,7 @@ export function deleteMessage(userId) {
                 data
             })
             .then((res) => {
-                if (res.data.status === 'ok') {
+                if (res.data.status === 200) {
                     dispatch({
                         type: DELETE_MESSAGE_FULFILLED,
                         payload: {

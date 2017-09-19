@@ -23,7 +23,7 @@ export function signIn(userInfo) {
             .then((res) => {
 
           
-                if (res.data.status === 'ok') {
+                if (res.data.status === 200) {
                     const token = res.data.token;
                     
                     //须确保 好友数据返回必须优先于消息数据返回
@@ -65,7 +65,7 @@ export function signUp(userInfo) {
             })
             .then((res) => {
           
-                if (res.data.status === 'ok') {
+                if (res.data.status === 200) {
                     dispatch({
                         type: SIGN_UP_FULFILLED,
                         payload: true
@@ -95,7 +95,7 @@ export function getValid(username, type) {
                 type
             })
             .then((res) => {
-                if (res.data.status === 'ok') {
+                if (res.data.status === 200) {
                     dispatch({
                         type: GET_VALID_FULFILLED,
                         payload: res.data.valid

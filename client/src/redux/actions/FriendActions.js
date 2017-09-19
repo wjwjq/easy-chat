@@ -38,7 +38,7 @@ export function queryFriend(userId) {
         axios
             .get(`${api.friends}/${userId}`)
             .then((res) =>  {     
-                if (res.status = 'ok') {
+                if (res.status = 200) {
                     dispatch({
                         type: QUERY_FRIEND_FULFILLED,
                         payload: res.data
@@ -63,7 +63,7 @@ export function addFriend(userId) {
         axios
             .post(`${api.friends}/${userId}`)
             .then((res) =>  {     
-                if (res.status = 'ok') {
+                if (res.status = 200) {
                     dispatch({
                         type: ADD_FRIEND_FULFILLED,
                         payload: res.data
@@ -90,7 +90,7 @@ export function updateFriend(userId, data) {
                 data
             })
             .then((res) => {
-                if (res.status = 'ok') {
+                if (res.status = 200) {
                     dispatch({
                         type: UPDATE_FRIEND_FULFILLED,
                         payload: res.data
@@ -115,10 +115,10 @@ export function deleteFriend(userId) {
         axios
             .delete(`${api.friends}/${userId}`)
             .then((res) => {
-                if (res.status = 'ok') {
+                if (res.status = 200) {
                     dispatch({
                         type: DELETE_FRIEND_FULFILLED,
-                        payload: 'ok'
+                        payload: 200
                     });
                 } else {
                     dispatch({

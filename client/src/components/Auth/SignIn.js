@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 
 import './form.less';
 import pathConfigs from '../../routes/path';
+import encrypt from '../../configs/encrypt';
 
 import { signIn, getValid } from '../../redux/actions/AuthActions';
 
@@ -141,7 +142,7 @@ export default class SignIn extends Component {
         if (isAllCorrect && username && password && valid) {
             const user = {
                 username,
-                password
+                password: encrypt.password(password)
             };
             this.props.dispatch(signIn({
                 user,
