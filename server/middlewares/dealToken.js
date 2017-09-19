@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const credentials =  require('../credentials');
 const parseToken = (req) =>  (req.body &&  req.body.access_token) || (req.query && req.query.access_token) || (req.headers['x-access-token']);
 
-exports.hasToken = function (token) {
+const hasToken = function (token) {
     /* todo: 1. 验证token是否存在
      *         2. token是否过期
      *过期或者不存在 返回 {
@@ -13,6 +13,7 @@ exports.hasToken = function (token) {
      * 存在 直接返回 返回ture
      **/ 
 };
+exports.hasToken = hasToken;
 
 exports.removeToken = function (req, res, next) {
     next();

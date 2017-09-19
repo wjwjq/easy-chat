@@ -5,3 +5,5 @@ tsconfig.json
 *.log
 dist
 backup.js
+redis
+server/public/easychat/*
