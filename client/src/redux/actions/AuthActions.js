@@ -3,7 +3,7 @@ import axios from 'axios';
 
 import { fetchFriends } from './FriendActions';
 import { fetchMessages } from './MessageActions';
-import storage from '../../configs/storage';
+import { setItem, getItem, removeItem } from '../../configs/storage';
 
 import {
     SIGN_UP_REJECTED,
@@ -17,33 +17,29 @@ import {
 //登录
 export function signIn(userInfo) {
     return function (dispatch) {
+        const accessToken = getItem('access_token');
+        const expired = accessToken && accessToken['expires'] > Math.floor(Date.now() / 1000);
+        !expired && removeItem('access_token');
         axios
             .post(api.auth.signin,{
-                data: userInfo
+                ...userInfo,
+                'access_token':  expired ? accessToken.token : ''
             })
             .then((res) => {
-                if (res.data.status === 204) {
-                    return dispatch({
-                        type: SIGN_IN_REJECTED,
-                        payload: '重定向'
-                    });
-                }
-                
-                if (res.data.status !== 200) {
+                if (res.data.status === 401) {
                     return dispatch({
                         type: SIGN_IN_REJECTED,
                         payload: res.data.message
                     });
-                } 
+                }
 
                 const token = res.data.token;
                 //setCookies Or localStorage
-                console.info(res.data);
-                storage.setItem('access_token', token);
-
+                token && setItem('access_token', JSON.stringify(token));
+                
                 dispatch({
                     type: SIGN_IN_FULFILLED,
-                    payload: { token,  user : Object.assign({}, userInfo.user, res.data.user) }
+                    payload: { token,  user : Object.assign({}, res.data.user) }
                 });
 
                 //须确保 好友数据返回必须优先于消息数据返回
@@ -67,7 +63,7 @@ export function signUp(userInfo) {
     return function (dispatch) {
         axios
             .post(api.auth.signup,{
-                data: userInfo
+                ...userInfo
             })
             .then((res) => {
           

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import Header from '../../components/Header/Header';
 
 import SignUp from '../../components/Auth/SignUp';
@@ -6,18 +7,18 @@ import SignIn from '../../components/Auth/SignIn';
 
 import pathConfigs from '../../routes/path';
 
-export default class AuthView extends Component {
+class AuthView extends Component {
 
     constructor(props) {
         super(props);
     }
-    componentWillMount() {
-        const { match, history } = this.props;
-        const { path } = match;
-        if ( path !== `${pathConfigs.signup}` ||path !==  `${pathConfigs.signin}` ) {
-            history.replace('signin');
-        }
-    }
+    // componentWillMount() {
+    //     const { match, history } = this.props;
+    //     const { path } = match;
+    //     if ( path !== `${pathConfigs.signup}` || path !==  `${pathConfigs.signin}` ) {
+    //         history.replace('signin');
+    //     }
+    // }
     render() {
         const { match, history } = this.props;
         const { path } = match;
@@ -30,3 +31,5 @@ export default class AuthView extends Component {
     }
 
 }
+
+export default withRouter(AuthView);

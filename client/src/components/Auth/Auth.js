@@ -12,15 +12,13 @@ export default function authenticate(WrappedComponent) {
         constructor(props) {
             super(props);
         }
-
+      
         render() {
-            //如果当前token存在 且未过期 则直接自动登录
-            // 过期 重新登录
             const { isLogined } = this.props;
             if (isLogined) {
-                return <WrappedComponent {...this.props}/>; 
+                return <WrappedComponent />; 
             } else {
-                return <AuthView {...this.props}/>;
+                return <AuthView />;
             }
         }
     }

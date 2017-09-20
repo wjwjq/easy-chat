@@ -6,8 +6,8 @@ import { Link } from 'react-router-dom';
 import './form.less';
 import pathConfigs from '../../routes/path';
 import encrypt from '../../configs/encrypt';
-
 import { signIn, getValid } from '../../redux/actions/AuthActions';
+import { getItem } from '../../configs/storage';
 
 @connect((store) => {
     return { 
@@ -27,8 +27,10 @@ export default class SignIn extends Component {
         //   this.counter = this.counter.bind(this);
 
         this.state = {
+            isTokenNotExpired: this.props.isTokenNotExpired,
             username: '',
             password: '',
+            isLogining: false,
             valid: '',
             validButton: {
                 text: '',
@@ -140,61 +142,84 @@ export default class SignIn extends Component {
         }
         
         if (isAllCorrect && username && password && valid) {
-            const user = {
-                username,
-                password: encrypt.password(password)
-            };
             this.props.dispatch(signIn({
-                user,
-                valid
+                username,
+                valid,
+                password: encrypt.password(password)
             }));
         }
     }
+    componentWillMount() {
+        const hasAccessToken = getItem('access_token');
+        this.setState({
+            isTokenNotExpired:   hasAccessToken && hasAccessToken['expires'] > Math.floor(Date.now() / 1000)
+        });
+    }
+
+    handlleLoginState() {
+        const { isLogining } = this.state; 
+        console.info(isLogining);
+        if (isLogining)
+            return;
+       
+        this.setState({
+            isLogining : !isLogining
+        });
+    }
     componentDidMount() {
-        
     }
     componentWillReceiveProps(nextProps) {
         nextProps.isLogined && this.props.history.push('messages');
     }
-
+    // shouldComponentUpdate(prevProps, nextProps) {
+    //     // console.info(prevProps);
+    //     // console.info(nextProps);
+    //     // console.info(prevProps.logined);
+    //     // return !prevProps.logined;
+    // }
     render() {
-        const { username, password, valid, validButton, canBeTriggered, regStates } = this.state;
+        const { isTokenNotExpired, username, password, valid, validButton, canBeTriggered, regStates } = this.state;
         const { error } = this.props;
-     
-        return (
-            <div className='form'>
-          
-                <div className="form-tips">{error && '用户名或密码不正确'}</div>
-                <div className="input-item">
-                    <div className="input-wrapper">
-                        <span>账号:</span>
-                        <input placeholder='手机号' type="text" name="username" value={username} onChange={this.handleChange} onBlur={this.handleUsernameBlur}/>
-                    </div>
-                    <p className="input-tips">{regStates.username === 1  && '手机号格式有误！'}</p>
-                </div> 
-
-                <div className="input-item">
-                    <div className="input-wrapper">
-                        <span>密码：</span>
-                        <input placeholder='请填写密码' type="password" name="password" value={password} onChange={this.handleChange} onBlur={this.handlePasswordBlur}/>
-                    </div>
-                    <p className="input-tips">
-                        {regStates.password === 1 ? '密码不能为空' :''}
-                    </p>
-                </div> 
-
-                <div className="input-item valid-item">
-                    <div className="input-wrapper valid-wrapper">
-                        <span>验证码:</span>
-                        <input placeholder='请输入验证码' type="text" name="valid" value={valid} onChange={this.handleChange} />
-                        <input type="button" className="btn btn-valid" value={validButton.text || validButton.originText} onClick={this.handleGetValid} disabled={!canBeTriggered} />
+        //判断access_token是否过期
+        if (isTokenNotExpired) {
+            this.props.dispatch(signIn());
+            return null;
+        } else {
+            return (
+                <div className='form'>
+              
+                    <div className="form-tips">{error && '用户名或密码不正确'}</div>
+                    <div className="input-item">
+                        <div className="input-wrapper">
+                            <span>账号:</span>
+                            <input placeholder='手机号' type="text" name="username" value={username} onChange={this.handleChange} onBlur={this.handleUsernameBlur}/>
+                        </div>
+                        <p className="input-tips">{regStates.username === 1  && '手机号格式有误！'}</p>
                     </div> 
-                </div> 
-                
-                <button type="submit" onClick={this.handleSubmit} className="btn btn-green" >登录</button>
-                <p>没有账号？<Link to={pathConfigs.signup}>去注册</Link></p>
-            </div>
-        );
+    
+                    <div className="input-item">
+                        <div className="input-wrapper">
+                            <span>密码：</span>
+                            <input placeholder='请填写密码' type="password" name="password" value={password} onChange={this.handleChange} onBlur={this.handlePasswordBlur}/>
+                        </div>
+                        <p className="input-tips">
+                            {regStates.password === 1 ? '密码不能为空' :''}
+                        </p>
+                    </div> 
+    
+                    <div className="input-item valid-item">
+                        <div className="input-wrapper valid-wrapper">
+                            <span>验证码:</span>
+                            <input placeholder='请输入验证码' type="text" name="valid" value={valid} onChange={this.handleChange} />
+                            <input type="button" className="btn btn-valid" value={validButton.text || validButton.originText} onClick={this.handleGetValid} disabled={!canBeTriggered} />
+                        </div> 
+                    </div> 
+                    
+                    <button type="submit" onClick={this.handleSubmit} className="btn btn-green" >登录</button>
+                    <p>没有账号？<Link to={pathConfigs.signup}>去注册</Link></p>
+                </div>
+            );
+        }
     }
 
 }

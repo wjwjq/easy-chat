@@ -1,6 +1,7 @@
 import axios from 'axios';
 import api  from '../../configs/api';
-// import { getToken }  from '../../configs/storage';
+import { getItem } from '../../configs/storage';
+
 import {
     FETCH_MESSAGES_REJECTED,
     FETCH_MESSAGES_FULFILLED,
@@ -14,7 +15,11 @@ import {
 export function fetchMessages() {
     return function (dispatch) {
         axios
-            .get(api.messages)
+            .get(api.messages,{
+                headers: {
+                    'x-access-token': getItem('access_token')['token']
+                }
+            })
             .then((res) => {
                 dispatch({
                     type: FETCH_MESSAGES_FULFILLED,

@@ -167,13 +167,11 @@ export default class SignUp extends Component {
         }
         
         if (isAllCorrect && username && password && valid) {
-            const user = {
-                username,
-                password: encrypt.password(password)
-            };
+          
             this.props.dispatch(signUp({
-                user,
-                valid
+                username,
+                valid,
+                password: encrypt.password(password)
             }));
         }
     }
@@ -245,3 +243,5 @@ export default class SignUp extends Component {
     }
 
 }
+
+

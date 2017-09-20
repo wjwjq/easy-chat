@@ -1,9 +1,14 @@
 import React from 'react';
-import history from '../lib/history';
+import { withRouter } from 'react-router-dom';
 
 
-const Back = () => {
-    return <i className="icon icon-arrow-left go-back" onClick={history.goBack}>返回</i>;
-};
+class Back extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+    render() {
+        return <i className="icon icon-arrow-left go-back" onClick={this.props.history.goBack}>返回</i>;
+    }
+}
 
-export default Back;
+export default withRouter(Back);

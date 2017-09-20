@@ -5,6 +5,8 @@ import { connect } from 'react-redux';
 import config from '../../configs/config';
 import pathConfigs from '../../routes/path';
 
+import Logout from  '../Auth//Logout';
+
 import './index.less';
 
 @connect((store) => {
@@ -12,7 +14,7 @@ import './index.less';
         user: store.user.user
     };
 })
-export default class My extends Component {
+export default  class My extends Component {
 
     constructor(props) {
         super(props);
@@ -64,6 +66,9 @@ export default class My extends Component {
                             <span>关于</span>
                             <i className="icon icon-arrow-right user-icon-arrow-right"></i>
                         </Link>
+                    </li>
+                    <li className="user-line">
+                        <Logout><span>注销登录</span></Logout>
                     </li>
                 </ul>
             </div>

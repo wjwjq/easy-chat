@@ -1,35 +1,30 @@
 const Users = require('../../models/user');
-const jwt = require('jsonwebtoken');
 const utils = require('../../utils/');
 const formatUserData = utils.formatUserData;
 const validFunc = utils.validFunc;
-const credentials = require('../../credentials');
-const valid = '1234';
+const tokenManager = require('../../middlewares/tokenManager');
+
+const generatedValid = '1234';
 //登录
 exports.signin = function (req, res) {
-    const {
-        username,
-        password
-    } = req.body.data.user;
-    const postValid = req.body.data.valid;
-
+    const { username, password, valid } = req.body;
     if (username === '' || password === '') {
         return res.json({
-            'status': 204,
+            'status': 401,
             'message': '账号或密码错误'
         });
     }
     //验证是否正确
-    if (postValid !== valid) {
+    if (generatedValid !== valid) {
         return res.json({
-            'status': 204,
+            'status': 401,
             'message': '验证码已过期或错误'
         });
     }
     //手机号格式验证
     if (!validFunc.phoneNumber(username)) {
         return res.json({
-            'status': 204,
+            'status': 401,
             'message': '用户名格式错误'
         });
     }
@@ -37,31 +32,17 @@ exports.signin = function (req, res) {
     //密码验证
     Users.findOne({
         username
-    }, function (err, user) {
-        if (err) {
-            return res.json({
-                'status': 204,
-                'message': '账号或密码不正确'
-            });
-        }
+    }).then(function (user) {
         //密码验证
         user.comparePassword(password, function (isMatch) {
             if (!isMatch) {
                 return res.json({
-                    'status': 204,
+                    'status': 401,
                     'message': '账号或密码不正确'
                 });
             }
             //生成token
-            const token = jwt.sign({
-                username,
-                password,
-                iat: Math.floor(Date.now() / 1000) - 30
-            }, credentials.token.secret, {
-                expiresIn: credentials.token.expires
-            });
-            
-            console.info('genrator', token);
+            const token = tokenManager.generatorToken(username, password);
             return res.json({
                 'status': 200,
                 'message': '登录成功',
@@ -69,28 +50,37 @@ exports.signin = function (req, res) {
                 token
             });
         });
+    }).catch(function (err) {
+        if (err) {
+            return res.json({
+                'status': 401,
+                'message': '账号或密码不正确'
+            });
+        }
     });
 };
 
 //注册
 exports.signup = function (req, res) {
-    const userInfo = req.body.data.user;
-    const postValid = req.body.data.valid;
+    const { username, password, valid } = req.body;
     //验证是否正确
-    if (postValid !== valid) {
+    if (generatedValid !== valid) {
         return res.json({
-            'status': 204,
+            'status': 401,
             'message': '验证码已过期或错误'
         });
     }
     //创建用户
     const user = new Users();
-    Object.assign(user, userInfo);
+    Object.assign(user, {
+        username,
+        password
+    });
     user.save((err, msg) => {
         console.info(msg);
         if (err) {
             return res.json({
-                'status': 204,
+                'status': 401,
                 'message': '用户名已存在'
             });
         }

@@ -6,6 +6,7 @@ const initalState = {
     token: '',
     isLogined: false,
     isRegistered: false,
+    isTokenNotExpired: true,
     error: ''
 };
 
@@ -25,6 +26,7 @@ export default function reducers(state = initalState, action) {
             return {
                 ...state,
                 logining: false,
+                isTokenNotExpired: false,
                 error: action.payload
             };
         case SIGN_IN_FULFILLED:
@@ -32,7 +34,7 @@ export default function reducers(state = initalState, action) {
                 ...state,
                 logined: true,
                 user: action.payload.user,
-                token: action.payload.token,
+                isTokenNotExpired: true,
                 isLogined: true
             };
         //注册

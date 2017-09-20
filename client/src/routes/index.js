@@ -6,6 +6,7 @@ import pathConfigs from './path';
 
 //引入布局
 import Layout from '../layouts/default';
+import PageNotFound from '../components/share//NotFound';
 
 //引入各组件
 import Welcome from '../components/Welcome';
@@ -51,6 +52,7 @@ export default class Routes extends Component {
                         <Route path={pathConfigs.myHelp} component={Help}/>
                         <Route path={pathConfigs.myAbout} component={About} />
                         <Route path={pathConfigs.my} component={MyView} />
+                        <Route  component={PageNotFound} />
                     </Switch>
                     {/* <Redirect from='/' to='welcome' /> */}
                 </Layout>

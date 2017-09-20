@@ -3,6 +3,6 @@ module.exports = {
     cookieSecret:  'easychat',
     token: {
         secret:  'easychat',
-        expires: 1000 * 60 * 3
+        expires: 60 * 60
     }
 };

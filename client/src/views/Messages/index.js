@@ -8,7 +8,6 @@ import authenticate from '../../components/Auth/Auth';
 
 @authenticate
 export default class MessageListView extends Component {
-
     render() {
         return (
             <div className="container messages">
