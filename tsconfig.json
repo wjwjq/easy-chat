@@ -1,0 +1,27 @@
+{
+    "typeAcquisition": {
+        "enable": true
+    },
+    "compilerOptions": {
+        "allowJs": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "importHelpers": true,
+        "traceResolution": true,
+        "declaration": false,
+        "target": "es5",
+        "module": "commonjs",
+        "jsx": "react",
+        "noLib": false,
+        "isolatedModules": false,
+        "noImplicitAny": false,
+        "suppressImplicitAnyIndexErrors": true
+    },
+    "include": [
+        "**/*"
+    ],
+    "exclude": [
+        "node_modules",
+        "public"
+    ]
+}
