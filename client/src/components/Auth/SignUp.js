@@ -185,59 +185,63 @@ export default class SignUp extends Component {
 
     render() {
         const { username, password, repassword, valid, validButton, canBeTriggered, regStates } = this.state;
-        const { error } = this.props;
+        const { error, isRegistering } = this.props;
         
         return (
-            <div className='form'>
-                <div className="form-tips">{error && '注册失败！请检查后重新提交！'}</div>
-                <div className="input-item">
-                    <div className="input-wrapper">
-                        <span>账号:</span>
-                        <input placeholder='请输入手机号' type="text" name="username" value={username} onChange={this.handleChange} onBlur={this.handleUsernameBlur}/>
-                    </div>
-                    <p className="input-tips">{regStates.username === 1 && '手机号格式有误！'}</p>
-                </div> 
-
-                <div className="input-item">
-                    <div className="input-wrapper">
-                        <span>密码：</span>
-                        <input placeholder='请输入密码' type="password" name="password" value={password} onChange={this.handleChange} onBlur={this.handlePasswordBlur}/>
-                    </div>
-                    <p className="input-tips">
-                        {regStates.password === 1 
-                            ? '密码不能为空' 
-                            : regStates.password === 2 
-                                ? '密码长度不宜过长或过短,建议8到16位之间' 
-                                : regStates.password === 3 
-                                    ? '密码格式错误，应为数字、字母、下划线组合'
-                                    : ''}
-                    </p>
-                </div> 
-
-                <div className="input-item">
-                    <div className="input-wrapper">
-                        <span>确认密码：</span>
-                        <input placeholder='请确认密码' type="password" name="repassword" value={repassword} onChange={this.handleChange} onBlur={this.handleRepasswordBlur}/>
-                    </div>
-                    <p className="input-tips">
-                        {regStates.repassword === 1 
-                            ? '确认密码不能为空' 
-                            : regStates.repassword === 2 
-                                ? '密码不一致' 
-                                : ''}
-                    </p>
-                </div> 
-
-                <div className="input-item valid-item">
-                    <div className="input-wrapper valid-wrapper">
-                        <span>验证码:</span>
-                        <input placeholder='请输入验证码' type="text" name="valid" value={valid} onChange={this.handleChange} />
-                        <input type="button" className="btn btn-valid" value={validButton.text || validButton.originText} onClick={this.handleGetValid} disabled={!canBeTriggered} />
+            <div>
+                <div className='form'>
+                    <div className="form-tips">{error && '注册失败！请检查后重新提交！'}</div>
+                    <div className="input-item">
+                        <div className="input-wrapper">
+                            <span>账号:</span>
+                            <input placeholder='请输入手机号' type="text" name="username" value={username} onChange={this.handleChange} onBlur={this.handleUsernameBlur}/>
+                        </div>
+                        <p className="input-tips">{regStates.username === 1 && '手机号格式有误！'}</p>
                     </div> 
-                </div> 
+
+                    <div className="input-item">
+                        <div className="input-wrapper">
+                            <span>密码：</span>
+                            <input placeholder='请输入密码' type="password" name="password" value={password} onChange={this.handleChange} onBlur={this.handlePasswordBlur}/>
+                        </div>
+                        <p className="input-tips">
+                            {regStates.password === 1 
+                                ? '密码不能为空' 
+                                : regStates.password === 2 
+                                    ? '密码长度不宜过长或过短,建议8到16位之间' 
+                                    : regStates.password === 3 
+                                        ? '密码格式错误，应为数字、字母、下划线组合'
+                                        : ''}
+                        </p>
+                    </div> 
+
+                    <div className="input-item">
+                        <div className="input-wrapper">
+                            <span>确认密码：</span>
+                            <input placeholder='请确认密码' type="password" name="repassword" value={repassword} onChange={this.handleChange} onBlur={this.handleRepasswordBlur}/>
+                        </div>
+                        <p className="input-tips">
+                            {regStates.repassword === 1 
+                                ? '确认密码不能为空' 
+                                : regStates.repassword === 2 
+                                    ? '密码不一致' 
+                                    : ''}
+                        </p>
+                    </div> 
+
+                    <div className="input-item valid-item">
+                        <div className="input-wrapper valid-wrapper">
+                            <span>验证码:</span>
+                            <input placeholder='请输入验证码' type="text" name="valid" value={valid} onChange={this.handleChange} />
+                            <input type="button" className="btn btn-valid" value={validButton.text || validButton.originText} onClick={this.handleGetValid} disabled={!canBeTriggered} />
+                        </div> 
+                    </div> 
                 
-                <button type="submit" onClick={this.handleSubmit} className="btn btn-green" >注册</button>
-                <p>已有账号？<Link to={pathConfigs.signin}>去登录</Link></p>
+                    <button type="submit" onClick={this.handleSubmit} className="btn btn-green" disabled={!isRegistering}>注册</button>
+                    <p>已有账号？<Link to={pathConfigs.signin}>去登录</Link></p>
+                </div>
+                {isRegistering && <div>登陆中</div>}
+                {error}
             </div>
         );
     }

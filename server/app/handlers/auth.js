@@ -2,7 +2,7 @@ const Users = require('../../models/user');
 const utils = require('../../utils/');
 const formatUserData = utils.formatUserData;
 const validFunc = utils.validFunc;
-const tokenManager = require('../../middlewares/tokenManager');
+const generatorToken = require('../../middlewares/tokenManager').generatorToken;
 
 const generatedValid = '1234';
 //登录
@@ -42,7 +42,7 @@ exports.signin = function (req, res) {
                 });
             }
             //生成token
-            const token = tokenManager.generatorToken(username, password);
+            const token = generatorToken(username, password);
             return res.json({
                 'status': 200,
                 'message': '登录成功',

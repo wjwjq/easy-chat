@@ -23,7 +23,7 @@ class AuthView extends Component {
         const { match, history } = this.props;
         const { path } = match;
         return (
-            <div className="auth" style={{ paddingTop: '.3rem' }}>
+            <div className="auth" style={{ paddingTop: '.7rem' }}>
                 <Header title={path ===  `${pathConfigs.signup}` ? '注册' : '登录'} />
                 {path ===  `${pathConfigs.signup}`? <SignUp history={history}/> : <SignIn history={history}/>}
             </div>

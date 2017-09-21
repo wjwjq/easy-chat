@@ -14,25 +14,29 @@ export const history = createHistory();
 
 const historyMiddleware = routerMiddleware(history);
 let middlewares;
-if (process.env.NODE_ENV !== 'production') {
-    middlewares = compose(
-        applyMiddleware(
-            historyMiddleware,
-            promiseMiddleware(), 
-            thunkMiddleware, 
-            createLogger()
-        ),
-        window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-    );
-} else {
-    middlewares =     applyMiddleware(
-        historyMiddleware,
-        promiseMiddleware(), 
-        thunkMiddleware
-    );
-}
+// if (process.env.NODE_ENV !== 'production') {
+//     middlewares = compose(
+//         applyMiddleware(
+//             historyMiddleware,
+//             promiseMiddleware(), 
+//             thunkMiddleware, 
+//             createLogger()
+//         ),
+//         window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+//     );
+// } else {
+//     middlewares =     applyMiddleware(
+//         historyMiddleware,
+//         promiseMiddleware(), 
+//         thunkMiddleware
+//     );
+// }
 
-
+middlewares =     applyMiddleware(
+    historyMiddleware,
+    promiseMiddleware(), 
+    thunkMiddleware
+);
 
 
 export default createStore(

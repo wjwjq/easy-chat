@@ -12,7 +12,7 @@ export default function authenticate(WrappedComponent) {
         constructor(props) {
             super(props);
         }
-      
+
         render() {
             const { isLogined } = this.props;
             if (isLogined) {

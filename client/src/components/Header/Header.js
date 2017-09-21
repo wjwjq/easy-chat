@@ -9,7 +9,6 @@ export default class Header extends Component {
     constructor(props) {
         super(props);
     }
-
     render() {
         const { title, showBackButton } = this.props;
         return (

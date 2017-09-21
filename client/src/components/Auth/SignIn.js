@@ -169,54 +169,52 @@ export default class SignIn extends Component {
     componentDidMount() {
     }
     componentWillReceiveProps(nextProps) {
-        nextProps.isLogined && this.props.history.push('messages');
+        !nextProps.isLogining && nextProps.isLogined && this.props.history.push('/');
     }
-    // shouldComponentUpdate(prevProps, nextProps) {
-    //     // console.info(prevProps);
-    //     // console.info(nextProps);
-    //     // console.info(prevProps.logined);
-    //     // return !prevProps.logined;
-    // }
+ 
     render() {
         const { isTokenNotExpired, username, password, valid, validButton, canBeTriggered, regStates } = this.state;
-        const { error } = this.props;
-        //判断access_token是否过期
-        if (isTokenNotExpired) {
-            this.props.dispatch(signIn());
+        const { error, isLogined, isLogining } = this.props;
+        if (isTokenNotExpired && !isLogined  && !error) {
+            !isLogining && this.props.dispatch(signIn());
             return null;
         } else {
             return (
-                <div className='form'>
+                <div>
+                    <div className='form'>
               
-                    <div className="form-tips">{error && '用户名或密码不正确'}</div>
-                    <div className="input-item">
-                        <div className="input-wrapper">
-                            <span>账号:</span>
-                            <input placeholder='手机号' type="text" name="username" value={username} onChange={this.handleChange} onBlur={this.handleUsernameBlur}/>
-                        </div>
-                        <p className="input-tips">{regStates.username === 1  && '手机号格式有误！'}</p>
-                    </div> 
-    
-                    <div className="input-item">
-                        <div className="input-wrapper">
-                            <span>密码：</span>
-                            <input placeholder='请填写密码' type="password" name="password" value={password} onChange={this.handleChange} onBlur={this.handlePasswordBlur}/>
-                        </div>
-                        <p className="input-tips">
-                            {regStates.password === 1 ? '密码不能为空' :''}
-                        </p>
-                    </div> 
-    
-                    <div className="input-item valid-item">
-                        <div className="input-wrapper valid-wrapper">
-                            <span>验证码:</span>
-                            <input placeholder='请输入验证码' type="text" name="valid" value={valid} onChange={this.handleChange} />
-                            <input type="button" className="btn btn-valid" value={validButton.text || validButton.originText} onClick={this.handleGetValid} disabled={!canBeTriggered} />
+                        <div className="form-tips">{error && '用户名或密码不正确'}</div>
+                        <div className="input-item">
+                            <div className="input-wrapper">
+                                <span>账号:</span>
+                                <input placeholder='手机号' type="text" name="username" value={username} onChange={this.handleChange} onBlur={this.handleUsernameBlur}/>
+                            </div>
+                            <p className="input-tips">{regStates.username === 1  && '手机号格式有误！'}</p>
                         </div> 
-                    </div> 
+    
+                        <div className="input-item">
+                            <div className="input-wrapper">
+                                <span>密码：</span>
+                                <input placeholder='请填写密码' type="password" name="password" value={password} onChange={this.handleChange} onBlur={this.handlePasswordBlur}/>
+                            </div>
+                            <p className="input-tips">
+                                {regStates.password === 1 ? '密码不能为空' :''}
+                            </p>
+                        </div> 
+    
+                        <div className="input-item valid-item">
+                            <div className="input-wrapper valid-wrapper">
+                                <span>验证码:</span>
+                                <input placeholder='请输入验证码' type="text" name="valid" value={valid} onChange={this.handleChange} />
+                                <input type="button" className="btn btn-valid" value={validButton.text || validButton.originText} onClick={this.handleGetValid} disabled={!canBeTriggered} />
+                            </div> 
+                        </div> 
                     
-                    <button type="submit" onClick={this.handleSubmit} className="btn btn-green" >登录</button>
-                    <p>没有账号？<Link to={pathConfigs.signup}>去注册</Link></p>
+                        <button type="submit" onClick={this.handleSubmit} className="btn btn-green" >登录</button>
+                        <p>没有账号？<Link to={pathConfigs.signup}>去注册</Link></p>
+                    </div>
+                    {isLogining && <div>登陆中</div>}
+                    {error}
                 </div>
             );
         }

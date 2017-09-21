@@ -9,7 +9,6 @@ const parseToken = (req) => (req.body && req.body.access_token) || (req.query &&
 
 exports.autoSignin = function (req, res, next) {
     const token = parseToken(req);
-    console.info('recieve token', token);
     if (token) {
         jwt.verify(token, credentials.token.secret, function (err, decoded) {
             if (err) {
@@ -102,6 +101,11 @@ exports.verifyToken = function (req, res, next) {
                     }
                 });
         });
+    } else {
+        return res.json({
+            'status': 401, //认证失败状态哦码
+            'message': 'Authentication fail，Access_token is expired'
+        });
     }
 };
 
@@ -117,13 +121,7 @@ exports.generatorToken = function (username, password) {
         token,
         username
     });
-    Token.remove({
-        username
-    }, function (err) {
-        if (err) {
-            console.info('error from remove token', err);
-        }
-    });
+    removeToken(username);
     newToken.save(function (err) {
         if (err) {
             console.info(`error from add newToken`, err);
@@ -134,14 +132,12 @@ exports.generatorToken = function (username, password) {
         expires
     };
 };
-exports.removeToken = function (req, res, next) {
+exports.removeToken = removeToken = function (username) {
     Token.remove({
-        token
+        username
     }, function (err) {
         if (err) {
-            console.info('form removeToken', err);
-            next();
+            console.info('error from remove token', err);
         }
     });
-    next();
 };

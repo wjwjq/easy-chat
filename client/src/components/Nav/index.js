@@ -44,8 +44,6 @@ export default class Nav extends Component {
                     <i className={myClaeses}></i>
                     <span>我</span>
                 </Link>
-
-                
             </nav>
         );
     }

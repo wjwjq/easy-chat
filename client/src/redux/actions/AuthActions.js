@@ -6,17 +6,24 @@ import { fetchMessages } from './MessageActions';
 import { setItem, getItem, removeItem } from '../../configs/storage';
 
 import {
-    SIGN_UP_REJECTED,
-    SIGN_UP_FULFILLED,
+    SIGN_IN,
     SIGN_IN_REJECTED, 
     SIGN_IN_FULFILLED,
+    SIGN_UP,
+    SIGN_UP_REJECTED,
+    SIGN_UP_FULFILLED,
     GET_VALID_REJECTED,
     GET_VALID_FULFILLED
 } from '../constant/';
 
 //登录
 export function signIn(userInfo) {
+
     return function (dispatch) {
+        dispatch({
+            type: SIGN_IN
+        });
+
         const accessToken = getItem('access_token');
         const expired = accessToken && accessToken['expires'] > Math.floor(Date.now() / 1000);
         !expired && removeItem('access_token');
@@ -27,6 +34,7 @@ export function signIn(userInfo) {
             })
             .then((res) => {
                 if (res.data.status === 401) {
+                    removeItem('access_token');
                     return dispatch({
                         type: SIGN_IN_REJECTED,
                         payload: res.data.message
@@ -61,6 +69,10 @@ export function signIn(userInfo) {
 //注册
 export function signUp(userInfo) {
     return function (dispatch) {
+        dispatch({
+            type: SIGN_UP
+        });
+
         axios
             .post(api.auth.signup,{
                 ...userInfo

@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-
-
 import FriendCard from './Card';
 import './List.less';
 
@@ -28,15 +26,16 @@ export default class FriendList extends Component {
         }))
     }
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            friends: []
-        };
+    static defaultProps = {
+        friends: []
     }
 
-    friendsSort() {
-        const { friends } = this.props;
+    constructor(props) {
+        super(props);
+        this.friendsSort = this.friendsSort.bind(this);
+    }
+
+    friendsSort(friends) {
         let tempFriends =  {};
         for (let i =0; i < friends.length; i++) {
             if (tempFriends[friends[i].order]) {
@@ -48,21 +47,16 @@ export default class FriendList extends Component {
         return tempFriends;
     }
 
-    componentDidMount() {
-        this.setState({
-            friends: this.friendsSort()
-        });
-    }
-
     render() {
-        const { friends } = this.state;
+        const { friends } = this.props;
+        const sortedFriends = this.friendsSort(friends);
         return (
             <div className="friend-list">
-                {Object.keys(friends).map( (key) => {
+                {Object.keys(sortedFriends).map( (key) => {
                     return (<div key={key} className="friend-list-block">
                         <p  id={key} className="friend-list-order">{key}</p>
                         <ul className="friend-card-list">
-                            {friends[key].map((item) => <FriendCard key={item.userId} {...item}/>)}
+                            {sortedFriends[key] && sortedFriends[key].map((item) => <FriendCard key={item.userId} {...item}/>)}
                         </ul>
                     </div>);
                 })}

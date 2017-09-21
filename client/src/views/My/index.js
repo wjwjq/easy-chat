@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 
-import Nav from '../../components/Nav/';
 import Header from '../../components/Header/Header';
 import My from '../../components/My/';
 
@@ -15,11 +14,9 @@ export default class MyView extends Component {
 
     render() {
         return (
-            <div className="container messages">
+            <div className="messages">
                 <Header title="我"/>
-                {this.props.children}
                 <My />
-                <Nav />
             </div>
         );
     }
