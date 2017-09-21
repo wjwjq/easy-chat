@@ -18,6 +18,7 @@ import {
     SIGN_UP,
     SIGN_UP_REJECTED,
     SIGN_UP_FULFILLED,
+    LOGOUT,
     GET_VALID_REJECTED,
     GET_VALID_FULFILLED
 } from '../constant/';
@@ -70,7 +71,14 @@ export default function reducers(state = initalState, action) {
                 isRegistered: true,
                 msg: action.payload
             };
-
+        
+        case LOGOUT: {
+            return {
+                ...state,
+                isLogining: false,
+                isLogined: false
+            };
+        }
         //获取验证码
         case GET_VALID_REJECTED:
             return {
@@ -84,5 +92,7 @@ export default function reducers(state = initalState, action) {
             };
         default:
             return state;
+        
+            
     }
 }

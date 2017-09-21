@@ -35,7 +35,6 @@ import AuthView from '../views/Auth/';
 import Main from '../views/Main';
 import Home from '../views/Home';
 
-
 export default class Routes extends Component {
     render() {
         return (
@@ -47,15 +46,14 @@ export default class Routes extends Component {
                         <Route path={pathConfigs.signup} component={AuthView} />
                         <Home>
                             <Switch>
-                
-                                <Route path={pathConfigs.messagesid} component={MessageBoxView} />
-                                <Route path={pathConfigs.friendsid} component={FriendDetailView} />
+                                <Route path={`${pathConfigs.messages}/:id`} component={MessageBoxView} />
+                                <Route path={`${pathConfigs.friends}/:id`} component={FriendDetailView} />
                                 <Route path={pathConfigs.myDetail} component={MyDetail} />
                                 <Route path={pathConfigs.myAccountandsecurity} component={AcountAndSecurity} />
                                 <Route path={pathConfigs.myBlacklist} component={BlackList}/>
                                 <Route path={pathConfigs.myHelp} component={Help}/>
                                 <Route path={pathConfigs.myAbout} component={About} />
-                                <Route path='/' component= {Main} />
+                                <Route path={pathConfigs.root} component= {Main} />
                                 <Route component={PageNotFound} />
                             </Switch>
                         </Home>

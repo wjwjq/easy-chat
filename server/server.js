@@ -17,7 +17,7 @@ mongoose.connection.on('error', function () {
 });
 
 //引入前端路由
-const appRoutes = require('./app/routes/');
+const easychatRoutes = require('./easychat/routes/');
 //引入管理路由
 const adminRoutes = require('./admin/routes/');
 
@@ -70,19 +70,23 @@ var easychat = express.Router();
 app.use(vhost('easychat.*', easychat));
 
 //注入路由
-appRoutes(easychat);
+easychatRoutes(easychat);
 easychat.get('*', (req, res) => {
     console.info('loading from easychat domain');
     res.sendFile(path.resolve(__dirname) + '/public/easychat/index.html');
 });
 
-appRoutes(app);
+easychatRoutes(app);
+
+app.get('/easychat/*', (req, res) => {
+    res.sendFile(path.resolve(__dirname) + '/public/easychat/index.html');
+});
 
 //网站主页
 app.get('/', (req, res) => {
     res.locals.title = "wjq\'s blog";
     res.locals.items = [{
-        href: 'http://easychat.localhost:3000/welcome',
+        href: 'http://localhost:3000/easychat/welcome',
         name: 'easychat'
     }];
     res.render('index');

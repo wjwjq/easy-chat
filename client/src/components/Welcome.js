@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
 import './Welcome.less';
-// import pathConfigs from '../routes/path';
+import pathConfigs from '../routes/path';
 
 export default class Welcome extends Component {
     constructor(props) {
@@ -12,7 +12,7 @@ export default class Welcome extends Component {
     }
     render() {
         return (
-            <Link to="/"  className="welcome">Welcome</Link>
+            <Link to={pathConfigs.root}  className="welcome">Welcome</Link>
         );
     }
 

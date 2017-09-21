@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 import './form.less';
 import pathConfigs from '../../routes/path';
-import encrypt from '../../configs/encrypt';
+import { encrypt } from '../../configs/utils';
 import { signIn, getValid } from '../../redux/actions/AuthActions';
 import { getItem } from '../../configs/storage';
 
@@ -145,7 +145,7 @@ export default class SignIn extends Component {
             this.props.dispatch(signIn({
                 username,
                 valid,
-                password: encrypt.password(password)
+                password: encrypt(password)
             }));
         }
     }
@@ -169,7 +169,7 @@ export default class SignIn extends Component {
     componentDidMount() {
     }
     componentWillReceiveProps(nextProps) {
-        !nextProps.isLogining && nextProps.isLogined && this.props.history.push('/');
+        !nextProps.isLogining && nextProps.isLogined && this.props.history.push(pathConfigs.root);
     }
  
     render() {

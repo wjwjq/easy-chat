@@ -12,6 +12,7 @@ import {
     SIGN_UP,
     SIGN_UP_REJECTED,
     SIGN_UP_FULFILLED,
+    LOGOUT,
     GET_VALID_REJECTED,
     GET_VALID_FULFILLED
 } from '../constant/';
@@ -97,6 +98,13 @@ export function signUp(userInfo) {
                     payload: err.message
                 });
             });        
+    };
+}
+
+//注销
+export function logout() {
+    return {
+        type: LOGOUT
     };
 }
 

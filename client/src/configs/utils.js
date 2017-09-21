@@ -1,3 +1,4 @@
+//日期格式化
 export function dataFormat(date) {
     var o = {
         'M+': date.getMonth() + 1, //月份 
@@ -13,4 +14,12 @@ export function dataFormat(date) {
     for (var k in o)
         if (new RegExp('(' + k + ')').test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (('00' + o[k]).substr(('' + o[k]).length)));
     return fmt;
+}
+
+//密码简易加密
+const crypto = require('crypto');
+export function encrypt(password) {
+    const sha1 = crypto.createHash('sha1');
+    sha1.update(password);
+    return sha1.digest('hex');
 }

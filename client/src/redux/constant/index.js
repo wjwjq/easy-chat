@@ -12,6 +12,10 @@ export const SIGN_UP = 'SIGN_UP';
 export const SIGN_UP_REJECTED = 'SIGN_UP_REJECTED';
 export const SIGN_UP_FULFILLED = 'SIGN_UP_FULFILLED';
 
+//注销
+
+export const LOGOUT = 'LOGOUT';
+
 //获取验证码
 export const GET_VALID_REJECTED = 'GET_VALID_REJECTED';
 export const GET_VALID_FULFILLED = 'GET_VALID_FULFILLED';

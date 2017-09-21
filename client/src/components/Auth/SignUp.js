@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import './form.less';
 
 import pathConfigs from '../../routes/path';
-import encrypt from '../../configs/encrypt';
+import { encrypt } from '../../configs/utils';
 
 import { signUp, getValid } from '../../redux/actions/AuthActions';
 import { connect } from 'react-redux';
@@ -171,7 +171,7 @@ export default class SignUp extends Component {
             this.props.dispatch(signUp({
                 username,
                 valid,
-                password: encrypt.password(password)
+                password: encrypt(password)
             }));
         }
     }
@@ -236,8 +236,8 @@ export default class SignUp extends Component {
                             <input type="button" className="btn btn-valid" value={validButton.text || validButton.originText} onClick={this.handleGetValid} disabled={!canBeTriggered} />
                         </div> 
                     </div> 
-                
-                    <button type="submit" onClick={this.handleSubmit} className="btn btn-green" disabled={!isRegistering}>注册</button>
+                    {/* disabled={!isRegistering} */}
+                    <button type="submit" onClick={this.handleSubmit} className="btn btn-green">注册</button>
                     <p>已有账号？<Link to={pathConfigs.signin}>去登录</Link></p>
                 </div>
                 {isRegistering && <div>登陆中</div>}

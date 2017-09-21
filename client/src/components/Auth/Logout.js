@@ -1,7 +1,11 @@
 //登出
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { clearToken } from '../../configs/tokenHadlers';
+import { connect } from 'react-redux';
+
+import { clearToken } from '../../configs/tokenHandlers';
+import { logout } from '../../redux//actions//AuthActions';
+import pathConfigs from '../../routes/path';
 
 class Logout extends Component {
     constructor(props) {
@@ -10,11 +14,13 @@ class Logout extends Component {
     }
     handleLogout() {
         clearToken();
-        this.props.history.push('/signin');
+        this.props.history.push(pathConfigs.signin);
+        this.props.dispatch(logout());
     }
     render() {
         const { children } = this.props;
         return  <div  onClick={this.handleLogout}>{children ? children : '注销登录'}</div>;
     }
 }
-export default  withRouter(Logout);
+
+export default  withRouter(connect((store) => ({ ...store.user }))(Logout));
