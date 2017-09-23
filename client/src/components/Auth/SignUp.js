@@ -69,6 +69,13 @@ export default class SignUp extends Component {
                         regs={ [{ reg: '^1[345789][\\d]{9}$', mode: 'ig' ,msg: '手机格式错误' }] } 
                     />
                     <FormItem 
+                        text="昵称" 
+                        placeholder="请输入昵称" 
+                        type="text" 
+                        name="nickname" 
+                        isRequired={true}
+                    />
+                    <FormItem 
                         text="密码" 
                         placeholder="请输入密码" 
                         type="password" 
@@ -101,7 +108,7 @@ export default class SignUp extends Component {
                         length={4}
                         validButtonText='获取验证码' 
                         countTime={60}
-                        associateName={['username','password','repeatPassword']}
+                        associateName={['username', 'nickname', 'password', 'repeatPassword']}
                         getVerifyCodeFunc={this.handleGetValid}
                     />
                     <FormItem  text="注册" type='submit' />

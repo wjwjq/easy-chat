@@ -13,7 +13,7 @@ export default class About extends PureComponent {
                 <p><span>author:</span><i>Stephen Wu</i></p>
                 <p><span>github:</span> <i><a href="https://github.com/wjwjq">https://github.com/wjwjq</a></i></p>
                 <p><span>repository:</span><i><a href="https://github.com/wjwjq/easy-chat">https://github.com/wjwjq/easy-chat</a></i></p>
-                <p><span>author's blog:</span> <i><a href="http://wjwjq.com">http//:wjwjq.com</a>(developing)</i></p>
+                <p><span>author's blog:</span> <i><a href="http://wjwjq.com">http//wjwjq.com</a>(developing)</i></p>
                 <p><span>Contact:</span> <i><a href="mailto:wjwjq456@gmail.com">wjwjq456@gmail.com</a></i></p>
             </article>
         );

@@ -24,9 +24,11 @@ export default class Validate extends Component {
             regMsg: '',
             canTriggerAgain: true,
             verifyCode: '',
+            regs: this.props.regs || [],
             buttonText: validButtonText || '获取验证码',
             buttonOriginText: validButtonText || '获取验证码',
-            countTime: countTime || 60
+            countTime: countTime || 60,
+            counterId: ''
         };
       
     }
@@ -41,14 +43,26 @@ export default class Validate extends Component {
     }
     validate(target) {
         const { text, isRequired } = this.props;
-        let { regMsg } = this.state;
+        let { regs, regMsg } = this.state;
         
         let name = target.name;
         let value = target.value;
         let regPass = true;
+        let reg = '';
         if (isRequired && !value.length) {
             regMsg = `${text}不能为空`;
             regPass = false;
+            this.setValue(name, value, regPass, regMsg);
+            return;
+        }
+        for (let i = 0; i < regs.length; i++) {
+            reg = regs[i];
+            if ( !(new RegExp(reg['reg'], reg['mode'])).test(value) ) {
+                regMsg = reg['msg'];
+                regPass = false;
+                this.setValue(name, value, regPass, regMsg);
+                return;
+            }
         }
         this.setValue(name, value, regPass, regMsg);
     }
@@ -67,23 +81,22 @@ export default class Validate extends Component {
 
     counter() {
         let _this =  this;
-        let { countTime } = _this.state;
-        const countFunc = () => {
-            setTimeout(() => {
-                if (countTime < 0) {
-                    _this.setState({
-                        canTriggerAgain: true,
-                        buttonText: _this.state.buttonOriginText
-                    });
-                    return;
-                }
+        let { countTime, counterId } = _this.state;
+        counterId = setInterval(() => {
+            if (countTime < 0) {
                 _this.setState({
-                    buttonText: `(${countTime--})s`
+                    canTriggerAgain: true,
+                    buttonText: _this.state.buttonOriginText,
+                    counterId
                 });
-                countFunc();
-            }, 1000);
-        };
-        countFunc();
+                clearInterval(counterId);
+                return;
+            }
+            _this.setState({
+                buttonText: `(${countTime--})s`,
+                counterId
+            });
+        },1000);
     }
 
     handleGetVerifyCode() {
@@ -98,6 +111,13 @@ export default class Validate extends Component {
                     canTriggerAgain: false
                 });
             }
+        }
+    }
+    
+    componentWillUnmount() {
+        const { counterId } = this.state;
+        if (counterId) {
+            clearInterval(counterId);
         }
     }
 

@@ -6,3 +6,4 @@ dist
 backup.js
 redis
 server/public/easychat/*
+smsConfig.js

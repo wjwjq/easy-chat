@@ -69,9 +69,8 @@ export default class SignIn extends Component {
             return (
                 <div className="signin">
                     {isLogining && <Loading/>}
-                    {error}
                     <Form onSubmit={this.handleSubmit} >
-                        <div className="form-tips">{error && '用户名或密码不正确'}</div>
+                        <div className="form-tips">{error}</div>
                         <FormItem 
                             text="手机号" 
                             placeholder="请输入手机号" 
