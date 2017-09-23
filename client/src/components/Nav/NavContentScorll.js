@@ -61,14 +61,15 @@ export default class NavContentScroll extends Component {
             <div className="nav-content-box"  ref="navContentBox" onTouchStart={this.handleTouchStart} onTouchMove={this.handleTouchMove} >  
                 <div className="nav-content-box-inner-scorll" ref="navContentBoxInnerScorll">
                     <Motion style={{ top: spring(top) }}>
-                        {({ top }) => <div  style={
-                            {
-                                WebkitTransform: `translate3d( 0, ${top}px, 0)`,
-                                transform: `translate3d( 0, ${top}px, 0)`
-                            }
-                        }>
-                            {this.props.children}
-                        </div>}
+                        {
+                            ({ top }) => <div  style={
+                                {
+                                    WebkitTransform: `translate3d( 0, ${top}px, 0)`,
+                                    transform: `translate3d( 0, ${top}px, 0)`
+                                }
+                            }>
+                                {this.props.children}
+                            </div>}
                     </Motion>
                 </div> 
             </div>
