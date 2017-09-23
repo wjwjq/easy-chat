@@ -6,7 +6,7 @@ import pathConfigs from './path';
 
 //引入布局
 import Layout from '../layouts/default';
-import PageNotFound from '../components/share/NotFound';
+import PageNotFound from '../components/share/PageNotFound';
 
 //引入各组件
 import Welcome from '../components/Welcome';
@@ -16,6 +16,8 @@ import BlackList from '../components/My/BlackList';
 import Help from '../components/My/Help';
 import About from '../components/My/About';
 import MyDetail from '../components/My/Detail';
+
+import TestForm from '../components/share/Form/test';
 
 // //消息视图
 // import MessageListView from '../views/Messages/';
@@ -41,6 +43,7 @@ export default class Routes extends Component {
             <Router>
                 <Layout>
                     <Switch>
+                        <Route path='/form' component={TestForm} />
                         <Route exact path={pathConfigs.welcome} component={Welcome} />
                         <Route path={pathConfigs.signin} component={AuthView} />
                         <Route path={pathConfigs.signup} component={AuthView} />

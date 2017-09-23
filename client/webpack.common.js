@@ -22,8 +22,9 @@ module.exports = {
             'react-redux',
             'redux-thunk',
             'redux-promise-middleware',
-            'immutable',
-            'axios'
+            // 'immutable',
+            'axios',
+            'lodash'
         ]
     },
     //入口文件输出配置

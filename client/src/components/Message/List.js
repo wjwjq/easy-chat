@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import MessageCard from './Card';
+import MessageItem from './Item';
 import './Message.less';
 
 @connect((store) => {
@@ -24,7 +24,7 @@ export default class MessageList extends Component {
         const { messages } = this.props;
         return (
             <ul>
-                { messages.map((message) => <MessageCard key={message.userId} {...message}/> )}
+                { messages.map((message) => <MessageItem key={message.userId} {...message}/> )}
             </ul>
         );
     }

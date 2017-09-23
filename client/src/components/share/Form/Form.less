@@ -1,0 +1,152 @@
+.custom-form {
+    margin: 0 .12rem;
+    .form-tips {
+        color: #D63434;
+        text-align: center;
+        line-height: .2rem;
+        &.sucess {
+            color: #035F13;
+        }
+        &.fail {
+            color: #D63434;
+        }
+    }
+    .form-item {
+        &-input {
+            position: relative;
+            padding-bottom: .2rem;
+        }
+        &-wrapper {
+            overflow: hidden;
+            display: flex;
+        }
+        &-left {
+            width: .6rem;
+            line-height: .33rem;
+            font-size: .12rem;
+        }
+        &-right {
+            flex: 1;
+            position: relative;
+            padding: 0 .02rem;
+            &::after{
+                position: absolute;
+                width: .02rem;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                display: block;
+                content: '';
+                background-color: #fff;
+                z-index: 2;
+            }
+        }
+        &-tips {
+            position: absolute;
+            bottom: .03rem;
+            right: .03rem;
+            z-index: 1;
+            line-height: .15rem;
+            color: #f00;
+            font-size: .1rem;
+            text-align: right;
+        }
+        &-radio {
+            .form-item-right {
+                line-height: .33rem;
+            }
+        }
+        &-validate {
+            input[type=button]{
+                position: absolute;
+                top: 0;
+                right: 0;
+            }
+        }
+    }
+    label {
+        padding: 0 .05rem;
+        position: relative;
+        display: inline-block;
+        vertical-align: middle;
+    }
+    input[type=text],
+    input[type=password],
+    input[type=button] {
+        padding: .05rem .1rem;
+        line-height: .2rem;
+    }
+    input[type=text],
+    input[type=password] {
+        font-size: .14rem;
+        width: 100%;
+        border-bottom: .01rem solid #787878;
+        transition: border-corlor .3s ease-out, box-shadow .3s ease;
+        &:focus {
+            border-bottom-color: #108ee9;
+            box-shadow: .015rem 0 .005rem .005rem #108ee9;
+        }
+    }
+    input[type=button] {
+        width: .75rem;
+        padding: .05rem 0;
+        font-size: .12rem;
+        line-height: .21rem;
+        background-color: #108ee9;
+        color: #fff;
+        &:disabled {
+            color: #333;
+            background-color: #999;
+            border-color: #999;
+            cursor: not-allowed;
+        }
+    }
+  
+    input[type=radio],
+    input[type=checkbox] {
+        position: absolute;
+        top: 0;
+        &~span {
+            position: relative;
+            display: inline-block;
+            vertical-align: middle;
+            border: .01rem solid #787878;
+            width: .18rem;
+            height: .18rem;
+            border-radius: 50%;
+            margin-right: .05rem;
+            &::after {
+                position: absolute;
+                display: none;
+                top: .04rem;
+                left: .045rem;
+                width: .07rem;
+                height: .07rem;
+                content: '';
+                border-radius: 50%;
+                background-color: #108ee9;
+            }
+        }
+        &:checked {
+            &~span {
+                border-color: #108ee9;
+                &::after {
+                    display: block;
+                }
+            }
+        }
+    }
+    button[type=submit]{
+        display: block;
+        width: 100%;
+        line-height: .3rem;
+        font-size: .12rem;
+        text-align: center;
+        border-width: .01rem;
+        border-style: solid;
+        margin: .05rem auto .15rem;
+        color: #fff;
+        background-color: #239B37;
+    }
+
+}

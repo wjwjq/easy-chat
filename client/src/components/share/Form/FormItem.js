@@ -2,18 +2,19 @@ import React, { Component } from 'react';
 
 // import PropTypes from 'prop-types';
 
-export default class NavPannel extends Component {
+export default class FormItem extends Component {
 
     constructor(props) {
         super(props);
     }
 
+
+
     render() {
         return (
             <div>
-                {this.props.children}
+                {/* {this.props.children} */}
             </div>
         );
     }
-
 }

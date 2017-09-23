@@ -1,13 +1,16 @@
 //注册
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import './form.less';
 
 import pathConfigs from '../../routes/path';
 import { encrypt } from '../../configs/utils';
 
 import { signUp, getValid } from '../../redux/actions/AuthActions';
 import { connect } from 'react-redux';
+import Loading from '../share/Loading/';
+
+import Form from '../share/Form/';
+import FormItem from '../share/Form/FormItem';
 
 @connect((store) => {
     return {
@@ -21,159 +24,25 @@ export default class SignUp extends Component {
     constructor(props) {
         super(props);
 
-        this.handleChange = this.handleChange.bind(this);
         this.handleGetValid = this.handleGetValid.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleUsernameBlur = this.handleUsernameBlur.bind(this);
-        this.handlePasswordBlur = this.handlePasswordBlur.bind(this);
-        this.handleRepasswordBlur = this.handleRepasswordBlur.bind(this);
 
-        this.state = {
-            username: '',
-            password: '',
-            repassword: '',
-            valid: '',
-            validButton: {
-                text: '',
-                originText: '获取验证码'
-            },
-            canBeTriggered: true,
-            regStates: {
-                username: 0,
-                password: 0,
-                repassword: 0
-            }
-        };
-    }
-
-    handleChange(event) {
-        const target = event.target;
-        const value = target.type === 'checkbox' ? target.checked : target.value;
-        const name = target.name;
-        
-        this.setState({
-            [name]: value
-        });
-    }
-
-    counter() {
-        let count = 10;
-        let _this =  this;
-        const countFunc = () => {
-            setTimeout(() => {
-                if (count < 0) {
-                    _this.setState({
-                        canBeTriggered: true,
-                        validButton: { text: '' }
-                    });
-                    return;
-                }
-                _this.setState({
-                    validButton: { text: `(${count--})S` }
-                });
-                countFunc();
-            }, 1000);
-        };
-        countFunc();
+        this.state = {};
     }
 
     handleGetValid() {
-        const { username, canBeTriggered }=  this.state;
-        if (canBeTriggered) {
-            this.counter();
-            this.props.dispatch(getValid(username, 'signUp'));
-            this.setState({
-                canBeTriggered: false
-            });
-        }
-    }
-
-    
-    handleUsernameBlur(e) {
-        if (!/^1[345789][\d]{9}$/g.test(e.target.value)) {
-            this.setState({
-                regStates: Object.assign({},this.state.regStates, {  username: 1 })
-            });
-            return;
-        }
-
-        this.setState({
-            regStates: Object.assign({},this.state.regStates, {  username: 0 })
-        });
-    }
-
-    handlePasswordBlur(e) {
-        const value = e.target.value; 
-        if (value.length === 0) {
-            this.setState({
-                regStates: Object.assign({},this.state.regStates, {  password: 1 })
-            });
-            return;
-        }
-        
-        if (value.length < 8  || value.length >16) {
-            this.setState({
-                regStates: Object.assign({},this.state.regStates, {  password: 2 })
-            });
-            return;
-        }
-
-        if (!/\d/g.test(value) || !/[a-zA-Z]/g.test(value) || /^w{8, 16}$/g.test(value)) {
-            this.setState({
-                regStates: Object.assign({},this.state.regStates, {  password: 3 })
-            });
-            return;
-        }
-
-        this.setState({
-            regStates: Object.assign({},this.state.regStates, {  password: 0 })
-        });
-    }
-
-    handleRepasswordBlur(e) {
-        const value = e.target.value; 
-
-        if (!value) {
-            this.setState({
-                regStates: Object.assign({},this.state.regStates, {  repassword: 1 })
-            });
-            return;
-        }
-
-        if (value !== this.state.password) {
-            this.setState({
-                regStates: Object.assign({},this.state.regStates, {  repassword: 2 })
-            });
-            return;
-        }
-
-        this.setState({
-            regStates: {  repassword: 0 }
-        });
+        console.info('哈哈哈我是卖报的小行家');
+        this.props.dispatch(getValid('signUp'));
     }
     
-    handleSubmit(e) {
-        e.preventDefault();
-        const { username, password, valid,  regStates } = this.state;
-        let isAllCorrect = true;
-        for (let key in regStates) {
-            if (regStates[key]) {
-                isAllCorrect = false;
-                this.setState({
-                    regStates: Object.assign({},this.state.regStates, {  [key]: 1 })
-                });
-                return;
+    handleSubmit(result) {
+        for (let key in result) {
+            if (key === 'password') {
+                result[key] =  encrypt(result[key]);
             }
         }
-        
-        if (isAllCorrect && username && password && valid) {
-          
-            this.props.dispatch(signUp({
-                username,
-                valid,
-                password: encrypt(password)
-            }));
-        }
+        console.info(result);
+        this.props.dispatch(signUp(result));
     }
     
     componentDidMount() {
@@ -184,68 +53,62 @@ export default class SignUp extends Component {
     }
 
     render() {
-        const { username, password, repassword, valid, validButton, canBeTriggered, regStates } = this.state;
         const { error, isRegistering } = this.props;
         
         return (
-            <div>
-                <div className='form'>
-                    <div className="form-tips">{error && '注册失败！请检查后重新提交！'}</div>
-                    <div className="input-item">
-                        <div className="input-wrapper">
-                            <span>账号:</span>
-                            <input placeholder='请输入手机号' type="text" name="username" value={username} onChange={this.handleChange} onBlur={this.handleUsernameBlur}/>
-                        </div>
-                        <p className="input-tips">{regStates.username === 1 && '手机号格式有误！'}</p>
-                    </div> 
-
-                    <div className="input-item">
-                        <div className="input-wrapper">
-                            <span>密码：</span>
-                            <input placeholder='请输入密码' type="password" name="password" value={password} onChange={this.handleChange} onBlur={this.handlePasswordBlur}/>
-                        </div>
-                        <p className="input-tips">
-                            {regStates.password === 1 
-                                ? '密码不能为空' 
-                                : regStates.password === 2 
-                                    ? '密码长度不宜过长或过短,建议8到16位之间' 
-                                    : regStates.password === 3 
-                                        ? '密码格式错误，应为数字、字母、下划线组合'
-                                        : ''}
-                        </p>
-                    </div> 
-
-                    <div className="input-item">
-                        <div className="input-wrapper">
-                            <span>确认密码：</span>
-                            <input placeholder='请确认密码' type="password" name="repassword" value={repassword} onChange={this.handleChange} onBlur={this.handleRepasswordBlur}/>
-                        </div>
-                        <p className="input-tips">
-                            {regStates.repassword === 1 
-                                ? '确认密码不能为空' 
-                                : regStates.repassword === 2 
-                                    ? '密码不一致' 
-                                    : ''}
-                        </p>
-                    </div> 
-
-                    <div className="input-item valid-item">
-                        <div className="input-wrapper valid-wrapper">
-                            <span>验证码:</span>
-                            <input placeholder='请输入验证码' type="text" name="valid" value={valid} onChange={this.handleChange} />
-                            <input type="button" className="btn btn-valid" value={validButton.text || validButton.originText} onClick={this.handleGetValid} disabled={!canBeTriggered} />
-                        </div> 
-                    </div> 
-                    {/* disabled={!isRegistering} */}
-                    <button type="submit" onClick={this.handleSubmit} className="btn btn-green">注册</button>
-                    <p>已有账号？<Link to={pathConfigs.signin}>去登录</Link></p>
-                </div>
-                {isRegistering && <div>登陆中</div>}
-                {error}
+            <div className="signup">
+                {isRegistering && <Loading/>}
+                <Form onSubmit={this.handleSubmit} >
+                    <div className="form-tips">{error}</div>
+                    <FormItem 
+                        text="手机号" 
+                        placeholder="请输入手机号" 
+                        type="text" 
+                        name="username" 
+                        isRequired={true}
+                        regs={ [{ reg: '^1[345789][\\d]{9}$', mode: 'ig' ,msg: '手机格式错误' }] } 
+                    />
+                    <FormItem 
+                        text="密码" 
+                        placeholder="请输入密码" 
+                        type="password" 
+                        name="password" 
+                        isRequired={true}
+                        regs={ [{ reg: '.{8,16}', mode: 'ig' ,msg: '密码长度应为8-16位' }] }  
+                    />
+                    <FormItem 
+                        text="确认密码" 
+                        placeholder="请再次输入密码" 
+                        type="password"
+                        name="repeatPassword" 
+                        isRequired={true}
+                        role="confirm"
+                        associateName='password'
+                    />
+                    <FormItem 
+                        text="性别" 
+                        type="radio" 
+                        name="gender" 
+                        values={['男','女']} 
+                        defaultValue="男" 
+                    />
+                    <FormItem 
+                        text="验证码" 
+                        placeholder="4位验证码" 
+                        type="validate"
+                        name="valid"
+                        isRequired={true}
+                        length={4}
+                        validButtonText='获取验证码' 
+                        countTime={60}
+                        associateName={['username','password','repeatPassword']}
+                        getVerifyCodeFunc={this.handleGetValid}
+                    />
+                    <FormItem  text="注册" type='submit' />
+                </Form>
+                <p className="auth-link">已有账号？<Link to={pathConfigs.signin}>去登录</Link></p>
             </div>
         );
     }
 
 }
-
-

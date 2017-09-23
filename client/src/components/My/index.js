@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import classnames from 'classnames';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import config from '../../configs/config';
 import pathConfigs from '../../routes/path';
+
+import Card from '../share/Card/';
 
 import Logout from  '../Auth//Logout';
 
@@ -22,25 +22,20 @@ export default  class My extends Component {
     }
 
     render() {
-        const { avatarUrl, nickname, username, gender } = this.props.user;
-
-        const genderClasses = classnames({
-            icon: true,
-            'icon-male': !gender,
-            'icon-female': gender
-        });
+        const { user } = this.props;
         
         return (
             <div className="user">
                 <section className="user-info">
-                    <Link to={`${pathConfigs.my}/detail`} className="user-info-item">
-                        <img src={avatarUrl || config.defaultAvatar}  className="user-info-avatar"/>
-                        <dl className="user-info-content">
-                            <dt>{nickname} <i className={genderClasses}></i></dt>
-                            <dd>用户号: {username}</dd>
-                        </dl> 
-                        <i className="icon icon-arrow-right user-icon-arrow-right"></i>
-                    </Link>
+                    <Card 
+                        to={`${pathConfigs.my}/detail`} 
+                        classPrefix="user-info" 
+                        arrowShow={true} 
+                        nicknameShow={true}
+                        countShow={true}
+                        genderShow={true} 
+                        userInfo={user}
+                    />
                 </section>
                 <ul className="user-line-wrap">
                     <li className="user-line">

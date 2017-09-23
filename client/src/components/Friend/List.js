@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import FriendCard from './Card';
+import FriendItem from './Item';
 import './List.less';
 
 @connect((store) => {
@@ -56,7 +56,7 @@ export default class FriendList extends Component {
                     return (<div key={key} className="friend-list-block">
                         <p  id={key} className="friend-list-order">{key}</p>
                         <ul className="friend-card-list">
-                            {sortedFriends[key] && sortedFriends[key].map((item) => <FriendCard key={item.userId} {...item}/>)}
+                            {sortedFriends[key] && sortedFriends[key].map((item) => <FriendItem key={item.userId} {...item}/>)}
                         </ul>
                     </div>);
                 })}

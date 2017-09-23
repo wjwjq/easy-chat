@@ -1,0 +1,32 @@
+.card{
+    &-item{
+        padding: .07rem .1rem;
+        position: relative;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        &:last-child{
+            border-bottom: none;
+        }
+    }
+    &-content {
+        flex: 1;
+        padding-left: .1rem;
+        dt {
+            display: flex;
+            line-height: .2rem;
+        }
+        strong {
+            font-size: .14rem;
+            color: #333;
+            font-weight: 700;
+        }
+        .icon {
+            &-male {
+                color: #2088e4;
+            }
+            &-female {
+                color: #e43320;
+            }
+        }
+    }
+}

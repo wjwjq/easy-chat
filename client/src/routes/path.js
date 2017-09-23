@@ -31,7 +31,7 @@ if (global.activeServerSubdomain) {
         myAccountandsecurity: `${BASEROUTE}/my/accountandsecurity`,
         myBlacklist: `${BASEROUTE}/my/blacklist`,
         myHelp: `${BASEROUTE}/my/help`,
-        myAbout: `${BASEROUTE}/about`,
+        myAbout: `${BASEROUTE}/my/about`,
         root: `${BASEROUTE}/`
     };
     

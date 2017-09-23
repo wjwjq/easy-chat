@@ -1,14 +1,13 @@
 //好友详情
 import React, { Component } from 'react';
-import classnames from 'classnames';
 import PropTypes from 'prop-types';
 
 import { Link } from 'react-router-dom';
 
 import './Detail.less';
 
-import config from '../../configs/config';
 import pathConfigs from '../../routes/path';
+import Card from '../share/Card/';
 
 export default class FriendDetail extends Component {
     
@@ -30,23 +29,17 @@ export default class FriendDetail extends Component {
     render() {
         const { avatarUrl, nickname, remark, telephone, address, gender, userId, username } = this.props;
         
-        const genderClasses = classnames({
-            icon: true,
-            'icon-male': !gender,
-            'icon-female': gender
-        });
-        
         return (
-            <div className="detail-info">
-                <div className="detail-info-item">
-                    <img src={avatarUrl || config.defaultAvatar}  className="detail-info-avatar"/>
-                    <dl className="detail-info-content">
-                        <dt>{remark || nickname} <i className={genderClasses}></i></dt>
-                        <dd>用户号: {username}</dd>
-                        {remark && <dd>昵称：{nickname}</dd>}
-                    </dl> 
-                </div> 
-                <div className="detail-info-contact">
+            <ul className="detail-info">
+                <Card
+                    classPrefix="user-info"
+                    userInfo={{ avatarUrl, nickname, remark }}
+                    genderShow={true}
+                    countShow={true}
+                    nicknameShow={true}
+                    userInfo={{ avatarUrl, nickname, remark, gender, username }}
+                /> 
+                <li className="user-info-contact">
                     <p>
                         <span>电话</span>
                         <i><a href={`tel:${telephone}`}>{telephone}</a></i>
@@ -55,11 +48,11 @@ export default class FriendDetail extends Component {
                         <span>地区</span>
                         <i>{address}</i>
                     </p>
-                </div>
-                <div className="btn-group">
+                </li>
+                <li className="btn-group">
                     <Link to={`${pathConfigs.messages}/${userId}`} className="btn btn-green">发消息</Link>
-                </div>
-            </div>
+                </li>
+            </ul>
         );
     }
 
