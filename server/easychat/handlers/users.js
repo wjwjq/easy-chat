@@ -7,13 +7,11 @@ exports.getUser = function (req, res) {
             console.info(err);
         }
         if (data) {
-            res.json({
-                status: 204,
+            res.status(204).json({
                 message: '用户名已被注册'
             });
         } else {
-            res.json({
-                status: 200,
+            res.status(200).json({
                 message: '用户名可以使用'
             });
         }

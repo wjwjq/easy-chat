@@ -2,13 +2,13 @@
 exports.getFriends = function (req, res) {
     const data = [{
         'address': '四川 成都',
-        'avatarUrl': '',
+        'avatarUrl': '/images/avatar.png',
         'gender': 0,
         'nickname': 'test A-1',
         'order': 'A',
         'remark': '风',
         'telephone': '18990655830',
-        'userId': '1',
+        'friendId': '1',
         'username': '18990655830'
     }, {
         'address': '',
@@ -18,39 +18,10 @@ exports.getFriends = function (req, res) {
         'order': 'B',
         'remark': '',
         'telephone': '',
-        'userId': '2',
+        'friendId': '2',
         'username': 'wjwjq456@qq.com'
-    }, {
-        'address': '',
-        'avatarUrl': '',
-        'gender': 1,
-        'nickname': 'test B-1',
-        'order': 'A',
-        'remark': '',
-        'telephone': '',
-        'userId': '3',
-        'username': 'wjq@eagle.com'
-    }, {
-        'address': '',
-        'avatarUrl': '/images/avatar.png',
-        'gender': 0,
-        'nickname': 'test B-2',
-        'order': 'B',
-        'remark': '',
-        'telephone': '',
-        'userId': '4',
-        'username': 'eagleagle@qq.com'
-    },{
-        'address': '四川 成都',
-        'avatarUrl': '',
-        'gender': 0,
-        'nickname': 'test A-1',
-        'order': 'A',
-        'remark': '风',
-        'telephone': '18990655830',
-        'userId': '5',
-        'username': '18990655830'
-    }, {
+    },
+    {
         'address': '',
         'avatarUrl': '/images/avatar.png',
         'gender': 1,
@@ -58,7 +29,7 @@ exports.getFriends = function (req, res) {
         'order': 'B',
         'remark': '',
         'telephone': '',
-        'userId': '6',
+        'friendId': '59c262677e18a92adc9d93aa',
         'username': 'wjwjq456@qq.com'
     }, {
         'address': '',
@@ -68,38 +39,8 @@ exports.getFriends = function (req, res) {
         'order': 'A',
         'remark': '',
         'telephone': '',
-        'userId': '7',
+        'friendId': '3',
         'username': 'wjq@eagle.com'
-    }, {
-        'address': '',
-        'avatarUrl': '/images/avatar.png',
-        'gender': 0,
-        'nickname': 'test B-2',
-        'order': 'B',
-        'remark': '',
-        'telephone': '',
-        'userId': '8',
-        'username': 'eagleagle@qq.com'
-    },{
-        'address': '四川 成都',
-        'avatarUrl': '',
-        'gender': 0,
-        'nickname': 'test A-1',
-        'order': 'A',
-        'remark': '风',
-        'telephone': '18990655830',
-        'userId': '9',
-        'username': '18990655830'
-    }, {
-        'address': '',
-        'avatarUrl': '/images/avatar.png',
-        'gender': 1,
-        'nickname': 'test A-2',
-        'order': 'B',
-        'remark': '',
-        'telephone': '',
-        'userId': '10',
-        'username': 'wjwjq456@qq.com'
     }, {
         'address': '',
         'avatarUrl': '',
@@ -108,62 +49,12 @@ exports.getFriends = function (req, res) {
         'order': 'A',
         'remark': '',
         'telephone': '',
-        'userId': '11',
+        'friendId': '4',
         'username': 'wjq@eagle.com'
-    }, {
-        'address': '',
-        'avatarUrl': '/images/avatar.png',
-        'gender': 0,
-        'nickname': 'test B-2',
-        'order': 'B',
-        'remark': '',
-        'telephone': '',
-        'userId': '12',
-        'username': 'eagleagle@qq.com'
-    },{
-        'address': '四川 成都',
-        'avatarUrl': '',
-        'gender': 0,
-        'nickname': 'test A-1',
-        'order': 'A',
-        'remark': '风',
-        'telephone': '18990655830',
-        'userId': '13',
-        'username': '18990655830'
-    }, {
-        'address': '',
-        'avatarUrl': '/images/avatar.png',
-        'gender': 1,
-        'nickname': 'test A-2',
-        'order': 'B',
-        'remark': '',
-        'telephone': '',
-        'userId': '14',
-        'username': 'wjwjq456@qq.com'
-    }, {
-        'address': '',
-        'avatarUrl': '',
-        'gender': 1,
-        'nickname': 'test B-1',
-        'order': 'A',
-        'remark': '',
-        'telephone': '',
-        'userId': '15',
-        'username': 'wjq@eagle.com'
-    }, {
-        'address': '',
-        'avatarUrl': '/images/avatar.png',
-        'gender': 0,
-        'nickname': 'test B-2',
-        'order': 'B',
-        'remark': '',
-        'telephone': '',
-        'userId': '16',
-        'username': 'eagleagle@qq.com'
     }];
 
     setTimeout(() => {
-        res.json(data);
+        res.status(200).json(data);
     }, 300);
 };
 

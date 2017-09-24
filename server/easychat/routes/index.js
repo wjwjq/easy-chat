@@ -26,9 +26,15 @@ module.exports = function (app) {
     app.get('/api/users/:id', tokenManager.verifyToken, users.getUser);
     
     //messages
+    //获取指定好友的消息列表
     app.get('/api/messages/:id', tokenManager.verifyToken, messages.getMessage);
-    app.post('/api/messages/:id', messages.postMessage);
-    app.delete('/api/messages/:id', messages.deleteMessage);
+    //新建指定好友的消息列表
+    app.post('/api/messages/:id', tokenManager.verifyToken, messages.postMessage);
+    //更新指定好友的消息列表
+    app.put('/api/messages/:id', tokenManager.verifyToken, messages.putMessage);
+    //删除指定好友的消息列表
+    app.delete('/api/messages/:id', tokenManager.verifyToken, messages.deleteMessage);
+    //获取所有好友的消息列表
     app.get('/api/messages', tokenManager.verifyToken, messages.getMessages);
 
     //提示浏览器升级
