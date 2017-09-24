@@ -34,7 +34,7 @@ export function signIn(userInfo) {
                 'access_token':  expired ? accessToken.token : ''
             })
             .then((res) => {
-                if (res.data.status === 401) {
+                if (res.status === 401) {
                     removeItem('access_token');
                     return dispatch({
                         type: SIGN_IN_REJECTED,
@@ -80,7 +80,7 @@ export function signUp(userInfo) {
             })
             .then((res) => {
           
-                if (res.data.status === 200) {
+                if (res.status === 200) {
                     dispatch({
                         type: SIGN_UP_FULFILLED,
                         payload: true
@@ -117,12 +117,11 @@ export function getValid(username, type) {
                 type
             })
             .then((res) => {
-                if (res.data.status === 200) {
+                if (res.status === 200) {
                     dispatch({
                         type: GET_VALID_FULFILLED,
                         payload: res.data.valid
                     });
-                    //todo: setCookies Or localStorage
                 } else {
                     dispatch({
                         type: GET_VALID_REJECTED,

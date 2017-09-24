@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import pathConfigs from '../../routes/path';
 
 import Card from '../share/Card/';
 
-import Logout from  '../Auth//Logout';
+import Logout from  '../Auth/Logout';
 
 import './index.less';
 
@@ -14,13 +14,8 @@ import './index.less';
         user: store.user.user
     };
 })
-export default  class My extends Component {
-
-    constructor(props) {
-        super(props);
-        this.state = {};
-    }
-
+export default  class My extends PureComponent {
+    
     render() {
         const { user } = this.props;
         

@@ -1,14 +1,10 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 
 import Back from './Back';
 import './Header.less';
 
 
-export default class Header extends Component {
-
-    constructor(props) {
-        super(props);
-    }
+export default class Header extends PureComponent {
     render() {
         const { title, showBackButton } = this.props;
         return (

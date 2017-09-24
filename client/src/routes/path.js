@@ -17,7 +17,7 @@ if (global.activeServerSubdomain) {
         root: '/'
     };
 } else {
-    const APPNAME = global.APPNAME.replace(/\//g, 'global');
+    const APPNAME = global.APPNAME.replace(/\//g, '');
     
     const BASEROUTE = APPNAME ? `/${APPNAME}`: '';
     route = {

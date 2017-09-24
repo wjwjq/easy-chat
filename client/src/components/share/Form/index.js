@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
-// import PropTypes from 'prop-types';
-
-import './Form.less';
 import Text from './Text';
 import Password from './Password';
 import Validate from './Validate';
@@ -13,6 +10,7 @@ import Select from './Select';
 import Textarea from './Textarea';
 import Submit from './Submit';
 
+import './Form.less';
 
 //调用方式，详见./test.js
 
@@ -20,13 +18,16 @@ export default class Form extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            data: {}
-        };
+        
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.queryInsetData = this.queryInsetData.bind(this);
         this.validateAllAndformatData = this.validateAllAndformatData.bind(this);
+
+        this.state = {
+            data: {}
+        };
+   
     }
 
     

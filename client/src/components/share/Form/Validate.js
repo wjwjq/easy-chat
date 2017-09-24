@@ -149,4 +149,3 @@ export default class Validate extends Component {
     }
 
 }
-

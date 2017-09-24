@@ -8,14 +8,15 @@ export default class MessageSend extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            value: ''
-        };
-
+        
         this.handleChange = this.handleChange.bind(this);
         this.handleEmojiClick = this.handleEmojiClick.bind(this);
         this.handleVoiceClick = this.handleVoiceClick.bind(this);
         this.handleKeydown = this.handleKeydown.bind(this);
+
+        this.state = {
+            value: ''
+        };
     }
 
     handleChange(e) {
@@ -25,26 +26,28 @@ export default class MessageSend extends Component {
     }
 
     handleEmojiClick() {
-
+        //todo:
     }
 
     handleVoiceClick() {
-
+        //todo:
     }
 
 
     handleKeydown(e) {
         if (e.keyCode === 13) {
             e.preventDefault();
+            const { friendId, userId } = this.props;
             const data = {
-                from: 0,
-                content: this.state.value,
+                from: userId,
+                to: friendId,
+                content: e.target.value,
                 publishTime:  dataFormat(new Date())                
             };
-            this.props.onSend(data);
             this.setState({
                 value: ''
             });
+            this.props.onSend(data);
         }
     }
 
@@ -66,16 +69,20 @@ export default class MessageSend extends Component {
         return (
             <div className="message-send">
                 <div className="message-send-options-btn">
-                    <i className={voiceClasses} onClick={this.handleVoiceClick}></i>
+                    <i className={voiceClasses} onClick={this.handleVoiceClick} ></i>
                 </div>
                 <div className="message-send-input-box">
                     <label>
-                        <textarea className="message-send-input" value={value} onChange ={this.handleChange} onKeyDown={this.handleKeydown} ></textarea>
-                        {/* <span className="message-send-text">{value}</span> */}
+                        <textarea 
+                            className="message-send-input" 
+                            value={value} 
+                            onChange={this.handleChange} 
+                            onKeyDown={this.handleKeydown} 
+                        ></textarea>
                     </label>
                 </div>
                 <div className="message-send-options-btn">
-                    <i  className={emojiClasses} onClick={this.handleEmojiClick}></i>
+                    <i  className={emojiClasses} onClick={this.handleEmojiClick} ></i>
                 </div>
             </div>
         );

@@ -6,7 +6,6 @@ export default class TabContent extends Component {
 
     constructor(props) {
         super(props);
-        
     }
     
     getContent() {
@@ -15,7 +14,6 @@ export default class TabContent extends Component {
         return contents.map((item) => {
 
             const order = parseInt(item.props.order, 10);
-            /* style={order === activeIndex ? { 'display':'block' } : { 'display':'none' }} */
             
             return  <NavContentScroll key={order}>
                 {item.props.children}

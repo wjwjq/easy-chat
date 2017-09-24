@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import Nav from '../components/Nav/Nav';
 import NavPannel from '../components/Nav/NavPannel';
 
@@ -9,7 +9,7 @@ import MyView from './My/';
 import authenticate from '../components/Auth/Auth';
 
 @authenticate
-export default class extends Component {
+export default class extends PureComponent {
     render() {
         return (
             <Nav  defaultActiveIndex={0}>

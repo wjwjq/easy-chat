@@ -19,7 +19,6 @@ export default class Checkbox extends Component {
     }
     
     handleChange(e) {
-        //todo: valid
         this.setState({
             selectOption:  e.target.value
         });
@@ -46,4 +45,3 @@ export default class Checkbox extends Component {
     }
 
 }
-

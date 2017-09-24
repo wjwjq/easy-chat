@@ -9,6 +9,7 @@ export default function authenticate(WrappedComponent) {
         static propTypes = {
             isLogined: PropTypes.bool.isRequired
         }
+        
         constructor(props) {
             super(props);
         }

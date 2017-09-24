@@ -31,7 +31,6 @@ export default class SignUp extends Component {
     }
 
     handleGetValid() {
-        console.info('哈哈哈我是卖报的小行家');
         this.props.dispatch(getValid('signUp'));
     }
     
@@ -44,10 +43,7 @@ export default class SignUp extends Component {
         console.info(result);
         this.props.dispatch(signUp(result));
     }
-    
-    componentDidMount() {
-        
-    }
+ 
     componentWillReceiveProps(nextProps) {
         nextProps.isRegistered && this.props.history.push('signin');
     }

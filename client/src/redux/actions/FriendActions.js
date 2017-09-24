@@ -3,6 +3,7 @@ import api  from '../../configs/api';
 import { getItem } from '../../configs/storage';
 
 import {
+    FETCH_FRIENDS,
     FETCH_FRIENDS_REJECTED,
     FETCH_FRIENDS_FULFILLED,
     QUERY_FRIEND_REJECTED,
@@ -19,20 +20,32 @@ import {
 //获取当期用户所有的好友
 export function fetchFriends() {
     return function (dispatch) {
+        dispatch({
+            type: FETCH_FRIENDS
+        });
         axios
             .get(api.friends,{
                 headers: {
                     'x-access-token':  getItem('access_token')['token']
                 }
             })
-            .then((res) => dispatch({
-                type: FETCH_FRIENDS_FULFILLED,
-                payload: res.data
-            }))
+            .then((res) => {
+                if (res.status === 200) {
+                    dispatch({
+                        type: FETCH_FRIENDS_FULFILLED,
+                        payload: res.data
+                    });
+                } else {
+                    dispatch({
+                        type: QUERY_FRIEND_REJECTED,
+                        payload: res.data
+                    });
+                }
+            })
             .catch((err) =>
                 dispatch({
                     type: FETCH_FRIENDS_REJECTED,
-                    payload: err
+                    payload: err.message
                 })
             );
     }; 
@@ -44,21 +57,21 @@ export function queryFriend(userId) {
         axios
             .get(`${api.friends}/${userId}`)
             .then((res) =>  {     
-                if (res.status = 200) {
+                if (res.status === 200) {
                     dispatch({
                         type: QUERY_FRIEND_FULFILLED,
-                        payload: res.data
+                        payload: res.data.friend
                     });
                 } else {
                     dispatch({
                         type: QUERY_FRIEND_REJECTED,
-                        payload: res.data
+                        payload: res.data.message
                     });
                 }
             })
             .catch((err) => dispatch({
                 type: QUERY_FRIEND_REJECTED,
-                payload: err
+                payload: err.message
             }));
     };
 }
@@ -69,21 +82,21 @@ export function addFriend(userId) {
         axios
             .post(`${api.friends}/${userId}`)
             .then((res) =>  {     
-                if (res.status = 200) {
+                if (res.status === 200) {
                     dispatch({
                         type: ADD_FRIEND_FULFILLED,
-                        payload: res.data
+                        payload: res.data.friend
                     });
                 } else {
                     dispatch({
                         type: ADD_FRIEND_REJECTED,
-                        payload: err
+                        payload: res.data.message
                     });
                 }
             })
             .catch((err) => dispatch({
                 type: ADD_FRIEND_REJECTED,
-                payload: err
+                payload: err.message
             }));
     };
 }
@@ -96,21 +109,21 @@ export function updateFriend(userId, data) {
                 data
             })
             .then((res) => {
-                if (res.status = 200) {
+                if (res.status === 200) {
                     dispatch({
                         type: UPDATE_FRIEND_FULFILLED,
-                        payload: res.data
+                        payload: res.data.friend
                     });
                 } else {
                     dispatch({
                         type: UPDATE_FRIEND_REJECTED,
-                        payload: fail
+                        payload: res.data.message
                     });                   
                 }
             })
             .catch((err) => dispatch({
                 type: UPDATE_FRIEND_REJECTED,
-                payload: err
+                payload: err.message
             }));
     };
 }
@@ -121,22 +134,21 @@ export function deleteFriend(userId) {
         axios
             .delete(`${api.friends}/${userId}`)
             .then((res) => {
-                if (res.status = 200) {
+                if (res.status === 200) {
                     dispatch({
                         type: DELETE_FRIEND_FULFILLED,
-                        payload: 200
+                        payload: res.data.message
                     });
                 } else {
                     dispatch({
                         type: DELETE_FRIEND_REJECTED,
-                        payload: 'fail'
+                        payload: res.data.message
                     });    
                 }
-               
             })
             .catch((err) => dispatch({
                 type: DELETE_FRIEND_REJECTED,
-                payload: err
+                payload: err.message
             }));
     };
 }

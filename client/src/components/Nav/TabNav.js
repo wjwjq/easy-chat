@@ -7,7 +7,6 @@ export default class TabNav extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {};
     }
 
     getNavs() {
@@ -29,6 +28,7 @@ export default class TabNav extends Component {
             );
         });
     }
+
     render() {
         return (
             <nav className="nav">

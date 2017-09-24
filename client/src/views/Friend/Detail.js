@@ -8,7 +8,7 @@ import _ from 'lodash';
 
 @connect((store, ownProps) => {
     return {
-        friend: _.find(store.friends.friends, { userId: ownProps.match.params.id }) 
+        friend: _.find(store.friends.friends, { friendId: ownProps.match.params.id }) 
     };
 })
 export default class FriendDetailView extends Component {

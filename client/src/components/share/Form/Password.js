@@ -146,4 +146,3 @@ export default class Password extends Component {
     }
 
 }
-

@@ -9,44 +9,68 @@ import SendMessage from './Send';
 import './Box.less';
 
 import _ from 'lodash';
-import config from '../../configs/config';
 
-import { addMessage } from '../../redux/actions/MessageActions';
+import { newMessage, addMessage } from '../../redux/actions/MessageActions';
 
-
-
-@connect((store, ownProps) => {
+@connect((store) => {
     return {
-        friend: _.find(store.friends.friends, { userId: ownProps.userId }),
-        messages: store.messages.messages
+        messages: store.messages.messages,
+        user: store.user.user
     };
+},{
+    newMessage,
+    addMessage
 })
 export default class MessageBox extends Component {
-    
+
     static propTypes = {
-        userId: PropTypes.string.isRequired,
+        friendId: PropTypes.string.isRequired,
         friend: PropTypes.object,
         message: PropTypes.object
     }
 
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state={
+            message: _.find(props.messages, { friendId: props.friendId })
+        };
         this.handleSend = this.handleSend.bind(this);
     }
 
-    handleSend( data) {
-        this.props.dispatch(addMessage(this.props.userId, data));
+    handleSend(data) {
+        const { friendId, addMessage, newMessage } = this.props;
+        const { message } = this.state;
+        if (message) {
+            addMessage(friendId, data);
+        } else {
+            newMessage(friendId, data);
+        }
     }
 
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            message: _.find(nextProps.messages, { friendId: nextProps.friendId })
+        });
+    }
+ 
     render() {
-        const { friend, messages, userId }  = this.props;
-        let message = _.find(messages, { userId });
-
+        const { friendId, friendAvatarUrl, user }  = this.props;
+        const { userId, avatarUrl } = user;
+        const { message } = this.state;
         return (
             <div className="message-box">
-                <ShowMessage {...message} avatarUrl= {friend.avatarUrl || config.defaultAvatar} />
-                <SendMessage onSend={this.handleSend} />
+                <ShowMessage 
+                    {...message}
+                    friendId={friendId}
+                    userId={userId}
+                    userAvatarUrl={avatarUrl}
+                    friendAvatarUrl={friendAvatarUrl}
+                />
+                <SendMessage 
+                    friendId={friendId}
+                    userId={userId}
+                    onSend={this.handleSend} 
+                />
             </div>
         );
     }

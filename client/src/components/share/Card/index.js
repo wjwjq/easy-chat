@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { withRouter } from 'react-router-dom';
@@ -6,7 +6,7 @@ import { withRouter } from 'react-router-dom';
 import config from '../../../configs/config';
 import './Card.less';
 
-class Card extends Component {
+class Card extends PureComponent {
 
     static propTypes = {
         classPrefix: PropTypes.string,

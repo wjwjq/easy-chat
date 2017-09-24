@@ -1,5 +1,5 @@
 //消息联系人卡
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
@@ -10,29 +10,25 @@ import Card from '../share//Card/';
 
 @connect((store, ownProps) => (
     {
-        friend: _.find(store.friends.friends, { userId: ownProps.userId })
+        friend: _.find(store.friends.friends, { friendId: ownProps.friendId })
     }
 ))
-export default class MessageItem extends Component {
+export default class MessageItem extends PureComponent {
 
     static propTypes = {
-        userId: PropTypes.string.isRequired,
+        friendId: PropTypes.string.isRequired,
         msgs: PropTypes.arrayOf(PropTypes.shape({
             content: PropTypes.string,
             publishTime: PropTypes.string
         }))
     }
 
-    constructor(props) {
-        super(props);
-    }
-
     render() {
 
-        const { friend, userId, msgs } = this.props;
+        const { friend, friendId, msgs } = this.props;
         return (
             <Card
-                to={`${pathConfigs.messages}/${userId}`}
+                to={`${pathConfigs.messages}/${friendId}`}
                 classPrefix="message-card"
                 latestMsg={ msgs.slice(-1).pop() || {} }
                 userInfo={friend}

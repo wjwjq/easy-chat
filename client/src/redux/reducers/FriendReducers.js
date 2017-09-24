@@ -1,4 +1,5 @@
 import {
+    FETCH_FRIENDS,
     FETCH_FRIENDS_REJECTED,
     FETCH_FRIENDS_FULFILLED,
     QUERY_FRIEND_REJECTED,
@@ -31,16 +32,23 @@ export default function reducers(state = initialState, action) {
     switch (action.type) {
 
         //获取当期用户所有的好友
+        case FETCH_FRIENDS: 
+            return {
+                ...state,
+                fetching: true,
+                fetched: false
+            };
         case FETCH_FRIENDS_REJECTED:
             return {
                 ...state,
-                fetch: false,
+                fetching: false,
+                fetched: false,
                 error: action.payload
             };
         case FETCH_FRIENDS_FULFILLED:
             return {
-                ...state,
-                fetch: false,
+                ...state,   
+                fetching: false,
                 fetched: true,
                 friends: action.payload
             };
@@ -73,13 +81,7 @@ export default function reducers(state = initialState, action) {
                 ...state,
                 adding: false,
                 added: true,
-                friends: state.friends.map((friend) => {
-                    if (friend.userId === action.payload.userId) {
-                        return action.payload.data;
-                    } else {
-                        return friend;
-                    }
-                })
+                friends: state.friends.concat(action.payload)
             };
 
         //更新信息好友
@@ -97,10 +99,9 @@ export default function reducers(state = initialState, action) {
                 updated: true,
                 friends: state.friends.map((friend) => {
                     if (friend.userId === action.payload.userId) {
-                        return action.payload.data;
-                    } else {
-                        return friend;
+                        return Object.assign({}, friend, action.payload);
                     }
+                    return friend;
                 })
             };
 

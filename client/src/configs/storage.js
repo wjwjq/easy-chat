@@ -4,7 +4,7 @@ export function setItem(key, value) {
     if (key && value) {
         localStorage.setItem(key, value);
     } else {
-        key.length &&  key.map(function (item) {
+        Array.isArray(key) &&  key.map(function (item) {
             localStorage.setItem(item['key'], item['value']);
         });
     }

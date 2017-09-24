@@ -12,9 +12,8 @@ export default class OperationBar extends Component {
     render() {
         return (
             <ul className='operation-bar'>
-              <li>  
+                <li>  </li>
             </ul>
         );
     }
-
 }

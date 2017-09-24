@@ -1,10 +1,7 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import classnames from 'classnames';
-export default  class NavIcon extends Component {
-    constructor(pros) {
-        super(pros);
-    }
 
+export default  class NavIcon extends PureComponent {
     render() {
         const { isActive, icons } = this.props;
         let geIcons = {};

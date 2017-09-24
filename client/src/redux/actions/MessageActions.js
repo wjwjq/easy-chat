@@ -3,8 +3,11 @@ import api  from '../../configs/api';
 import { getItem } from '../../configs/storage';
 
 import {
+    FETCH_MESSAGES,
     FETCH_MESSAGES_REJECTED,
     FETCH_MESSAGES_FULFILLED,
+    NEW_MESSAGE_REJECTED,
+    NEW_MESSAGE_FULFILLED,
     ADD_MESSAGE_REJECTED,
     ADD_MESSAGE_FULFILLED,
     DELETE_MESSAGE_REJECTED,
@@ -14,6 +17,9 @@ import {
 //抓取所有信息列表
 export function fetchMessages() {
     return function (dispatch) {
+        dispatch({
+            type: FETCH_MESSAGES
+        });
         axios
             .get(api.messages,{
                 headers: {
@@ -21,12 +27,18 @@ export function fetchMessages() {
                 }
             })
             .then((res) => {
-                dispatch({
-                    type: FETCH_MESSAGES_FULFILLED,
-                    payload: res.data
-                });
-            }
-            )
+                if (res.status === 200) {
+                    dispatch({
+                        type: FETCH_MESSAGES_FULFILLED,
+                        payload: res.data
+                    });
+                } else {
+                    dispatch({
+                        type: FETCH_MESSAGES_REJECTED,
+                        payload: res.data.messages
+                    });
+                }
+            })
             .catch((err) =>
                 dispatch({
                     type: FETCH_MESSAGES_REJECTED,
@@ -36,19 +48,51 @@ export function fetchMessages() {
     }; 
 }
 
-//添加信息
-export function addMessage(userId, data) {
+//新建消息
+export function newMessage(friendId, data) {
     return function (dispatch) {
         axios
-            .post(`${api.messages}/${userId}`,{
-                data
+            .post(`${api.messages}/${friendId}`,{
+                data,
+                'access_token': getItem('access_token')['token']
             })
             .then((res) => {
-                if (res.data.status === 200) {
+                if (res.status === 200) {
+                    dispatch({
+                        type: NEW_MESSAGE_FULFILLED,
+                        payload: {
+                            friendId,
+                            msgs: [data]
+                        }
+                    });
+                } else {
+                    dispatch({
+                        type: NEW_MESSAGE_REJECTED,
+                        payload: err
+                    });
+                }
+            })
+            .catch((err) => dispatch({
+                type: NEW_MESSAGE_REJECTED,
+                payload: err
+            }));
+    };
+}
+
+//添加信息
+export function addMessage(friendId, data) {
+    return function (dispatch) {
+        axios
+            .put(`${api.messages}/${friendId}`,{
+                data,
+                'access_token': getItem('access_token')['token']
+            })
+            .then((res) => {
+                if (res.status === 200) {
                     dispatch({
                         type: ADD_MESSAGE_FULFILLED,
                         payload: {
-                            userId,
+                            friendId,
                             data
                         }
                     });
@@ -67,20 +111,19 @@ export function addMessage(userId, data) {
 }
 
 //删除信息
-export function deleteMessage(userId) {
+export function deleteMessage(friendId) {
     return function (dispatch) {
         axios
-            .post(`${api.messages}/${userId}`,{
-                data
+            .delete(`${api.messages}/${friendId}`,{
+                headers: {
+                    'x-access-token': getItem('access_token')['token']
+                }
             })
             .then((res) => {
-                if (res.data.status === 200) {
+                if (res.status === 200) {
                     dispatch({
                         type: DELETE_MESSAGE_FULFILLED,
-                        payload: {
-                            userId,
-                            data
-                        }
+                        payload: friendId
                     });
                 } else {
                     dispatch({

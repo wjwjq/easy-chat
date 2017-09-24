@@ -1,11 +1,10 @@
-const baseUrl = '/api';//'../../mock/';
-const ext = '';//'.json';
+const baseUrl = '/api';
 export default  {
-    messages: baseUrl + `/messages${ext}`,
-    friends: baseUrl + `/friends${ext}`,
+    messages: baseUrl + `/messages`,
+    friends: baseUrl + `/friends`,
     auth: {
-        signup: baseUrl + `/auth${ext}/signup`,
-        signin: baseUrl + `/auth${ext}/signin`,
-        valid: baseUrl + `/auth${ext}/valid`
+        signup: baseUrl + `/auth/signup`,
+        signin: baseUrl + `/auth/signin`,
+        valid: baseUrl + `/auth/valid`
     }
 };

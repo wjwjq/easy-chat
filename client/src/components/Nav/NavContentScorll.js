@@ -27,7 +27,6 @@ export default class NavContentScroll extends Component {
         const box = this.refs.navContentBox;
         const height = box.offsetHeight;
         const scrollEl = this.refs.navContentBoxInnerScorll;
-        // const header = scrollEl.querySelector('header');
         const maxHeight = scrollEl.offsetHeight;
         const limitPos = maxHeight - height;
         if (limitPos > 0) {
@@ -38,16 +37,9 @@ export default class NavContentScroll extends Component {
             startY = endY;
             if (top <= -limitPos) {
                 top = -limitPos;
-                // this.setState({
-                //     alreadyToTop: true
-                // });
             } else if (top >= 0) {
                 top = 0;
-                // this.setState({
-                //     alreadyToBottom: false
-                // });
             }
-            // header.style.top = `${-top}px`;
             this.setState({
                 top,
                 startY

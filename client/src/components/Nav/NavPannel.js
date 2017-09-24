@@ -1,19 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-// import PropTypes from 'prop-types';
-
-export default class NavPannel extends Component {
-
-    constructor(props) {
-        super(props);
-    }
-
-    render() {
-        return (
-            <div>
-                {this.props.children}
-            </div>
-        );
-    }
-
-}
+const NavPannel = (props) => {
+    return (
+        <div>
+            {props.children}
+        </div>
+    );
+};
+export default NavPannel;

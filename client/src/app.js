@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 
@@ -13,16 +13,14 @@ import './static/styles/fonts.less';
 import './static/styles/init.less';
 import './static/styles/global.less';
 
-class App extends Component {
-    render() {
-        return (
-            <Provider store={store}>
-                <ConnectedRouter history={history}>
-                    <Routes />
-                </ConnectedRouter>
-            </Provider>
-        );
-    }
-}
+const App = () => {
+    return (
+        <Provider store={store}>
+            <ConnectedRouter history={history}>
+                <Routes />
+            </ConnectedRouter>
+        </Provider>
+    );
+};
 
 ReactDOM.render(<App />, document.getElementById('app')); 

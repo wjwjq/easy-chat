@@ -38,15 +38,15 @@ export default class SignIn extends Component {
             isTokenNotExpired:   hasAccessToken && hasAccessToken['expires'] > Math.floor(Date.now() / 1000)
         });
     }
+    
     componentDidMount() {
     }
+
     componentWillReceiveProps(nextProps) {
         !nextProps.isLogining && nextProps.isLogined && this.props.history.push(pathConfigs.root);
     }
 
     handleGetValid() {
-        console.info('哈哈哈我是卖报的小行家');
-        return;
         this.props.dispatch(getValid('signin'));
     }
  
@@ -106,5 +106,4 @@ export default class SignIn extends Component {
             );
         }
     }
-
 }

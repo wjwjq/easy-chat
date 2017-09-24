@@ -44,11 +44,13 @@ export default class SlideToDelete extends Component {
     handleTouchMove(e) {
         let { left, startX, offSetPos } = this.state;
         const endX = e.nativeEvent.touches[0].clientX;
-        left += (endX - startX) * 2;
-        if (left >= 0) {
+        const step = endX - startX;
+        if (step >= 0 && left > offSetPos * 2 / 3 ) { //右滑动, 隐藏
             left = 0;
-        } else if (left <= -offSetPos) {
-            left = -offSetPos;
+        } else if (step < 0 && left < offSetPos * 1 / 3) { //左滑动，显示
+            left = offSetPos;
+        } else {
+            left += step * 2;
         }
         startX = endX;
         this.setState({
@@ -64,7 +66,7 @@ export default class SlideToDelete extends Component {
     initialOffSetPos() {
         const node = ReactDOM.findDOMNode(this).querySelector('.slide-item-inner-button');
         this.setState({
-            offSetPos: node.clientWidth
+            offSetPos: -node.clientWidth
         });
     }
     

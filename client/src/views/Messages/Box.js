@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Header from '../../components/Header/Header';
@@ -8,10 +8,10 @@ import _ from 'lodash';
 
 @connect((store, ownProps) => {
     return {
-        friend: _.find(store.friends.friends, { userId: ownProps.match.params.id }) 
+        friend: _.find(store.friends.friends, { friendId: ownProps.match.params.id }) 
     };
 })
-export default class MessagesBoxView extends Component {
+export default class MessagesBoxView extends PureComponent {
     
     static propTypes = {
         friend: PropTypes.object
@@ -19,11 +19,10 @@ export default class MessagesBoxView extends Component {
 
     render() {
         const { friend } = this.props;
-  
         return (
             <div>
                 <Header title={friend.remark || friend.nickname} showBackButton={true} />
-                <MessageBox {...friend} />
+                <MessageBox friendId={friend.friendId} friendAvatarUrl={friend.avatarUrl} />
             </div>
         );
     }
