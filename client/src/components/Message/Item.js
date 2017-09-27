@@ -10,13 +10,13 @@ import Card from '../share//Card/';
 
 @connect((store, ownProps) => (
     {
-        friend: _.find(store.friends.friends, { friendId: ownProps.friendId })
+        friend: _.find(store.friends.friends, { username: ownProps.username })
     }
 ))
 export default class MessageItem extends PureComponent {
 
     static propTypes = {
-        friendId: PropTypes.string.isRequired,
+        username: PropTypes.string.isRequired,
         msgs: PropTypes.arrayOf(PropTypes.shape({
             content: PropTypes.string,
             publishTime: PropTypes.string
@@ -25,10 +25,10 @@ export default class MessageItem extends PureComponent {
 
     render() {
 
-        const { friend, friendId, msgs } = this.props;
+        const { friend, username, msgs } = this.props;
         return (
             <Card
-                to={`${pathConfigs.messages}/${friendId}`}
+                to={`${pathConfigs.messages}/${username}`}
                 classPrefix="message-card"
                 latestMsg={ msgs.slice(-1).pop() || {} }
                 userInfo={friend}

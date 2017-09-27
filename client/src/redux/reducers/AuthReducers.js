@@ -1,14 +1,14 @@
 const initalState = {
     user: {},
     valid: {},
-    token: '',
+
     isLogining: false,
     isLogined: false,
+    loginMsg: '',
+
     isRegistering: false,
     isRegistered: false,
-    msg: '',
-    isTokenNotExpired: true,
-    error: ''
+    registryMsg: ''
 };
 
 import {
@@ -18,7 +18,6 @@ import {
     SIGN_UP,
     SIGN_UP_REJECTED,
     SIGN_UP_FULFILLED,
-    LOGOUT,
     GET_VALID_REJECTED,
     GET_VALID_FULFILLED
 } from '../constant/';
@@ -31,22 +30,22 @@ export default function reducers(state = initalState, action) {
                 ...state,
                 isLogining: true,
                 isLogined: false,
-                error: ''
+                loginMsg: ''
             };
         case SIGN_IN_REJECTED:
             return {
                 ...state,
                 isLogining: false,
                 isLogined: false,
-                error: action.payload
+                loginMsg: action.payload
             };
         case SIGN_IN_FULFILLED:
             return {
                 ...state,
-                user: action.payload.user,
                 isLogined: true,
                 isLogining: false,
-                error: ''
+                user: action.payload.user,
+                loginMsg: action.payload.message
             };
 
         //注册
@@ -55,30 +54,22 @@ export default function reducers(state = initalState, action) {
                 ...state,
                 isRegistering: true,
                 isRegistered: false,
-                error: ''
+                registryMsg: ''
             };
         case SIGN_UP_REJECTED:
             return {
                 ...state,
                 isRegistering: false,
                 isRegistered: false,
-                error: action.payload
+                registryMsg: action.payload
             };
         case SIGN_UP_FULFILLED:
             return {
                 ...state,
                 isRegistering: false,
                 isRegistered: true,
-                msg: action.payload
+                registryMsg: action.payload
             };
-        
-        case LOGOUT: {
-            return {
-                ...state,
-                isLogining: false,
-                isLogined: false
-            };
-        }
         //获取验证码
         case GET_VALID_REJECTED:
             return {

@@ -80,19 +80,18 @@ export default class Validate extends Component {
     }
 
     counter() {
-        let _this =  this;
-        let { countTime, counterId } = _this.state;
+        let { countTime, counterId } = this.state;
         counterId = setInterval(() => {
             if (countTime < 0) {
-                _this.setState({
+                this.setState({
                     canTriggerAgain: true,
-                    buttonText: _this.state.buttonOriginText,
+                    buttonText: this.state.buttonOriginText,
                     counterId
                 });
                 clearInterval(counterId);
                 return;
             }
-            _this.setState({
+            this.setState({
                 buttonText: `(${countTime--})s`,
                 counterId
             });

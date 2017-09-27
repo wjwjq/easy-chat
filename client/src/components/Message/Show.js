@@ -1,5 +1,5 @@
 //聊天窗口消息展示
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import classnames from 'classnames';
 
 import { Link } from 'react-router-dom';
@@ -23,7 +23,7 @@ const Passage = (props) => {
     </div>); 
 };
 
-export default class MessageShow extends PureComponent {
+export default class MessageShow extends Component {
 
     
     constructor(props) {

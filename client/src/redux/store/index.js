@@ -32,11 +32,23 @@ if (process.env.NODE_ENV !== 'production') {
     );
 }
 
+const appReducer =  combineReducers({
+    ...reducers,
+    router: routerReducer
+});
+
+const initialState = appReducer({}, {});
+  
+const rootReducer = (state, action) => {
+    if (action.type === 'LOG_OUT') {
+        state = initialState;
+    }
+  
+    return appReducer(state, action);
+};
+
 export default createStore(
-    combineReducers({
-        ...reducers,
-        router: routerReducer
-    }),
+    rootReducer,
     middlewares
 );
 

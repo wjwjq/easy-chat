@@ -21,7 +21,6 @@ export default class FriendList extends Component {
             order: PropTypes.string.isRequired,
             remark: PropTypes.string,
             telephone: PropTypes.string,
-            friendId: PropTypes.number.isRequired,
             username: PropTypes.string.isRequired
         }))
     }
@@ -56,7 +55,7 @@ export default class FriendList extends Component {
                     return (<div key={key} className="friend-list-block">
                         <p  id={key} className="friend-list-order">{key}</p>
                         <ul className="friend-card-list">
-                            {sortedFriends[key] && sortedFriends[key].map((item) => <FriendItem key={item.friendId} {...item}/>)}
+                            {sortedFriends[key] && sortedFriends[key].map((item) => <FriendItem key={item.username} {...item}/>)}
                         </ul>
                     </div>);
                 })}

@@ -1,21 +1,21 @@
-[{
-    "address": "四川 成都",
-    "avatarUrl": "/images/avatar.png",
-    "gender": 0,
-    "nickname": "test A-1",
-    "order": "A",
-    "remark": "风",
-    "telephone": "18990655830",
-    "friendId": "1",
-    "username": "18990655830"
-}, {
-    "address": "",
-    "avatarUrl": "/images/avatar.png",
-    "gender": 1,
-    "nickname": "test A-2",
-    "order": "B",
-    "remark": "",
-    "telephone": "",
-    "friendId": "2",
-    "username": "wjwjq456@qq.com"
-}]
+{
+    "status": 200,
+    "friends": [{
+        "address": "四川 成都",
+        "avatarUrl": "/images/avatar.png",
+        "gender": 0,
+        "nickname": "test A-1",
+        "order": "A",
+        "remark": "风",
+        "friendId": "1",
+        "username": "13558313145"
+    }, {
+        "address": "",
+        "avatarUrl": "/images/avatar.png",
+        "gender": 1,
+        "nickname": "test A-2",
+        "order": "B",
+        "remark": "",
+        "username": "13558313146"
+    }]
+}

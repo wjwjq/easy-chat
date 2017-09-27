@@ -32,7 +32,7 @@ export default class MessageBox extends Component {
     constructor(props) {
         super(props);
         this.state={
-            message: _.find(props.messages, { friendId: props.friendId })
+            message: _.find(props.messages, { username: props.friendId })
         };
         this.handleSend = this.handleSend.bind(this);
     }
@@ -49,26 +49,26 @@ export default class MessageBox extends Component {
 
     componentWillReceiveProps(nextProps) {
         this.setState({
-            message: _.find(nextProps.messages, { friendId: nextProps.friendId })
+            message: _.find(nextProps.messages, { username: nextProps.friendId })
         });
     }
  
     render() {
         const { friendId, friendAvatarUrl, user }  = this.props;
-        const { userId, avatarUrl } = user;
+        const { username, avatarUrl } = user;
         const { message } = this.state;
         return (
             <div className="message-box">
                 <ShowMessage 
                     {...message}
                     friendId={friendId}
-                    userId={userId}
+                    userId={username}
                     userAvatarUrl={avatarUrl}
                     friendAvatarUrl={friendAvatarUrl}
                 />
                 <SendMessage 
                     friendId={friendId}
-                    userId={userId}
+                    userId={username}
                     onSend={this.handleSend} 
                 />
             </div>

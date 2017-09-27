@@ -1,29 +1,34 @@
 //好友详情
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 import './Detail.less';
 import pathConfigs from '../../routes/path';
 import Card from '../share/Card/';
+import { deleteFriend } from '../../redux/actions/FriendActions';
 
 
-export default class FriendDetail extends PureComponent {
+class FriendDetail extends PureComponent {
     
     static propTypes = {
         avatarUrl: PropTypes.string,
         username: PropTypes.string,
         nickname: PropTypes.string,
-        friendId: PropTypes.string,
         gender: PropTypes.number,
         remark: PropTypes.string,
         telephone: PropTypes.string,
         address: PropTypes.string
     }
 
+    handleDelete(friendId) {
+        const { history, deleteFriend } = this.props;
+        deleteFriend(friendId);
+        history.push(pathConfigs.root);
+    }
     render() {
-        const { avatarUrl, nickname, remark, address, gender, friendId, username } = this.props;
-        
+        const { avatarUrl, nickname, remark, address, gender,  username, userID } = this.props;
         return (
             <ul className="detail-info">
                 <Card
@@ -44,10 +49,17 @@ export default class FriendDetail extends PureComponent {
                     </p>
                 </li>
                 <li className="btn-group">
-                    <Link to={`${pathConfigs.messages}/${friendId}`} className="btn btn-green">发消息</Link>
+                    <Link to={`${pathConfigs.messages}/${username}`} className="btn btn-green">发消息</Link>
+                    {
+                        username !== userID 
+                            ? <span className="btn btn-red" onClick={this.handleDelete.bind(this, username)}>删除好友</span>
+                            : ''
+                    }
                 </li>
             </ul>
         );
     }
 
 }
+
+export default withRouter(connect((store) => ({ userID: store.user.user.username }), { deleteFriend })(FriendDetail));

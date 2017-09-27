@@ -1,16 +1,16 @@
 import React, { PureComponent } from 'react';
 
-import Back from './Back';
+import Back from '../share/Back/';
 import './Header.less';
 
 
 export default class Header extends PureComponent {
     render() {
-        const { title, showBackButton } = this.props;
+        const { title, showBackButton, children, arrowShow } = this.props;
         return (
-            <header>
+            <header className="header">
                 <div className="handles left-handles">
-                    {showBackButton && <Back />}
+                    {showBackButton && <Back arrowShow={arrowShow}/>}
                 </div>
                 <div className="center-text">
                     <span>
@@ -18,6 +18,7 @@ export default class Header extends PureComponent {
                     </span>    
                 </div>
                 <div className="handles right-handles">
+                    {children}
                 </div>
             </header>
         );

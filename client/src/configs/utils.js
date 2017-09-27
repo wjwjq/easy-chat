@@ -17,9 +17,7 @@ export function dataFormat(date) {
 }
 
 //密码简易加密
-const crypto = require('crypto');
+import Sha256 from './sha256';
 export function encrypt(password) {
-    const sha1 = crypto.createHash('sha1');
-    sha1.update(password);
-    return sha1.digest('hex');
+    return Sha256.hash(password);
 }

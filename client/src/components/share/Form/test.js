@@ -7,12 +7,10 @@ export default class TestForm extends Component {
     
     constructor(props) {
         super(props);
-        this.state = {};
         this.handleSubmit = this.handleSubmit.bind(this);
     }
     
     handleSubmit(formData) {
-        console.info(formData);
         console.info('submit');
     }
 

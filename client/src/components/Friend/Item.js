@@ -10,16 +10,16 @@ export default class FriendItem extends PureComponent {
     static propTypes = {
         avatarUrl: PropTypes.string,
         nickname: PropTypes.string.isRequired,
-        friendId: PropTypes.string.isRequired,
+        username: PropTypes.string.isRequired,
         remark: PropTypes.string
     }
 
     render() {
-        const { friendId, avatarUrl, nickname, remark } = this.props;
+        const { username, avatarUrl, nickname, remark } = this.props;
 
         return (
             <Card
-                to={`${pathConfigs.friends}/${friendId}`}
+                to={`${pathConfigs.friends}/${username}`}
                 classPrefix="friend-card"
                 userInfo={{ avatarUrl, nickname, remark }}
             />

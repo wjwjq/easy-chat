@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import { clearToken } from '../../configs/tokenHandlers';
 import { logout } from '../../redux/actions/AuthActions';
 import pathConfigs from '../../routes/path';
 
@@ -14,9 +13,9 @@ class Logout extends Component {
     }
     
     handleLogout() {
-        clearToken();
-        this.props.history.push(pathConfigs.signin);
-        this.props.dispatch(logout());
+        const { history, dispatch } = this.props;
+        history.push(pathConfigs.signin);
+        dispatch(logout());
     }
 
     render() {

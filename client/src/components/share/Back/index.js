@@ -4,7 +4,8 @@ import { withRouter } from 'react-router-dom';
 
 class Back extends PureComponent {
     render() {
-        return <i className="icon icon-arrow-left go-back" onClick={this.props.history.goBack}>返回</i>;
+        const { text, arrowShow, history } = this.props;
+        return <i className={arrowShow ? 'icon icon-arrow-left go-back': ''} onClick={history.goBack}>{text ||'返回'}</i>;
     }
 }
 

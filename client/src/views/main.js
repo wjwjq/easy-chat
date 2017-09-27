@@ -1,10 +1,21 @@
 import React, { PureComponent } from 'react';
-import Nav from '../components/Nav/Nav';
-import NavPannel from '../components/Nav/NavPannel';
+import asyncComponent from '../routes/asyncComponent';
 
-import MessageView from './Messages/';
-import FriendView from './Friend/';
-import MyView from './My/';
+const Nav = asyncComponent(() =>
+    System.import('../components/Nav/Nav').then((module) => module.default)
+);
+const NavPannel = asyncComponent(() =>
+    System.import('../components/Nav/NavPannel').then((module) => module.default)
+);
+const MessageView = asyncComponent(() =>
+    System.import('./Messages/').then((module) => module.default)
+);
+const FriendView = asyncComponent(() =>
+    System.import('./Friend/').then((module) => module.default)
+);
+const MyView = asyncComponent(() =>
+    System.import('./My/').then((module) => module.default)
+);
 
 import authenticate from '../components/Auth/Auth';
 

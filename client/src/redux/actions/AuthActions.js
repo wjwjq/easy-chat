@@ -3,7 +3,7 @@ import axios from 'axios';
 
 import { fetchFriends } from './FriendActions';
 import { fetchMessages } from './MessageActions';
-import { setItem, getItem, removeItem } from '../../configs/storage';
+import { isTokenExpired, setToken, getToken, clearToken } from '../../configs/tokenHandlers';
 
 import {
     SIGN_IN,
@@ -12,7 +12,7 @@ import {
     SIGN_UP,
     SIGN_UP_REJECTED,
     SIGN_UP_FULFILLED,
-    LOGOUT,
+    LOG_OUT,
     GET_VALID_REJECTED,
     GET_VALID_FULFILLED
 } from '../constant/';
@@ -25,17 +25,21 @@ export function signIn(userInfo) {
             type: SIGN_IN
         });
 
-        const accessToken = getItem('access_token');
-        const expired = accessToken && accessToken['expires'] > Math.floor(Date.now() / 1000);
-        !expired && removeItem('access_token');
         axios
             .post(api.auth.signin,{
                 ...userInfo,
-                'access_token':  expired ? accessToken.token : ''
+                'access_token':  isTokenExpired() ? getToken() : ''
             })
             .then((res) => {
-                if (res.status === 401) {
-                    removeItem('access_token');
+                if (res.data.status === 401) {
+                    clearToken();
+                    return dispatch({
+                        type: SIGN_IN_REJECTED,
+                        payload: res.data.message
+                    });
+                }
+
+                if (res.data.status !== 200) {
                     return dispatch({
                         type: SIGN_IN_REJECTED,
                         payload: res.data.message
@@ -44,18 +48,16 @@ export function signIn(userInfo) {
 
                 const token = res.data.token;
                 //setCookies Or localStorage
-                token && setItem('access_token', JSON.stringify(token));
+                token && setToken(token);
                 
                 dispatch({
                     type: SIGN_IN_FULFILLED,
-                    payload: { token,  user : Object.assign({}, res.data.user) }
+                    payload: { user : Object.assign({}, res.data.user), message: res.data.message }
                 });
 
                 //须确保 好友数据返回必须优先于消息数据返回
                 //抓取用户好友
-                dispatch(fetchFriends());
-                 
-                //抓取用户已有消息历史
+                dispatch(fetchFriends(res.data.user.username));
                 dispatch(fetchMessages());
             })
             .catch((err) => {
@@ -80,10 +82,10 @@ export function signUp(userInfo) {
             })
             .then((res) => {
           
-                if (res.status === 200) {
+                if (res.data.status === 200) {
                     dispatch({
                         type: SIGN_UP_FULFILLED,
-                        payload: true
+                        payload: res.data.message
                     });
                 } else {
                     dispatch({
@@ -103,8 +105,9 @@ export function signUp(userInfo) {
 
 //注销
 export function logout() {
+    clearToken();
     return {
-        type: LOGOUT
+        type: LOG_OUT
     };
 }
 
@@ -117,7 +120,7 @@ export function getValid(username, type) {
                 type
             })
             .then((res) => {
-                if (res.status === 200) {
+                if (res.data.status === 200) {
                     dispatch({
                         type: GET_VALID_FULFILLED,
                         payload: res.data.valid

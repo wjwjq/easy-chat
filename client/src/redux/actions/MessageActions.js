@@ -27,22 +27,22 @@ export function fetchMessages() {
                 }
             })
             .then((res) => {
-                if (res.status === 200) {
+                if (res.data.status === 200) {
                     dispatch({
                         type: FETCH_MESSAGES_FULFILLED,
-                        payload: res.data
+                        payload: res.data.messages
                     });
                 } else {
                     dispatch({
                         type: FETCH_MESSAGES_REJECTED,
-                        payload: res.data.messages
+                        payload: res.data.message
                     });
                 }
             })
             .catch((err) =>
                 dispatch({
                     type: FETCH_MESSAGES_REJECTED,
-                    payload: err
+                    payload: err.message
                 })
             );
     }; 
@@ -57,24 +57,24 @@ export function newMessage(friendId, data) {
                 'access_token': getItem('access_token')['token']
             })
             .then((res) => {
-                if (res.status === 200) {
+                if (res.data.status === 200) {
                     dispatch({
                         type: NEW_MESSAGE_FULFILLED,
                         payload: {
-                            friendId,
+                            username: friendId,
                             msgs: [data]
                         }
                     });
                 } else {
                     dispatch({
                         type: NEW_MESSAGE_REJECTED,
-                        payload: err
+                        payload: res.data.message
                     });
                 }
             })
             .catch((err) => dispatch({
                 type: NEW_MESSAGE_REJECTED,
-                payload: err
+                payload: err.message
             }));
     };
 }
@@ -88,7 +88,7 @@ export function addMessage(friendId, data) {
                 'access_token': getItem('access_token')['token']
             })
             .then((res) => {
-                if (res.status === 200) {
+                if (res.data.status === 200) {
                     dispatch({
                         type: ADD_MESSAGE_FULFILLED,
                         payload: {
@@ -99,13 +99,13 @@ export function addMessage(friendId, data) {
                 } else {
                     dispatch({
                         type: ADD_MESSAGE_REJECTED,
-                        payload: err
+                        payload: res.data.message
                     });
                 }
             })
             .catch((err) => dispatch({
                 type: ADD_MESSAGE_REJECTED,
-                payload: err
+                payload: err.message
             }));
     };
 }
@@ -120,21 +120,21 @@ export function deleteMessage(friendId) {
                 }
             })
             .then((res) => {
-                if (res.status === 200) {
+                if (res.data.status === 200) {
                     dispatch({
                         type: DELETE_MESSAGE_FULFILLED,
-                        payload: friendId
+                        payload: { friendId }
                     });
                 } else {
                     dispatch({
                         type: DELETE_MESSAGE_REJECTED,
-                        payload: err
+                        payload: res.data.message
                     });
                 }
             })
             .catch((err) => dispatch({
                 type: DELETE_MESSAGE_REJECTED,
-                payload: err
+                payload: err.message
             }));
     };
 }

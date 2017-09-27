@@ -3,11 +3,11 @@ let route;
 
 if (global.activeServerSubdomain) {
     route = {
-        welcome: '/welcome',
         signup: '/signup',
         signin: '/signin',
         messages: '/messages',
         friends: '/friends',
+        add: `/add`,
         my: '/my',
         myDetail: '/my/detail',
         myAccountandsecurity: '/my/accountandsecurity',
@@ -21,11 +21,11 @@ if (global.activeServerSubdomain) {
     
     const BASEROUTE = APPNAME ? `/${APPNAME}`: '';
     route = {
-        welcome: `${BASEROUTE}/welcome`,
         signup: `${BASEROUTE}/signup`,
         signin: `${BASEROUTE}/signin`,
         messages: `${BASEROUTE}/messages`,
         friends: `${BASEROUTE}/friends`,
+        add: `${BASEROUTE}/add`,
         my: `${BASEROUTE}/my`,
         myDetail: `${BASEROUTE}/my/detail`,
         myAccountandsecurity: `${BASEROUTE}/my/accountandsecurity`,

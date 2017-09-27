@@ -12,7 +12,8 @@ APPNAME = APPNAME ? `${APPNAME}/` : '';
 module.exports = Merge(commonConfig, {
     // devtool: 'source-map',
     output: {
-        filename: `${APPNAME}js/${commonConfig.output.filename}`
+        filename: `${APPNAME}js/${commonConfig.output.filename}`,
+        chunkFilename: `${APPNAME}js/[name].[hash].js`
     },
     module: {
         rules: [
@@ -52,7 +53,8 @@ module.exports = Merge(commonConfig, {
             sourceMap: true,
             comments: false,
             compress: {
-                warnings: false
+                warnings: false,
+                'drop_console': true
             }
         }),
         //加载器最小化

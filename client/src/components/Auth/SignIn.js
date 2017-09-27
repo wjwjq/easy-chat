@@ -6,9 +6,9 @@ import { Link } from 'react-router-dom';
 import pathConfigs from '../../routes/path';
 import { encrypt } from '../../configs/utils';
 import { signIn, getValid } from '../../redux/actions/AuthActions';
-import { getItem } from '../../configs/storage';
-import Loading from '../share/Loading/';
+import { isTokenExpired } from '../../configs/tokenHandlers';
 
+import Loading from '../share/Loading/';
 import Form from '../share/Form/';
 import FormItem from '../share/Form/FormItem';
 
@@ -18,6 +18,9 @@ import './style.less';
     return { 
         ...store.user
     };
+},{
+    signIn,
+    getValid
 })
 export default class SignIn extends Component {
 
@@ -28,14 +31,13 @@ export default class SignIn extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
 
         this.state = {
-            isTokenNotExpired: this.props.isTokenNotExpired
+            hasAccessToken: true
         };
     }
 
     componentWillMount() {
-        const hasAccessToken = getItem('access_token');
         this.setState({
-            isTokenNotExpired:   hasAccessToken && hasAccessToken['expires'] > Math.floor(Date.now() / 1000)
+            hasAccessToken: isTokenExpired()
         });
     }
     
@@ -43,34 +45,37 @@ export default class SignIn extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        !nextProps.isLogining && nextProps.isLogined && this.props.history.push(pathConfigs.root);
+        !nextProps.isLogining && nextProps.isLogined && nextProps.history.push(pathConfigs.root);
     }
 
     handleGetValid() {
-        this.props.dispatch(getValid('signin'));
+        const { getValid } = this.props;
+        getValid('signin');
     }
  
     handleSubmit(result) {
+        const { signIn } = this.props;
         for (let key in result) {
             if (key === 'password') {
                 result[key] =  encrypt(result[key]);
             }
         }
-        this.props.dispatch(signIn(result));
+        signIn(result);
     }
- 
+
     render() {
-        const { isTokenNotExpired } = this.state;
-        const { error, isLogined, isLogining } = this.props;
-        if (isTokenNotExpired && !isLogined  && !error) {
-            !isLogining && this.props.dispatch(signIn());
+        const { hasAccessToken } = this.state;
+        const { isLogined, isLogining, loginMsg, signIn } = this.props;
+     
+        if (hasAccessToken && !isLogined  && !loginMsg) {
+            !isLogining && signIn();
             return null;
         } else {
             return (
                 <div className="signin">
                     {isLogining && <Loading/>}
                     <Form onSubmit={this.handleSubmit} >
-                        <div className="form-tips">{error}</div>
+                        <div className="form-tips">{loginMsg}</div>
                         <FormItem 
                             text="手机号" 
                             placeholder="请输入手机号" 

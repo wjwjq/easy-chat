@@ -65,7 +65,7 @@ export default function reducers(state = initialState, action) {
             return {
                 ...state,
                 messages: state.messages.map((message) => {
-                    if (message.friendId === action.payload.friendId) {
+                    if (message.username === action.payload.friendId) {
                         message.msgs.push(action.payload.data);
                     }
                     return message;
@@ -82,7 +82,7 @@ export default function reducers(state = initialState, action) {
             return {
                 ...state,
                 messages: state.messages.filter((message) => {
-                    if (message.friendId !== action.payload) {
+                    if (message.username !== action.payload.friendId) {
                         return message;
                     }
                 })

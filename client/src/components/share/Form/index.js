@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
-import Text from './Text';
-import Password from './Password';
-import Validate from './Validate';
-import Checkbox from './Checkbox';
-import Radio from './Radio';
-import Select from './Select';
-import Textarea from './Textarea';
-import Submit from './Submit';
+import Text from './Text/';
+import Password from './Password/';
+import Validate from './Validate/';
+import Checkbox from './Checkbox/';
+import Radio from './Radio/';
+import Select from './Select/';
+import Textarea from './Textarea/';
+import Submit from './Submit/';
 
 import './Form.less';
 

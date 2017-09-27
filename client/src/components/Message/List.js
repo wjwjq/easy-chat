@@ -28,34 +28,19 @@ export default class MessageList extends Component {
         return (
             <div className="messages-list">
                 { 
-                    messages.map((message) => 
-                        <SlideToDelete 
-                            key={message.friendId} 
-                            onDelete={this.handleDelete.bind(this, message.friendId)}
+                    messages.map((message) => {
+                        return  <SlideToDelete 
+                            key={message.username} 
+                            onDelete={this.handleDelete.bind(this, message.username)}
                             width={width} 
                             text='删除'
                         >
                             <MessageItem  {...message} />
-                        </SlideToDelete> )
+                        </SlideToDelete>;
+                    })
                 }
             </div>
         );
     }
 
 }
-
-/* { 
-                    Object.keys(messages).map((friendId) => 
-                        <SlideToDelete 
-                            key={friendId} 
-                            onDelete={this.handleDelete.bind(this, friendId)} 
-                            width={width} 
-                            text='登录'
-                        >
-                            <MessageItem
-                                key={friendId} 
-                                friendId={friendId}
-                                msgs={messages[friendId]}
-                            />
-                        </SlideToDelete> )
-                } */

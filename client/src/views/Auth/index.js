@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import { withRouter } from 'react-router-dom';
-import Header from '../../components/Header/Header';
-
+import Header from '../../components/Header/';
 import SignUp from '../../components/Auth/SignUp';
 import SignIn from '../../components/Auth/SignIn';
 
@@ -12,13 +11,6 @@ class AuthView extends PureComponent {
     constructor(props) {
         super(props);
     }
-    // componentWillMount() {
-    //     const { match, history } = this.props;
-    //     const { path } = match;
-    //     if ( path !== `${pathConfigs.signup}` || path !==  `${pathConfigs.signin}` ) {
-    //         history.replace('signin');
-    //     }
-    // }
     render() {
         const { match, history } = this.props;
         const { path } = match;

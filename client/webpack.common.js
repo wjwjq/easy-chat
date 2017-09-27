@@ -8,23 +8,17 @@ const APP_PATH = path.resolve(ROOT_PATH, 'src');
 const APP_FILE = path.resolve(APP_PATH, 'app.js');
 const BUILD_PATH = path.join(__dirname, 'dist');
 
+
 module.exports = {
     //页面入口文件配置
     entry: {
-        app: [
-            APP_FILE
-        ],
-        common: [
+        commons: [
             'react',
             'react-dom',
-            'react-router-dom',
-            'redux',
-            'react-redux',
-            'redux-thunk',
-            'redux-promise-middleware',
-            // 'immutable',
-            'axios',
-            'lodash'
+            'react-router-dom'
+        ],
+        app: [
+            APP_FILE
         ]
     },
     //入口文件输出配置
@@ -34,7 +28,6 @@ module.exports = {
         filename: '[name].[hash].js', //编译后的文件名字
         chunkFilename: '[name].[hash].js'
     },
-
     //配置文件模块解析
     module: {
         rules: [{
@@ -45,10 +38,10 @@ module.exports = {
         },
         {
             test: /\.less$/,
-            use: process.env.NODE_ENV === 'production' 
-                ? ExtractTextPlugin.extract({
+            use: process.env.NODE_ENV === 'production' ?
+                ExtractTextPlugin.extract({
                     fallback: 'style-loader',
-                    use: [ {
+                    use: [{
                         loader: 'css-loader',
                         options: {
                             sourceMap: true, //生成样式表link,添加到html head中
@@ -56,10 +49,9 @@ module.exports = {
                             importLoaders: 1,
                             localIdentName: '[path][name]__[local]--[hash:base64:5]'
                         }
-                    },'postcss-loader','less-loader'],
+                    }, 'postcss-loader', 'less-loader'],
                     publicPath: 'dist'
-                })
-                : ['style-loader',  {
+                }) : ['style-loader', {
                     loader: 'css-loader',
                     options: {
                         sourceMap: true, //生成样式表link,添加到html head中
@@ -86,20 +78,28 @@ module.exports = {
     resolve: {
         extensions: ['.js', '.jsx', '.less', '.css'] //后缀名自动补全
     },
-    
+    target: 'web',
     //插件
     plugins: [
-        // new webpack.ProvidePlugin({
-        //     $: 'jquery',
-        //     jQuery: 'jquery'
-        // }),
+        new webpack.ProvidePlugin({
+            react: 'react',
+            'react-dom': 'react-dom',
+            'react-router-dom': 'react-router-dom',
+            redux: 'redux',
+            'react-redux': 'react-redux',
+            'react-router-redux': 'react-router-redux',
+            'redux-thunk': 'redux-thunk',
+            'redux-promise-middleware': 'redux-promise-middleware',
+            axios: 'axios',
+            'react-motion': 'react-motion',
+            lodash: 'lodash',
+            _: 'lodash'
+        }),
         new CleanWebpackPlugin(['dist']),
         new webpack.HashedModuleIdsPlugin(),
         new webpack.optimize.CommonsChunkPlugin({
-            name: 'common'
-        }),
-        new webpack.optimize.CommonsChunkPlugin({
-            name: 'runtime'
+            name: 'commons',
+            minChunks: Infinity
         })
     ]
 };

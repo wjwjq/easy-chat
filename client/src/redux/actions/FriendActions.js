@@ -1,11 +1,14 @@
 import axios from 'axios';
-import api  from '../../configs/api';
-import { getItem } from '../../configs/storage';
+import api from '../../configs/api';
+import {
+    getItem
+} from '../../configs/storage';
 
 import {
     FETCH_FRIENDS,
     FETCH_FRIENDS_REJECTED,
     FETCH_FRIENDS_FULFILLED,
+    QUERY_FRIEND,
     QUERY_FRIEND_REJECTED,
     QUERY_FRIEND_FULFILLED,
     ADD_FRIEND_REJECTED,
@@ -13,7 +16,8 @@ import {
     UPDATE_FRIEND_REJECTED,
     UPDATE_FRIEND_FULFILLED,
     DELETE_FRIEND_REJECTED,
-    DELETE_FRIEND_FULFILLED
+    DELETE_FRIEND_FULFILLED,
+    DELETE_MESSAGE_FULFILLED
 } from '../constant/';
 // axios.defaults.headers.common['x-access-token'] = getItem('access_token');
 
@@ -24,21 +28,21 @@ export function fetchFriends() {
             type: FETCH_FRIENDS
         });
         axios
-            .get(api.friends,{
+            .get(`${api.friends}`, {
                 headers: {
-                    'x-access-token':  getItem('access_token')['token']
+                    'x-access-token': getItem('access_token')['token']
                 }
             })
             .then((res) => {
-                if (res.status === 200) {
+                if (res.data.status === 200) {
                     dispatch({
                         type: FETCH_FRIENDS_FULFILLED,
-                        payload: res.data
+                        payload: res.data.friends
                     });
                 } else {
                     dispatch({
-                        type: QUERY_FRIEND_REJECTED,
-                        payload: res.data
+                        type: FETCH_FRIENDS_REJECTED,
+                        payload: res.data.message
                     });
                 }
             })
@@ -48,16 +52,29 @@ export function fetchFriends() {
                     payload: err.message
                 })
             );
-    }; 
+    };
 }
 
 //查询某个用户信息
-export function queryFriend(userId) {
+export function queryFriend(friendId) {
     return function (dispatch) {
+        dispatch({
+            type: QUERY_FRIEND
+        });
         axios
-            .get(`${api.friends}/${userId}`)
-            .then((res) =>  {     
-                if (res.status === 200) {
+            .get(`${api.friends}/${friendId}`, {
+                headers: {
+                    'x-access-token': getItem('access_token')['token']
+                }
+            })
+            .then((res) => {
+                if (res.data.status === 204) {
+                    dispatch({
+                        type: QUERY_FRIEND_REJECTED,
+                        payload: res.data.message
+                    });
+                }
+                if (res.data.status === 200) {
                     dispatch({
                         type: QUERY_FRIEND_FULFILLED,
                         payload: res.data.friend
@@ -77,15 +94,20 @@ export function queryFriend(userId) {
 }
 
 //添加好友
-export function addFriend(userId) {
+export function addFriend(friendId) {
     return function (dispatch) {
         axios
-            .post(`${api.friends}/${userId}`)
-            .then((res) =>  {     
-                if (res.status === 200) {
+            .post(`${api.friends}/${friendId}`, {
+                'access_token': getItem('access_token')['token']
+            })
+            .then((res) => {
+                if (res.data.status === 200) {
                     dispatch({
                         type: ADD_FRIEND_FULFILLED,
-                        payload: res.data.friend
+                        payload: {
+                            friend: res.data.friend,
+                            message: res.data.message
+                        }
                     });
                 } else {
                     dispatch({
@@ -105,20 +127,23 @@ export function addFriend(userId) {
 export function updateFriend(userId, data) {
     return function (dispatch) {
         axios
-            .put(`${api.friends}/${userId}`,{
-                data
+            .put(`${api.friends}/${userId}`, {
+                data,
+                headers: {
+                    'x-access-token': getItem('access_token')['token']
+                }
             })
             .then((res) => {
-                if (res.status === 200) {
+                if (res.data.status === 200) {
                     dispatch({
                         type: UPDATE_FRIEND_FULFILLED,
-                        payload: res.data.friend
+                        payload: res.data.message
                     });
                 } else {
                     dispatch({
                         type: UPDATE_FRIEND_REJECTED,
                         payload: res.data.message
-                    });                   
+                    });
                 }
             })
             .catch((err) => dispatch({
@@ -129,21 +154,34 @@ export function updateFriend(userId, data) {
 }
 
 //删除好友
-export function deleteFriend(userId) {
+export function deleteFriend(friendId) {
     return function (dispatch) {
         axios
-            .delete(`${api.friends}/${userId}`)
+            .delete(`${api.friends}/${friendId}`, {
+                headers: {
+                    'x-access-token': getItem('access_token')['token']
+                }
+            })
             .then((res) => {
-                if (res.status === 200) {
+                if (res.data.status === 200) {
+                    dispatch({
+                        type: DELETE_MESSAGE_FULFILLED,
+                        payload: {
+                            friendId
+                        }
+                    });
                     dispatch({
                         type: DELETE_FRIEND_FULFILLED,
-                        payload: res.data.message
+                        payload: {
+                            friendId,
+                            message: res.data.message
+                        }
                     });
                 } else {
                     dispatch({
                         type: DELETE_FRIEND_REJECTED,
                         payload: res.data.message
-                    });    
+                    });
                 }
             })
             .catch((err) => dispatch({
@@ -152,5 +190,3 @@ export function deleteFriend(userId) {
             }));
     };
 }
-
-

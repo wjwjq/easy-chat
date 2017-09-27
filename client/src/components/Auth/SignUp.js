@@ -9,15 +9,25 @@ import { signUp, getValid } from '../../redux/actions/AuthActions';
 import { connect } from 'react-redux';
 import Loading from '../share/Loading/';
 
-import Form from '../share/Form/';
-import FormItem from '../share/Form/FormItem';
+// import Form from '../share/Form/';
+// import FormItem from '../share/Form/FormItem';
+
+import asyncComponent from '../../routes/asyncComponent';
+const Form = asyncComponent(() =>
+    System.import('../share/Form/').then((module) => module.default)
+);
+const FormItem = asyncComponent(() =>
+    System.import('../share/Form/FormItem').then((module) => module.default)
+);
+
 
 @connect((store) => {
     return {
-        error: store.user.error,
-        valid: store.user.valid,
-        isRegistered: store.user.isRegistered
+        ...store.user
     };
+},{
+    signUp,
+    getValid
 })
 export default class SignUp extends Component {
 
@@ -26,36 +36,35 @@ export default class SignUp extends Component {
 
         this.handleGetValid = this.handleGetValid.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-
-        this.state = {};
     }
 
     handleGetValid() {
-        this.props.dispatch(getValid('signUp'));
+        const { getValid } = this.props;
+        getValid('signUp');
     }
     
     handleSubmit(result) {
+        const { signUp } = this.props;
         for (let key in result) {
             if (key === 'password') {
                 result[key] =  encrypt(result[key]);
             }
         }
-        console.info(result);
-        this.props.dispatch(signUp(result));
+        signUp(result);
     }
  
     componentWillReceiveProps(nextProps) {
-        nextProps.isRegistered && this.props.history.push('signin');
+        nextProps.isRegistered && nextProps.history.push('signin');
     }
 
     render() {
-        const { error, isRegistering } = this.props;
+        const { isRegistering, registryMsg } = this.props;
         
         return (
             <div className="signup">
                 {isRegistering && <Loading/>}
                 <Form onSubmit={this.handleSubmit} >
-                    <div className="form-tips">{error}</div>
+                    <div className="form-tips">{registryMsg}</div>
                     <FormItem 
                         text="手机号" 
                         placeholder="请输入手机号" 
