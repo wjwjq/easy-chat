@@ -17,6 +17,7 @@
     "@alicloud/sms-sdk": "^1.0.2",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.17.2",
+    "compression": "^1.7.1",
     "cookie-parser": "^1.4.3",
     "cross-env": "^5.0.5",
     "csurf": "^1.9.0",
@@ -28,7 +29,6 @@
     "lodash": "^4.17.4",
     "mongoose": "^4.11.11",
     "nodemon": "^1.12.1",
-    "sequelize": "^4.8.0",
     "serve-favicon": "^2.4.4",
     "socket.io": "^2.0.3",
     "vhost": "^3.0.2"

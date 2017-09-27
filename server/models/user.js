@@ -8,9 +8,10 @@ const UserSchema = new mongose.Schema({
     'nickname': String,
     'order': String,
     'remark': String,
-    'telephone': String,
     'userId': String,
     'password': String,
+    'friends': [String],
+    'recentContact':[String],
     'username': {
         type: String,
         unique: true,
@@ -27,10 +28,15 @@ UserSchema.pre('save', function (next) {
         bcrypt.hash(user.password, salt, function (err, hash) {
             if (err) 
                 return next();
+            user.friends.push(user.username);
+            user.avatarUrl = '';
+            user.remark = '';
+            user.order = 'A',
             user.password = hash;
             next();
         });
     });
+
 });
 //密码比较
 UserSchema.methods.comparePassword = function (password, cb) {
@@ -40,4 +46,5 @@ UserSchema.methods.comparePassword = function (password, cb) {
         cb(isMatch);
     });
 };
+
 module.exports = mongose.model('User', UserSchema);

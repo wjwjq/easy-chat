@@ -7,6 +7,7 @@ const session = require('express-session');
 const vhost = require('vhost');
 const credentials = require('./credentials');
 const mongoose = require('mongoose');
+const compression = require('compression');
 //链接MongoDB
 const mongo = require('./configs').mongo;
 //const url = `mongodb://${mongo.username}:${mongo.password}@${mongo.host}:${mongo.port}/${mongo.database}`,{ useMongoClient: true };
@@ -22,6 +23,7 @@ const easychatRoutes = require('./easychat/routes/');
 const adminRoutes = require('./admin/routes/');
 
 const app = express();
+app.use(compression());
 
 //设置服务器端口
 app.set('port', process.env.PORT || 3000);
@@ -86,11 +88,20 @@ app.get('/easychat/*', (req, res) => {
 app.get('/', (req, res) => {
     res.locals.title = "wjq\'s blog";
     res.locals.items = [{
-        href: 'http://localhost:3000/easychat/welcome',
+        href: 'http://localhost:3000/easychat/',
         name: 'easychat'
     }];
     res.render('index');
 });
+
+// var server = require('http').Server(app);
+// var io = require('socket.io')(server);
+// io.on('connection', function (socket) {
+//     socket.emit('news', { hello: 'world' });
+//     socket.on('my other event', function (data) {
+//         console.info(data);
+//     });
+// });
 
 app.use(function (req, res, next) {
     var err = new Error('Not Found');

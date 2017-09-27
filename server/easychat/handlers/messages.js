@@ -1,76 +1,48 @@
 //获取所有好友消息历史列表
-exports.getMessages = function (req, res) {
-    const data = [
-        {
-            'friendId': '1',
-            'msgs': [{
-                'from': '1',
-                'to': '59c262677e18a92adc9d93aa',
-                'content': '哈哈哈，这是第一条内容,哈哈哈，这是第一条内容,哈哈哈，这是第一条内容,哈哈哈，这是第一条内容!',
-                'publishTime': '2017-09-11 18:27:30'
-            }, {
-                'from': '59c262677e18a92adc9d93aa',
-                'to': '1',
-                'content': '哈哈哈，这是第二条内容',
-                'publishTime': '2017-09-11 18:27:32'
-            }]
-        },
-        {
-            'friendId': '2',
-            'msgs': [ {
-                'from': '59c262677e18a92adc9d93aa',
-                'to': '2',
-                'content': '哈哈哈，这是第二条内容',
-                'publishTime': '2017-09-11 18:27:32'
-            },{
-                'from': '2',
-                'to': '59c262677e18a92adc9d93aa',
-                'content': '哈哈哈，这是第二条内容',
-                'publishTime': '2017-09-11 18:21:30'
-            }]
-        },
-        {
-            'friendId': '3',
-            'msgs': [{
-                'from': '3',
-                'to': '59c262677e18a92adc9d93aa',
-                'content': '哈哈哈，这是第三条内容',
-                'publishTime': '2017-09-10 18:27:30'
-            }]
-        },
-        {
-            'friendId': '4',
-            'msgs': [{
-                'from': '4',
-                'to': '59c262677e18a92adc9d93aa',
-                'content': '哈哈哈，这是第4条内容',
-                'publishTime': '2017-09-1 18:27:30'
-            }]
-        }
-    ];
-
-
+exports.index = (req, res) => {
+    const { username } = req.body;
     setTimeout(() => {
-        res.status(200).json(data);
+        res.json({
+            'status': 200,
+            'messages': [
+                // {  
+                //     username: '18990655830',
+                //     msgs:  [{ from: '18990655830', to: '18990655830', content: '32131', publishTime: '2017-09-25 22:08:49' }]
+                // },
+                // {  
+                //     username: '18990655839',
+                //     msgs:  [{ from: '18990655839', to: '18990655830', content: '32131', publishTime: '2017-09-25 22:08:49' }]
+                // }
+            ]
+        });
     }, 1000);
 };
 
 //查询指定好友的信息
-exports.getMessage = function (req, res) {
-
+exports.show = (req, res) => {
+    const { username } = req.body;
 };
 
 //新建好友消息
-exports.postMessage = function (req, res) {
-    res.json({});
+exports.post = (req, res) => {
+    const { username } = req.body;
+    res.json({
+        'status': 200
+    });
 };
 
 //更新好友消息
-exports.putMessage = function (req, res) {
-    res.json({});
+exports.put = (req, res) => {
+    const { username } = req.body;
+    res.json({
+        'status': 200        
+    });
 };
 
 //删除指定好友消息
-exports.deleteMessage = function (req, res) {
-    res.json({});
+exports.delete = (req, res) => {
+    const { username } = req.body;
+    res.json({
+        'status': 200
+    });
 };

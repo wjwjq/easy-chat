@@ -1,79 +1,187 @@
-//获取所有好友列表
-exports.getFriends = function (req, res) {
-    const data = [{
-        'address': '四川 成都',
-        'avatarUrl': '/images/avatar.png',
-        'gender': 0,
-        'nickname': 'test A-1',
-        'order': 'A',
-        'remark': '风',
-        'telephone': '18990655830',
-        'friendId': '1',
-        'username': '18990655830'
-    }, {
-        'address': '',
-        'avatarUrl': '/images/avatar.png',
-        'gender': 1,
-        'nickname': 'test A-2',
-        'order': 'B',
-        'remark': '',
-        'telephone': '',
-        'friendId': '2',
-        'username': 'wjwjq456@qq.com'
-    },
-    {
-        'address': '',
-        'avatarUrl': '/images/avatar.png',
-        'gender': 1,
-        'nickname': 'test A-2',
-        'order': 'B',
-        'remark': '',
-        'telephone': '',
-        'friendId': '59c262677e18a92adc9d93aa',
-        'username': 'wjwjq456@qq.com'
-    }, {
-        'address': '',
-        'avatarUrl': '',
-        'gender': 1,
-        'nickname': 'test B-1',
-        'order': 'A',
-        'remark': '',
-        'telephone': '',
-        'friendId': '3',
-        'username': 'wjq@eagle.com'
-    }, {
-        'address': '',
-        'avatarUrl': '',
-        'gender': 1,
-        'nickname': 'test B-1',
-        'order': 'A',
-        'remark': '',
-        'telephone': '',
-        'friendId': '4',
-        'username': 'wjq@eagle.com'
-    }];
+const User = require('../../models/user');
 
-    setTimeout(() => {
-        res.status(200).json(data);
-    }, 300);
+//获取所有好友列表
+exports.index = (req, res) => {
+    const { username } = req.body;
+    User
+        .findOne({
+            username
+        }, {
+            'password': 0
+        })
+        .then((data) => {
+            User
+                .find({}, {
+                    password: 0,
+                    friends: 0,
+                    recentContact: 0
+                })
+                .where('username', data.friends)
+                .exec((err, friends) => {
+                    if (err) {
+                        return res.json({
+                            'status': 404,
+                            'message': '获取好友失败'
+                        });
+                    }
+                    res.json({
+                        'status': 200,
+                        'friends': friends,
+                        'message': '获取所有好友成功'
+                    });
+                });
+
+        })
+        .catch((err) => {
+            console.info('获取好友失败', err);
+            res.json({
+                'status': 204,
+                'message': '获取好友失败'
+            });
+        });
 };
 
 //查询指定好友的信息
-exports.getFriend = function (req, res) {
-    
+exports.show = (req, res) => {
+    const friendId = req.params.id;
+    if (!friendId) {
+        return res.json({
+            'status': 400,
+            'message': '请求格式错误'
+        });
+    }
+    User
+        .findOne({
+            username: friendId
+        }, {
+            _id: 0,
+            password: 0,
+            friends: 0
+        })
+        .then((friend) => {
+            if (!friend) {
+                return res.json({
+                    'status': 204,
+                    'message': '用户名不存在'
+                });
+            }
+            setTimeout(() => {
+                res.json({
+                    'status': 200,
+                    'message': '查询用户信息成功',
+                    friend
+                });
+            }, 1000);
+        })
+        .catch((err) => {
+            if (err) {
+                console.info(err);
+            }
+            res.json({
+                'status': 204,
+                'message': '用户名不存在'
+            });
+        });
+
 };
 
 //添加指定好友
-exports.postFriend = function (req, res) {
-    
+exports.post = (req, res) => {
+    const  friendId = req.params.id;
+    const { username } = req.body;
+    if (!friendId) {
+        res.json({
+            'status': 400,
+            'message': '请求格式错误'
+        });
+    }
+    User.update({
+        username
+    }, {
+        $push: {
+            friends: friendId
+        }
+    }).then((data) => {
+        if (!data) {
+            res.json({
+                'status': 204,
+                'message': '添加好友失败'
+            });
+        }
+        User.findOne({
+            username: friendId
+        }, {
+            _id: 0,
+            password: 0,
+            friends: 0
+        })
+            .then((friend) => {
+                if (!friend) {
+                    res.json({
+                        'status': 204,
+                        'message': '添加好友失败'
+                    });
+                }
+                res.json({
+                    'status': 200,
+                    friend,
+                    'message': '添加好友成功'
+                });
+            })
+            .catch((err) => {
+                console.info(err);
+                res.json({
+                    'status': 204,
+                    'message': '添加好友失败'
+                });
+            });
+    }).catch((err) => {
+        console.info(err);
+        res.json({
+            'status': 204,
+            'message': '添加好友失败'
+        });
+    });
 };
 
 //更新指定好友信息
-exports.putFriend = function (req, res) {
-    
+exports.put = (req, res) => {
+    res.json({
+        'status': 200
+    });
 };
 
 //删除指定好友
-exports.deleteFriend = function (req, res) {
-    
+exports.delete = (req, res) => {
+    const  friendId = req.params.id;
+    const { username } = req.body;
+    if (!friendId) {
+        res.json({
+            'status': 400,
+            'message': '请求格式错误'
+        });
+    }
+    User.update({
+        username
+    }, {
+        $pull: { friends:  friendId }
+    }).then((data) => {
+        if (!data) {
+            res.json({
+                'status': 204,
+                'message': '删除好友失败'
+            });
+        }
+        console.info(data);
+        res.json({
+            'status': 200,
+            'message': '删除好友成功'
+        });
+    }).catch((err) => {
+        console.info(err);
+        res.json({
+            'status': 204,
+            'message': '删除好友失败'
+        });
+    });
 };

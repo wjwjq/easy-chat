@@ -1,20 +1,20 @@
 const Token = require('../models//token');
 const Users = require('../models/user');
 
-const formatUserData = require('../utils/').formatUserData;
 const jwt = require('jsonwebtoken');
 const credentials = require('../credentials');
 
 const parseToken = (req) => (req.body && req.body.access_token) || (req.query && req.query.access_token) || (req.headers['x-access-token']);
 
-exports.autoSignin = function (req, res, next) {
+exports.autoSignin = (req, res, next) => {
     const token = parseToken(req);
     if (token) {
-        jwt.verify(token, credentials.token.secret, function (err, decoded) {
+        jwt.verify(token, credentials.token.secret, (err, decoded) => {
             if (err) {
                 //已经过期
                 console.info('error from autoSignin', err);
-                return res.status(401).json({//认证失败状态吗
+                return res.json({
+                    'status': 401, //认证失败状态吗
                     'message': 'Auto authentication fail, Access_token is expired'
                 });
             }
@@ -23,34 +23,40 @@ exports.autoSignin = function (req, res, next) {
                 .findOne({
                     username: decoded.username
                 })
-                .then(function (data) {
+                .then((data) => {
                     if (data.token === token) {
                         Users
                             .findOne({
                                 username: decoded.username
+                            }, {
+                                '_id': 0,
+                                'password': 0
                             })
-                            .then(function (user) {
-                                // setTimeout(function () {
-                                return res.status(200).json({
+                            .then((user) => {
+                                // setTimeout( () => {
+                                return res.json({
+                                    'status': 200,
                                     'message': '登录成功',
-                                    'user': formatUserData(user._doc, 'password')
+                                    user
                                 });
                                 // }, 1000);
                             })
-                            .catch(function (err) {
+                            .catch((err) => {
                                 if (err) {
                                     console.info('error form autosigin token find', err);
                                 }
                             });
 
                     } else {
-                        res.status(401).json({
+                        res.json({
+                            'status': 401,
                             'message': 'Authentication fail,  Access_token is expired'
                         });
                     }
-                }).catch(function (err) {
+                }).catch((err) => {
                     if (err) {
-                        return res.status(401).json({
+                        return res.json({
+                            'status': 401,
                             'message': 'Authentication fail,  Access_token is expired'
                         });
                     }
@@ -61,14 +67,15 @@ exports.autoSignin = function (req, res, next) {
     }
 };
 
-exports.verifyToken = function (req, res, next) {
+exports.verifyToken = (req, res, next) => {
     const token = parseToken(req);
     if (token) {
-        jwt.verify(token, credentials.token.secret, function (err, decoded) {
+        jwt.verify(token, credentials.token.secret, (err, decoded) => {
             if (err) {
                 //已过期
                 console.info('error form verifyToken first error');
-                return res.status(401).json({//认证失败状态哦码
+                return res.json({
+                    'status': 401, //认证失败状态哦码
                     'message': 'Authentication fail，Access_token is expired'
                 });
             }
@@ -78,30 +85,34 @@ exports.verifyToken = function (req, res, next) {
                 .findOne({
                     username: decoded.username
                 })
-                .then(function (data) {
+                .then((data) => {
                     if (data.token === token) {
+                        req.body.username = decoded.username;
                         next();
                     } else {
-                        res.status(401).json({
+                        res.json({
+                            'status': 401,
                             'message': 'Authentication fail,  Access_token is expired'
                         });
                     }
-                }).catch(function (err) {
+                }).catch((err) => {
                     if (err) {
-                        return res.status(401).json({
+                        return res.json({
+                            'status': 401,
                             'message': 'Authentication fail'
                         });
                     }
                 });
         });
     } else {
-        return res.status(401).json({ //认证失败状态哦码
+        return res.json({
+            'status': 401, //认证失败状态哦码
             'message': 'Authentication fail，Access_token is expired'
         });
     }
 };
 
-exports.generatorToken = function (username, password) {
+exports.generatorToken = (username, password) => {
     const expires = Math.floor(Date.now() / 1000) + credentials.token.expires;
     const token = jwt.sign({
         username,
@@ -114,7 +125,7 @@ exports.generatorToken = function (username, password) {
         username
     });
     removeToken(username);
-    newToken.save(function (err) {
+    newToken.save((err) => {
         if (err) {
             console.info(`error from add newToken`, err);
         }
@@ -124,10 +135,10 @@ exports.generatorToken = function (username, password) {
         expires
     };
 };
-exports.removeToken = removeToken = function (username) {
+exports.removeToken = removeToken = (username) => {
     Token.remove({
         username
-    }, function (err) {
+    }, (err) => {
         if (err) {
             console.info('error from remove token', err);
         }
