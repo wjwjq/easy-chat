@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import asyncComponent from '../routes/asyncComponent';
 
 const Nav = asyncComponent(() =>
@@ -20,7 +20,7 @@ const MyView = asyncComponent(() =>
 import authenticate from '../components/Auth/Auth';
 
 @authenticate
-export default class extends PureComponent {
+export default class extends Component {
     render() {
         return (
             <Nav  defaultActiveIndex={0}>

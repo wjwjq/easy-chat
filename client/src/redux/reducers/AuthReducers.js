@@ -13,11 +13,12 @@ const initalState = {
 
 import {
     SIGN_IN,
-    SIGN_IN_REJECTED, 
+    SIGN_IN_REJECTED,
     SIGN_IN_FULFILLED,
     SIGN_UP,
     SIGN_UP_REJECTED,
     SIGN_UP_FULFILLED,
+    AUTH_FAIL,
     GET_VALID_REJECTED,
     GET_VALID_FULFILLED
 } from '../constant/';
@@ -48,8 +49,8 @@ export default function reducers(state = initalState, action) {
                 loginMsg: action.payload.message
             };
 
-        //注册
-        case  SIGN_UP:
+            //注册
+        case SIGN_UP:
             return {
                 ...state,
                 isRegistering: true,
@@ -70,7 +71,15 @@ export default function reducers(state = initalState, action) {
                 isRegistered: true,
                 registryMsg: action.payload
             };
-        //获取验证码
+
+            //自动登录失败
+        case AUTH_FAIL:
+            return {
+                ...state,
+                loginMsg: action.payload
+            };
+
+            //获取验证码
         case GET_VALID_REJECTED:
             return {
                 ...state,
@@ -83,7 +92,7 @@ export default function reducers(state = initalState, action) {
             };
         default:
             return state;
-        
-            
+
+
     }
 }

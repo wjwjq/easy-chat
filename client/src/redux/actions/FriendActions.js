@@ -1,9 +1,7 @@
 import axios from 'axios';
 import api from '../../configs/api';
-import {
-    getItem
-} from '../../configs/storage';
-
+import { authFail } from './AuthActions';
+import { setFriends } from '../../handlers/friends';
 import {
     FETCH_FRIENDS,
     FETCH_FRIENDS_REJECTED,
@@ -19,25 +17,26 @@ import {
     DELETE_FRIEND_FULFILLED,
     DELETE_MESSAGE_FULFILLED
 } from '../constant/';
-// axios.defaults.headers.common['x-access-token'] = getItem('access_token');
 
 //获取当期用户所有的好友
 export function fetchFriends() {
-    return function (dispatch) {
+    return (dispatch) =>  {
         dispatch({
             type: FETCH_FRIENDS
         });
         axios
-            .get(`${api.friends}`, {
-                headers: {
-                    'x-access-token': getItem('access_token')['token']
-                }
-            })
+            .get(`${api.friends}`)
             .then((res) => {
+                if (res.data.status === 401) {
+                    dispatch(authFail(res.data.message));
+                    return; 
+                }
                 if (res.data.status === 200) {
+                    const { friends } =res.data;
+                    setFriends(friends);
                     dispatch({
                         type: FETCH_FRIENDS_FULFILLED,
-                        payload: res.data.friends
+                        payload: friends
                     });
                 } else {
                     dispatch({
@@ -57,17 +56,17 @@ export function fetchFriends() {
 
 //查询某个用户信息
 export function queryFriend(friendId) {
-    return function (dispatch) {
+    return  (dispatch) => {
         dispatch({
             type: QUERY_FRIEND
         });
         axios
-            .get(`${api.friends}/${friendId}`, {
-                headers: {
-                    'x-access-token': getItem('access_token')['token']
-                }
-            })
+            .get(`${api.friends}/${friendId}`)
             .then((res) => {
+                if (res.data.status === 401) {
+                    dispatch(authFail(res.data.message));
+                    return; 
+                }
                 if (res.data.status === 204) {
                     dispatch({
                         type: QUERY_FRIEND_REJECTED,
@@ -95,12 +94,14 @@ export function queryFriend(friendId) {
 
 //添加好友
 export function addFriend(friendId) {
-    return function (dispatch) {
+    return (dispatch) => {
         axios
-            .post(`${api.friends}/${friendId}`, {
-                'access_token': getItem('access_token')['token']
-            })
+            .post(`${api.friends}/${friendId}`)
             .then((res) => {
+                if (res.data.status === 401) {
+                    dispatch(authFail(res.data.message));
+                    return; 
+                }
                 if (res.data.status === 200) {
                     dispatch({
                         type: ADD_FRIEND_FULFILLED,
@@ -125,15 +126,16 @@ export function addFriend(friendId) {
 
 //更新信息好友
 export function updateFriend(userId, data) {
-    return function (dispatch) {
+    return  (dispatch) => {
         axios
             .put(`${api.friends}/${userId}`, {
-                data,
-                headers: {
-                    'x-access-token': getItem('access_token')['token']
-                }
+                data
             })
             .then((res) => {
+                if (res.data.status === 401) {
+                    dispatch(authFail(res.data.message));
+                    return; 
+                }
                 if (res.data.status === 200) {
                     dispatch({
                         type: UPDATE_FRIEND_FULFILLED,
@@ -155,14 +157,14 @@ export function updateFriend(userId, data) {
 
 //删除好友
 export function deleteFriend(friendId) {
-    return function (dispatch) {
+    return (dispatch) => {
         axios
-            .delete(`${api.friends}/${friendId}`, {
-                headers: {
-                    'x-access-token': getItem('access_token')['token']
-                }
-            })
+            .delete(`${api.friends}/${friendId}`)
             .then((res) => {
+                if (res.data.status === 401) {
+                    dispatch(authFail(res.data.message));
+                    return; 
+                }
                 if (res.data.status === 200) {
                     dispatch({
                         type: DELETE_MESSAGE_FULFILLED,

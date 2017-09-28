@@ -15,6 +15,9 @@ export const SIGN_UP_FULFILLED = 'SIGN_UP_FULFILLED';
 //注销
 export const LOG_OUT = 'LOG_OUT';
 
+//自动登录失败
+export const AUTH_FAIL = 'AUTH_FAIL';
+
 //获取验证码
 export const GET_VALID = 'GET_VALID';
 export const GET_VALID_REJECTED = 'GET_VALID_REJECTED';

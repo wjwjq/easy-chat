@@ -11,6 +11,9 @@ class AuthView extends PureComponent {
     constructor(props) {
         super(props);
     }
+    componentWillReceiveProps(nextProps) {
+        console.info('nextProps', nextProps);
+    }
     render() {
         const { match, history } = this.props;
         const { path } = match;

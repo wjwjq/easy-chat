@@ -4,7 +4,6 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { logout } from '../../redux/actions/AuthActions';
-import pathConfigs from '../../routes/path';
 
 class Logout extends Component {
     constructor(props) {
@@ -13,9 +12,9 @@ class Logout extends Component {
     }
     
     handleLogout() {
-        const { history, dispatch } = this.props;
-        history.push(pathConfigs.signin);
+        const { dispatch, history } = this.props;
         dispatch(logout());
+        // history.push('/easychat/signin');
     }
 
     render() {

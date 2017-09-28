@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import _ from 'lodash';
 
 import Header from '../../components/Header/';
 import MessageBox from '../../components/Message/Box';
@@ -12,8 +13,6 @@ import MessageBox from '../../components/Message/Box';
 // const MessageBox = asyncComponent(() =>
 //     System.import('../../components/Message/Box').then((module) => module.default)
 // );
-
-import _ from 'lodash';
 
 @connect((store, ownProps) => {
     return {

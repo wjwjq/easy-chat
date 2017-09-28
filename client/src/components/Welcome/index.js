@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 import { connect }  from 'react-redux';
 import './Welcome.less';
 import pathConfigs from '../../routes/path';
-import { isTokenExpired } from '../../configs/tokenHandlers';
+import { isTokenExpired } from '../../handlers/token';
 
 class SignButtons extends  PureComponent {
     constructor(props) {

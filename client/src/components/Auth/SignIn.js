@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import pathConfigs from '../../routes/path';
 import { encrypt } from '../../configs/utils';
 import { signIn, getValid } from '../../redux/actions/AuthActions';
-import { isTokenExpired } from '../../configs/tokenHandlers';
+import { isTokenExpired } from '../../handlers/token';
 
 import Loading from '../share/Loading/';
 import Form from '../share/Form/';
@@ -45,6 +45,7 @@ export default class SignIn extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
+        console.info(nextProps);
         !nextProps.isLogining && nextProps.isLogined && nextProps.history.push(pathConfigs.root);
     }
 
@@ -67,7 +68,7 @@ export default class SignIn extends Component {
         const { hasAccessToken } = this.state;
         const { isLogined, isLogining, loginMsg, signIn } = this.props;
      
-        if (hasAccessToken && !isLogined  && !loginMsg) {
+        if (hasAccessToken && !isLogined) {
             !isLogining && signIn();
             return null;
         } else {

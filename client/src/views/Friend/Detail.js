@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import _ from 'lodash';
 
 import Header from '../../components/Header/';
 import FriendDetail from '../../components/Friend/Detail';
@@ -12,7 +13,6 @@ import FriendDetail from '../../components/Friend/Detail';
 //     System.import('../../components/Friend/Detail').then((module) => module.default)
 // );
 
-import _ from 'lodash';
 
 @connect((store, ownProps) => {
     return {
