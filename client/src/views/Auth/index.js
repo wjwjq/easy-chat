@@ -15,12 +15,12 @@ class AuthView extends PureComponent {
         console.info('nextProps', nextProps);
     }
     render() {
-        const { match, history } = this.props;
-        const { path } = match;
+        const { location, history } = this.props;
+        const { pathname } = location;
         return (
             <div className="auth" style={{ paddingTop: '.7rem' }}>
-                <Header title={path ===  `${pathConfigs.signup}` ? '注册' : '登录'} />
-                {path ===  `${pathConfigs.signup}`? <SignUp history={history}/> : <SignIn history={history}/>}
+                <Header title={pathname ===  `${pathConfigs.signup}` ? '注册' : '登录'} />
+                {pathname ===  `${pathConfigs.signup}`? <SignUp history={history}/> : <SignIn history={history}/>}
             </div>
         );
     }

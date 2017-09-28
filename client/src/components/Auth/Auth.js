@@ -10,11 +10,12 @@ const authenticate = (WrappedComponent) => {
         static propTypes = {
             isLogined: PropTypes.bool.isRequired
         }
-        
         constructor(props) {
             super(props);
         }
-
+        componentWillReceiveProps(nextProps) {
+            console.info(nextProps);
+        }        
         render() {
             const { isLogined, isLogining } = this.props;
     

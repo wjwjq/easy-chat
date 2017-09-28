@@ -12,9 +12,8 @@ class Logout extends Component {
     }
     
     handleLogout() {
-        const { dispatch, history } = this.props;
+        const { dispatch } = this.props;
         dispatch(logout());
-        // history.push('/easychat/signin');
     }
 
     render() {

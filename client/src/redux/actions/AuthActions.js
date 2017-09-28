@@ -1,23 +1,11 @@
 import axios from 'axios';
-// import { push } from 'react-router-redux';
+import { push } from 'react-router-redux';
 import pathConfigs  from '../../routes/path';
 import api from '../../configs/api';
 
-import { history } from '../../redux/store/';
-
-
-import {
-    fetchFriends
-} from './FriendActions';
-import {
-    fetchMessages
-} from './MessageActions';
-import {
-    isTokenExpired,
-    setToken,
-    getToken,
-    clearToken
-} from '../../handlers/token';
+import { fetchFriends } from './FriendActions';
+import { fetchMessages } from './MessageActions';
+import { isTokenExpired, setToken, getToken, clearToken } from '../../handlers/token';
 
 import {
     SIGN_IN,
@@ -77,6 +65,7 @@ export function signIn(userInfo) {
                 //抓取用户好友
                 dispatch(fetchFriends());
                 dispatch(fetchMessages());
+
             })
             .catch((err) => {
                 dispatch({
@@ -127,8 +116,7 @@ export function logout() {
         clearToken();
         axios.defaults.headers.common['x-access-token'] = '';
         dispatch({ type: LOG_OUT });
-        // dispatch();
-        history.push(pathConfigs.signin);
+        dispatch(push(pathConfigs.signin));
     };
 }
 

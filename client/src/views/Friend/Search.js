@@ -5,9 +5,7 @@ import SearchFriend from  '../../components/SearchFriend/';
 // import Result from '../../components/Result/';
 
 import { queryFriend, addFriend } from '../../redux/actions/FriendActions';
-import authenticate from '../../components/Auth/Auth';
 
-@authenticate
 @connect((store) => {
     return {
         friends: store.friends.friends, 

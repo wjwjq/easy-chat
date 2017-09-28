@@ -1,11 +1,9 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import asyncComponent from './asyncComponent';
 
 //引入路由路径配置
 import pathConfigs from './path';
-//引入布局
-import Layout from '../layouts/default';
 //主视图
 import Main from '../views/Main';
 import Home from '../views/Home';
@@ -54,28 +52,22 @@ const PageNotFound = asyncComponent(() =>
 
 const Routes = () => {
     return (
-        <Router>
-            <Layout>
-                <Switch>
-                    <Home>
-                        <Switch>
-                            <Route path={pathConfigs.signin} component={AuthView} />
-                            <Route path={pathConfigs.signup} component={AuthView} />
-                            <Route path={`${pathConfigs.messages}/:id`} component={MessageBoxView} />
-                            <Route path={`${pathConfigs.friends}/:id`} component={FriendDetailView} />
-                            <Route path={pathConfigs.add} component={SearchFriendView} />
-                            <Route path={pathConfigs.myDetail} component={MyDetail} />
-                            <Route path={pathConfigs.myAccountandsecurity} component={AcountAndSecurity} />
-                            <Route path={pathConfigs.myBlacklist} component={BlackList}/>
-                            <Route path={pathConfigs.myHelp} component={Help}/>
-                            <Route path={pathConfigs.myAbout} component={About} />
-                            <Route path={pathConfigs.root} component= {Main} />
-                            <Route component={PageNotFound} />
-                        </Switch>
-                    </Home>
-                </Switch>
-            </Layout>
-        </Router>
+        <Home >
+            <Switch >
+                <Route path={`${pathConfigs.messages}/:id`} component={MessageBoxView} />
+                <Route path={`${pathConfigs.friends}/:id`} component={FriendDetailView} />
+                <Route path={pathConfigs.add} component={SearchFriendView} />
+                <Route path={pathConfigs.myDetail} component={MyDetail} />
+                <Route path={pathConfigs.myAccountandsecurity} component={AcountAndSecurity} />
+                <Route path={pathConfigs.myBlacklist} component={BlackList}/>
+                <Route path={pathConfigs.myHelp} component={Help}/>
+                <Route path={pathConfigs.myAbout} component={About} />
+                <Route path={pathConfigs.signin} component={AuthView} />
+                <Route path={pathConfigs.signup} component={AuthView} />
+                <Route path={pathConfigs.root} component= {Main} />
+                <Route component={PageNotFound} />
+            </Switch>
+        </Home>
     );
 };
 

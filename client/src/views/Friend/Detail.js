@@ -13,7 +13,6 @@ import FriendDetail from '../../components/Friend/Detail';
 //     System.import('../../components/Friend/Detail').then((module) => module.default)
 // );
 
-
 @connect((store, ownProps) => {
     return {
         friend: _.find(store.friends.friends, { username: ownProps.match.params.id }) 
