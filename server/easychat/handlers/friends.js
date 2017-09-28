@@ -2,7 +2,7 @@ const User = require('../../models/user');
 
 //获取所有好友列表
 exports.index = (req, res) => {
-    const { username } = req.body;
+    const { username } = req.body.user;
     User
         .findOne({
             username
@@ -88,7 +88,7 @@ exports.show = (req, res) => {
 //添加指定好友
 exports.post = (req, res) => {
     const  friendId = req.params.id;
-    const { username } = req.body;
+    const { username } = req.body.user;
     if (!friendId) {
         res.json({
             'status': 400,
@@ -154,7 +154,7 @@ exports.put = (req, res) => {
 //删除指定好友
 exports.delete = (req, res) => {
     const  friendId = req.params.id;
-    const { username } = req.body;
+    const { username } = req.body.user;
     if (!friendId) {
         res.json({
             'status': 400,

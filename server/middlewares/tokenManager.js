@@ -6,6 +6,12 @@ const credentials = require('../credentials');
 
 const parseToken = (req) => (req.body && req.body.access_token) || (req.query && req.query.access_token) || (req.headers['x-access-token']);
 
+//认证失败状态吗
+const FAIL_RESPONSE = {
+    'status': 401, 
+    'message': '身份验证失败，请重新登录'
+};
+
 exports.autoSignin = (req, res, next) => {
     const token = parseToken(req);
     if (token) {
@@ -13,10 +19,7 @@ exports.autoSignin = (req, res, next) => {
             if (err) {
                 //已经过期
                 console.info('error from autoSignin', err);
-                return res.json({
-                    'status': 401, //认证失败状态吗
-                    'message': 'Auto authentication fail, Access_token is expired'
-                });
+                return res.json(FAIL_RESPONSE);
             }
             //去数据库查找token  是否存在
             Token
@@ -48,17 +51,11 @@ exports.autoSignin = (req, res, next) => {
                             });
 
                     } else {
-                        res.json({
-                            'status': 401,
-                            'message': 'Authentication fail,  Access_token is expired'
-                        });
+                        res.json(FAIL_RESPONSE);
                     }
                 }).catch((err) => {
                     if (err) {
-                        return res.json({
-                            'status': 401,
-                            'message': 'Authentication fail,  Access_token is expired'
-                        });
+                        return res.json(FAIL_RESPONSE);
                     }
                 });
         });
@@ -69,15 +66,13 @@ exports.autoSignin = (req, res, next) => {
 
 exports.verifyToken = (req, res, next) => {
     const token = parseToken(req);
+    console.info(token);
     if (token) {
         jwt.verify(token, credentials.token.secret, (err, decoded) => {
             if (err) {
                 //已过期
                 console.info('error form verifyToken first error');
-                return res.json({
-                    'status': 401, //认证失败状态哦码
-                    'message': 'Authentication fail，Access_token is expired'
-                });
+                return res.json(FAIL_RESPONSE);
             }
 
             //去数据库查找token  是否存在
@@ -87,28 +82,20 @@ exports.verifyToken = (req, res, next) => {
                 })
                 .then((data) => {
                     if (data.token === token) {
-                        req.body.username = decoded.username;
+                        console.info(1);
+                        req.body.user = { username: decoded.username };
                         next();
                     } else {
-                        res.json({
-                            'status': 401,
-                            'message': 'Authentication fail,  Access_token is expired'
-                        });
+                        res.json(FAIL_RESPONSE);
                     }
                 }).catch((err) => {
                     if (err) {
-                        return res.json({
-                            'status': 401,
-                            'message': 'Authentication fail'
-                        });
+                        return res.json(FAIL_RESPONSE);
                     }
                 });
         });
     } else {
-        return res.json({
-            'status': 401, //认证失败状态哦码
-            'message': 'Authentication fail，Access_token is expired'
-        });
+        return res.json(FAIL_RESPONSE);
     }
 };
 
