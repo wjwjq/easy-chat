@@ -35,7 +35,6 @@ exports.signin = function (req, res) {
         },{ 
             '_id': 0 
         }).then(function (user) {
-            console.info(user);
             //密码验证
             user.comparePassword(password, function (isMatch) {
                 if (!isMatch) {
@@ -47,7 +46,6 @@ exports.signin = function (req, res) {
                 //生成token
                 const token = generatorToken(username, password);
                 delete user._doc.password;
-                console.info('after', user);
                 return res.json({
                     'status': 200,
                     'message': '登录成功',

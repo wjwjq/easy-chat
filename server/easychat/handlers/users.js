@@ -4,12 +4,7 @@ exports.index = (req, res) => {
 
 };
 
-
 exports.show = (req, res) => {
-    
-};
-
-exports.getUser = (req, res) => {
     const { username } = req.body;
     Users.findOne({ username }, function (err, data) {
         if (err) {

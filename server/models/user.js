@@ -18,6 +18,7 @@ const UserSchema = new mongose.Schema({
         required: true
     }
 });
+
 //Bcrypt middleware on UserSchema
 UserSchema.pre('save', function (next) {
     const user = this;
@@ -29,15 +30,16 @@ UserSchema.pre('save', function (next) {
             if (err) 
                 return next();
             user.friends.push(user.username);
-            user.avatarUrl = '';
-            user.remark = '';
-            user.order = 'A',
+            user.avatarUrl = user.remark || '';
+            user.remark = user.remark || '';
+            user.order =  user.order || 'A',
             user.password = hash;
             next();
         });
     });
 
 });
+
 //密码比较
 UserSchema.methods.comparePassword = function (password, cb) {
     bcrypt.compare(password, this.password, function (err, isMatch) {

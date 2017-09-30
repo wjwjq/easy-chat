@@ -66,7 +66,6 @@ exports.autoSignin = (req, res, next) => {
 
 exports.verifyToken = (req, res, next) => {
     const token = parseToken(req);
-    console.info(token);
     if (token) {
         jwt.verify(token, credentials.token.secret, (err, decoded) => {
             if (err) {

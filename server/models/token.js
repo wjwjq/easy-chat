@@ -11,11 +11,4 @@ const tokenScheme = new mongoose.Schema({
     }
 });
 
-tokenScheme.methods.isExpired = function (cb) {
-    const token = this;
-    if (token.expires < new Date().now) {
-        
-    }
-};
-
 module.exports =  mongoose.model('Token', tokenScheme);
