@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import AuthView from '../../views/Auth';
-
+import Loading from '../share/Loading/';
 
 const authenticate = (WrappedComponent) => {
     class AuthenticateComponent extends Component {
@@ -13,9 +13,6 @@ const authenticate = (WrappedComponent) => {
         constructor(props) {
             super(props);
         }
-        componentWillReceiveProps(nextProps) {
-            console.info(nextProps);
-        }        
         render() {
             const { isLogined, isLogining } = this.props;
     

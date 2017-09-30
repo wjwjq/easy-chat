@@ -65,7 +65,7 @@ export default class SearchFriendView extends Component {
                 <SearchFriend onQuery={this.handleQuery}/>
                 <div style={{ paddingTop: '.5rem' }}></div>
                 { querying ? <div>加载中</div> : '' }
-                {queryError ? <p>{queryError}</p> : '' }
+                { queryError ? <p>{queryError}</p> : '' }
                 { queryMsg ? <div style={{ textAlign: 'center' }}>{queryMsg}</div> : '' }
                 { queryed && result ? <div>
                     <p>{result.username}</p>

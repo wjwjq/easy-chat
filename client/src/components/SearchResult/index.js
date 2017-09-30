@@ -1,10 +1,10 @@
 import React from 'react';
 
-const Result = () => {
+const SearchResult = () => {
     return (
         <div>
             结果
         </div>
     );
 };  
-export default Result;
+export default SearchResult;

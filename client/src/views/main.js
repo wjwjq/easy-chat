@@ -17,7 +17,7 @@ const MyView = asyncComponent(() =>
     System.import('./My/').then((module) => module.default)
 );
 
-import authenticate from '../components/Auth/Auth';
+import authenticate from '../components/Auth/';
 
 @authenticate
 export default class extends Component {

@@ -18,7 +18,6 @@ class FriendDetail extends PureComponent {
         nickname: PropTypes.string,
         gender: PropTypes.number,
         remark: PropTypes.string,
-        telephone: PropTypes.string,
         address: PropTypes.string
     }
 

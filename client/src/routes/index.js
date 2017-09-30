@@ -65,7 +65,7 @@ const Routes = () => {
                 <Route path={pathConfigs.signin} component={AuthView} />
                 <Route path={pathConfigs.signup} component={AuthView} />
                 <Route path={pathConfigs.root} component= {Main} />
-                <Route component={PageNotFound} />
+                {/* <Route component={PageNotFound} /> */}
             </Switch>
         </Home>
     );
