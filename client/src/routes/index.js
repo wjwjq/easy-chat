@@ -10,9 +10,7 @@ import Home from '../views/Home';
 
 //认证视图
 import AuthView from '../views/Auth';
-// const AuthView = asyncComponent(() =>
-//     System.import('../views/Auth/').then((module) => module.default)
-// );
+
 //搜索视图
 const SearchFriendView = asyncComponent(() =>
     System.import('../views//Friend/Search').then((module) => module.default)
@@ -65,7 +63,7 @@ const Routes = () => {
                 <Route path={pathConfigs.signin} component={AuthView} />
                 <Route path={pathConfigs.signup} component={AuthView} />
                 <Route path={pathConfigs.root} component= {Main} />
-                {/* <Route component={PageNotFound} /> */}
+                <Route component={PageNotFound} />
             </Switch>
         </Home>
     );

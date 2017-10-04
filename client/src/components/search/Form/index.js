@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import Back from '../share/Back/';
+import Back from '../../share/Back/';
 
 import './style.less';
 
-export default class SearchFriend extends Component {
+export default class SearchForm extends Component {
     constructor(props) {
         super(props);
         this.handleChange = this.handleChange.bind(this);
@@ -25,6 +25,10 @@ export default class SearchFriend extends Component {
         if (e.keyCode === 13) {
             e.preventDefault();
             onQuery(this.state.value);
+            // e.target.blur();
+            // this.setState({
+            //     value: ''
+            // });
         }
     }
     render() {

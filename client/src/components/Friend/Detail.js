@@ -14,7 +14,7 @@ class FriendDetail extends PureComponent {
     
     static propTypes = {
         avatarUrl: PropTypes.string,
-        username: PropTypes.string,
+        username: PropTypes.string.isRequired,
         nickname: PropTypes.string,
         gender: PropTypes.number,
         remark: PropTypes.string,
@@ -27,7 +27,7 @@ class FriendDetail extends PureComponent {
         history.push(pathConfigs.root);
     }
     render() {
-        const { avatarUrl, nickname, remark, address, gender,  username, userID } = this.props;
+        const { avatarUrl, nickname, remark, address, gender,  username, userId } = this.props;
         return (
             <ul className="detail-info">
                 <Card
@@ -50,7 +50,7 @@ class FriendDetail extends PureComponent {
                 <li className="btn-group">
                     <Link to={`${pathConfigs.messages}/${username}`} className="btn btn-green">发消息</Link>
                     {
-                        username !== userID 
+                        username !== userId 
                             ? <span className="btn btn-red" onClick={this.handleDelete.bind(this, username)}>删除好友</span>
                             : ''
                     }
@@ -61,4 +61,4 @@ class FriendDetail extends PureComponent {
 
 }
 
-export default withRouter(connect((store) => ({ userID: store.user.user.username }), { deleteFriend })(FriendDetail));
+export default withRouter(connect((store) => ({ userId: store.user.user.username }), { deleteFriend })(FriendDetail));

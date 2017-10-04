@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import SearchFriend from  '../../components/SearchFriend/';
-// import Result from '../../components/Result/';
+import SearchForm from  '../../components/search/Form/';
+import SearchResult from '../../components/search/Result/';
 
 import { queryFriend, addFriend } from '../../redux/actions/FriendActions';
+
+
 
 @connect((store) => {
     return {
@@ -23,6 +25,7 @@ export default class SearchFriendView extends Component {
     constructor(props) {
         super(props);
         this.handleQuery = this.handleQuery.bind(this);
+        this.handleAdd = this.handleAdd.bind(this);
 
         this.state = {
             queryError: ''
@@ -61,16 +64,23 @@ export default class SearchFriendView extends Component {
         const { querying, queryed, result, queryMsg } = this.props;
         const { queryError } = this.state;
         return (
-            <div>
-                <SearchFriend onQuery={this.handleQuery}/>
-                <div style={{ paddingTop: '.5rem' }}></div>
-                { querying ? <div>加载中</div> : '' }
-                { queryError ? <p>{queryError}</p> : '' }
-                { queryMsg ? <div style={{ textAlign: 'center' }}>{queryMsg}</div> : '' }
-                { queryed && result ? <div>
-                    <p>{result.username}</p>
-                    <button onClick={this.handleAdd.bind(this, result.username)}>添加好友</button>
-                </div> : '' }
+            <div className="search-view">
+                <SearchForm onQuery={this.handleQuery}/>
+                <div className="search-result-box"   style={{ paddingTop: '.5rem' }} >
+                    { 
+                        queryed && result  &&
+                            <SearchResult 
+                                result={result} 
+                                onAdd={this.handleAdd} 
+                            />
+                      
+                    }
+                    <div style={{ paddingTop: '0.3rem', textAlign: 'center' }}>
+                        { querying ? <div>搜索中</div> : '' }
+                        { queryError ? <p>{queryError}</p> : '' }
+                        { !queryError && queryMsg ? <div>{queryMsg}</div> : '' }
+                    </div>
+                </div>
             </div>
         );
     }

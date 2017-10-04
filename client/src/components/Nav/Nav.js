@@ -81,7 +81,10 @@ export default class Nav extends Component {
     }
 
     componentWillUnmount() {
+        const { saveCurrActiveIndex } = this.props;
         window.removeEventListener('resize', this.updateDimensions);
+        //保存当前activeIndex
+        saveCurrActiveIndex && saveCurrActiveIndex(this.state.activeIndex);
     }
 
     render() {

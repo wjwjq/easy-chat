@@ -17,7 +17,7 @@ const authenticate = (WrappedComponent) => {
             const { isLogined, isLogining } = this.props;
     
             if (isLogining) {
-                return null;
+                return <Loading />;
             }
             if (!isLogined) {
                 return <AuthView />;

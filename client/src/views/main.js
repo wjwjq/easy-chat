@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import asyncComponent from '../routes/asyncComponent';
 
 const Nav = asyncComponent(() =>
@@ -17,13 +18,34 @@ const MyView = asyncComponent(() =>
     System.import('./My/').then((module) => module.default)
 );
 
+import { leaveNav } from '../redux/actions/NavActions';
 import authenticate from '../components/Auth/';
 
 @authenticate
+@connect((store) => {
+    return {
+        ...store.nav
+    };
+},{
+    leaveNav 
+})
 export default class extends Component {
+    constructor(props) {
+        super(props);
+        this.saveCurrActiveIndex = this.saveCurrActiveIndex.bind(this);
+        this.state ={
+            defaultActiveIndex: props.activeIndex || 0
+        };
+    }
+
+    saveCurrActiveIndex(currActiveIndex) {
+        this.props.leaveNav(currActiveIndex);
+    }
+
     render() {
+        const { defaultActiveIndex } = this.state;
         return (
-            <Nav  defaultActiveIndex={0}>
+            <Nav  defaultActiveIndex={defaultActiveIndex} saveCurrActiveIndex={this.saveCurrActiveIndex} >
                 <NavPannel
                     order = "0"
                     icons ="icon icon-message icon-message-active"
