@@ -98,7 +98,6 @@ exports.signup = function (req, res) {
 //验证码
 exports.valid = function (req, res) {
     const { username } = req.body;
-    console.info(username);
     res.json({
         'status': 200,
         'token': '123456aavss',

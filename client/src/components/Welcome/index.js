@@ -10,11 +10,13 @@ class SignButtons extends  PureComponent {
     constructor(props) {
         super(props);
     }
+
     handleClick(path) {
         const { history, clickToChangeRoute } = this.props;
         clickToChangeRoute(false);
         history.push(path);
     }
+    
     render() {
         return (
             <div className="start-up-bottom-fixed">
@@ -35,12 +37,14 @@ class Welcome extends Component {
             hasAccessToken: false
         };
     }   
+    
     componentWillMount() {
         const hasAccessToken = isTokenExpired();
         this.setState({
             hasAccessToken
         });
     }
+    
     componentDidMount() {
         const { onChange, history } = this.props;
         let { hasAccessToken, timer } = this.state;
@@ -48,21 +52,24 @@ class Welcome extends Component {
             timer = setTimeout(() => {
                 onChange(false);
                 history.push(pathConfigs.root);
-            },1000);
+            }, 1000);
         }
         this.setState({
             timer
         });
     }
+    
     componentWillReceiveProps(nextProps) {
         if (nextProps.isLogined) {
             nextProps.history.push(pathConfigs.root);
             nextProps.onChange(false);
         } 
     }
+    
     componentWillUnmount() {
         clearTimeout(this.state.timer);
     }
+    
     render() {
         const { onChange, history } = this.props;
         const { hasAccessToken } = this.state;
@@ -79,6 +86,5 @@ class Welcome extends Component {
         );
     }
 }
-
 
 export default withRouter(connect((store) => ({ ...store.user }))(Welcome));

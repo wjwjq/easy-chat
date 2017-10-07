@@ -1,3 +1,4 @@
+//基本信息卡片
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
@@ -66,6 +67,5 @@ class Card extends PureComponent {
     }
 
 }
-
 
 export default withRouter(Card);

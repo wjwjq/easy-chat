@@ -79,7 +79,6 @@ easychat.get('*', (req, res) => {
 });
 
 easychatRoutes(app);
-
 app.get('/easychat/*', (req, res) => {
     res.sendFile(path.resolve(__dirname) + '/public/easychat/index.html');
 });
@@ -94,21 +93,27 @@ app.get('/', (req, res) => {
     res.render('index');
 });
 
-// var server = require('http').Server(app);
-// var io = require('socket.io')(server);
-// io.on('connection', function (socket) {
-//     socket.emit('news', { hello: 'world' });
-//     socket.on('my other event', function (data) {
-//         console.info(data);
-//     });
-// });
+var server = require('http').Server(app);
+const io = require('socket.io')(server, {
+    path: '/api/chat',
+    serveClient: false,
+    // below are engine.IO options
+    pingInterval: 10000,
+    pingTimeout: 5000,
+    cookie: false
+});
+const chat = require('./easychat/handlers/chat');
+chat(io);
 
+
+// 404 Error Middleware
 app.use(function (req, res, next) {
     var err = new Error('Not Found');
     err.status = 404;
     next(err);
 });
 
+// 500 Error Middleware
 app.use(function (err, req, res) {
     // set locals, only providing error in development
     res.locals.message = err.message;
@@ -121,9 +126,12 @@ app.use(function (err, req, res) {
 
 
 function startServer() {
-    server = http.createServer(app).listen(app.get('port'), function () {
-        console.info(`Server started in ${app.get('env')}  mode on http://localhost:${app.get('port')}; press Ctrl-C to terminate.`);
+    server.listen(app.get('port'), function () {
+        console.info(`Server started in ${ app.get('env') }, mode on http://localhost:${ app.get('port') }; press Ctrl-C to terminate.`);
     });
+    // server = http.createServer(app).listen(app.get('port'), function () {
+    //     console.info(`Server started in ${app.get('env')}  mode on http://localhost:${app.get('port')}; press Ctrl-C to terminate.`);
+    // });
 }
 
 if (require.main === module) {

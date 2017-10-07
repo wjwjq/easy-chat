@@ -17,20 +17,18 @@ export default class MessageItem extends PureComponent {
 
     static propTypes = {
         username: PropTypes.string.isRequired,
-        msgs: PropTypes.arrayOf(PropTypes.shape({
-            content: PropTypes.string,
-            publishTime: PropTypes.string
-        }))
+        friend: PropTypes.object,
+        latestMsg: PropTypes.object
     }
-
+    
     render() {
 
-        const { friend, username, msgs } = this.props;
+        const { friend, username, latestMsg } = this.props;
         return (
             <Card
                 to={`${pathConfigs.messages}/${username}`}
                 classPrefix="message-card"
-                latestMsg={ msgs.slice(-1).pop() || {} }
+                latestMsg={latestMsg}
                 userInfo={friend}
             />
         );

@@ -1,7 +1,7 @@
 //聊天窗口消息展示
 import React, { Component } from 'react';
 import classnames from 'classnames';
-
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import pathConfigs from '../../routes/path';
 import config from '../../configs/config';
@@ -24,7 +24,12 @@ const Passage = (props) => {
 };
 
 export default class MessageShow extends Component {
-
+    static propTypes = {
+        friendId: PropTypes.string.isRequired,
+        friendAvatarUrl: PropTypes.string.isRequired,
+        userAvatarUrl: PropTypes.string.isRequired,
+        userId: PropTypes.string.isRequired
+    }
     
     constructor(props) {
         super(props);

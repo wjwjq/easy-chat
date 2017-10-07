@@ -6,5 +6,6 @@ export default  {
         signup: baseUrl + `/auth/signup`,
         signin: baseUrl + `/auth/signin`,
         valid: baseUrl + `/auth/valid`
-    }
+    },
+    chat: baseUrl + '/chat'
 };

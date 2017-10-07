@@ -28,14 +28,14 @@ export default class MessageList extends Component {
         return (
             <div className="messages-list">
                 { 
-                    messages.map((message) => {
+                    Object.keys(messages).map((key) => {
                         return  <SlideToDelete 
-                            key={message.username} 
-                            onDelete={this.handleDelete.bind(this, message.username)}
+                            key={key} 
+                            onDelete={this.handleDelete.bind(this, key)}
                             width={width} 
                             text='删除'
                         >
-                            <MessageItem  {...message} />
+                            <MessageItem  username={key}  latestMsg={ messages[key].slice(-1).pop() || {} } />
                         </SlideToDelete>;
                     })
                 }

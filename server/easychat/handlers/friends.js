@@ -172,7 +172,6 @@ exports.delete = (req, res) => {
                 'message': '删除好友失败'
             });
         }
-        console.info(data);
         res.json({
             'status': 200,
             'message': '删除好友成功'

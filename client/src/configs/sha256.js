@@ -175,4 +175,4 @@ class Sha256 {
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
 
-if (typeof module !== 'undefined' && module.exports) module.exports = Sha256; // ≡ export default Sha256
+export default Sha256;

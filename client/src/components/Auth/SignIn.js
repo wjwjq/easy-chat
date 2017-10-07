@@ -10,7 +10,7 @@ import { isTokenExpired } from '../../handlers/token';
 
 import Loading from '../share/Loading/';
 import Form from '../share/Form/';
-import FormItem from '../share/Form/FormItem';
+import FormItem from '../share/Form/Item';
 
 import './style.less';
 
@@ -45,7 +45,6 @@ export default class SignIn extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        console.info(nextProps);
         !nextProps.isLogining && nextProps.isLogined && nextProps.history.push(pathConfigs.root);
     }
 

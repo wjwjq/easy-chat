@@ -1,16 +1,18 @@
 import axios from 'axios';
 import api  from '../../configs/api';
+
 import { authFail } from './AuthActions';
+
+import { onPostMessage } from '../../handlers/chat';
 import { setMessages } from '../../handlers/messages';
 
 import {
     FETCH_MESSAGES,
     FETCH_MESSAGES_REJECTED,
     FETCH_MESSAGES_FULFILLED,
-    NEW_MESSAGE_REJECTED,
-    NEW_MESSAGE_FULFILLED,
-    ADD_MESSAGE_REJECTED,
-    ADD_MESSAGE_FULFILLED,
+    // POST_MESSAGE_REJECTED,
+    POST_MESSAGE_FULFILLED,
+    RECEIVE_MESSAGE_FULFILLED,
     DELETE_MESSAGE_REJECTED,
     DELETE_MESSAGE_FULFILLED
 } from '../constant/';
@@ -51,69 +53,30 @@ export function fetchMessages() {
     }; 
 }
 
-//新建消息
-export function newMessage(friendId, data) {
-    return  (dispatch) => {
-        axios
-            .post(`${api.messages}/${friendId}`)
-            .then((res) => {
-                if (res.data.status === 401) {
-                    dispatch(authFail(res.data.message));
-                    return; 
-                }
-                if (res.data.status === 200) {
-                    dispatch({
-                        type: NEW_MESSAGE_FULFILLED,
-                        payload: {
-                            username: friendId,
-                            msgs: [data]
-                        }
-                    });
-                } else {
-                    dispatch({
-                        type: NEW_MESSAGE_REJECTED,
-                        payload: res.data.message
-                    });
-                }
-            })
-            .catch((err) => dispatch({
-                type: NEW_MESSAGE_REJECTED,
-                payload: err.message
-            }));
+/*新建消息 或 添加信息
+ * data: Object {
+ * }
+ **/
+export function addMessage(msg) {
+    console.info('msg', msg);
+    if (msg.data.from !== msg.data.to) {
+        //反转身份
+        const postMsg = {
+            friendId: msg.data.from,
+            data: msg.data
+        };
+        onPostMessage(postMsg);
+    }
+    return {
+        type: POST_MESSAGE_FULFILLED,
+        payload: msg
     };
 }
 
-//添加信息
-export function addMessage(friendId, data) {
-    return (dispatch) => {
-        axios
-            .put(`${api.messages}/${friendId}`,{
-                data
-            })
-            .then((res) => {
-                if (res.data.status === 401) {
-                    dispatch(authFail(res.data.message));
-                    return; 
-                }
-                if (res.data.status === 200) {
-                    dispatch({
-                        type: ADD_MESSAGE_FULFILLED,
-                        payload: {
-                            friendId,
-                            data
-                        }
-                    });
-                } else {
-                    dispatch({
-                        type: ADD_MESSAGE_REJECTED,
-                        payload: res.data.message
-                    });
-                }
-            })
-            .catch((err) => dispatch({
-                type: ADD_MESSAGE_REJECTED,
-                payload: err.message
-            }));
+export function receiveMessage(msg) {
+    return {
+        type: RECEIVE_MESSAGE_FULFILLED,
+        payload: msg
     };
 }
 

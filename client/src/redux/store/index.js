@@ -52,4 +52,3 @@ export default createStore(
     rootReducer,
     middlewares
 );
-

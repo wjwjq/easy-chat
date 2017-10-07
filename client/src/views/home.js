@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { receiveMessage } from '../redux/actions/MessageActions';
+import { onReceiveMessage } from '../handlers/chat';
 
 import Welcome from '../components/Welcome/';
 class Home extends Component {
@@ -12,21 +14,27 @@ class Home extends Component {
             isShow: true
         };
     }
+
     handleShow(isShow) {
         this.setState({
             isShow
         });
     }
-  
+    componentDidMount() {
+        const { receiveMessage } = this.props;
+        onReceiveMessage((data) => receiveMessage(data));
+    }
     render() {
         const { children } = this.props;
         const { isShow } = this.state;
         return (<div className="home">
-            {isShow ? <Welcome onChange={this.handleShow}/> : children}
+            {isShow ? <Welcome onChange={this.handleShow} /> : children}
         </div>);
-
-        return <div>{children}</div>;
     }
 }
 
-export default withRouter(connect((store) => ({ isLogined: store.user.isLogined }))(Home));
+export default withRouter(connect((store) => ({ 
+    isLogined: store.user.isLogined 
+}),{
+    receiveMessage
+})(Home));

@@ -1,4 +1,32 @@
 import io from 'socket.io-client';
-console.info(io);
-// import globalConfig from '../../global';
-const socket = io('');
+let socket = null;
+
+export function socketConnect(url, path, accessToken) {
+    socket = io(url, {
+        path: path,
+        transportOptions: {
+            polling: {
+                extraHeaders: {
+                    'access_token': accessToken
+                }
+            }
+        }
+    });
+}
+
+export function onPostMessage(msg) {
+    try {
+        socket.emit('postMessage', msg);
+    } catch (err) {
+        console.info(err);
+    }
+}
+
+export function onReceiveMessage(cb) {
+    try {
+        socket.on('receiveMessage', (chunk) => typeof cb === 'function' && cb(chunk) );
+    } catch (err) {
+        // console.info(err);
+        setTimeout(() => onReceiveMessage(cb), 2000);
+    }
+}

@@ -2,7 +2,7 @@ import axios from 'axios';
 import { push } from 'react-router-redux';
 import pathConfigs  from '../../routes/path';
 import api from '../../configs/api';
-
+import { socketConnect } from '../../handlers/chat';
 import { fetchFriends } from './FriendActions';
 import { fetchMessages } from './MessageActions';
 import { isTokenExpired, setToken, getToken, clearToken } from '../../handlers/token';
@@ -51,7 +51,10 @@ export function signIn(userInfo) {
 
                 const token = res.data.token;
                 token && setToken(token);
-                axios.defaults.headers.common['x-access-token'] = token ? token.token : getToken();
+                const accessToken = token ? token.token : getToken();
+                axios.defaults.headers.common['x-access-token'] = accessToken;
+                //socket 链接携带cookie
+                socketConnect('', api.chat, accessToken);
 
                 dispatch({
                     type: SIGN_IN_FULFILLED,

@@ -3,14 +3,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-
 import ShowMessage from './Show';
 import SendMessage from './Send';
 import './Box.less';
 
-import _ from 'lodash';
-
-import { newMessage, addMessage } from '../../redux/actions/MessageActions';
+import { addMessage } from '../../redux/actions/MessageActions';
 
 @connect((store) => {
     return {
@@ -18,7 +15,6 @@ import { newMessage, addMessage } from '../../redux/actions/MessageActions';
         user: store.user.user
     };
 },{
-    newMessage,
     addMessage
 })
 export default class MessageBox extends Component {
@@ -32,24 +28,19 @@ export default class MessageBox extends Component {
     constructor(props) {
         super(props);
         this.state={
-            message: _.find(props.messages, { username: props.friendId })
+            message: props.messages[props.friendId]
         };
         this.handleSend = this.handleSend.bind(this);
     }
 
     handleSend(data) {
-        const { friendId, addMessage, newMessage } = this.props;
-        const { message } = this.state;
-        if (message) {
-            addMessage(friendId, data);
-        } else {
-            newMessage(friendId, data);
-        }
+        const { friendId, addMessage } = this.props;
+        addMessage({ friendId, data });
     }
 
     componentWillReceiveProps(nextProps) {
         this.setState({
-            message: _.find(nextProps.messages, { username: nextProps.friendId })
+            message: nextProps.messages[nextProps.friendId]
         });
     }
  
@@ -60,7 +51,7 @@ export default class MessageBox extends Component {
         return (
             <div className="message-box">
                 <ShowMessage 
-                    {...message}
+                    msgs={message}
                     friendId={friendId}
                     userId={username}
                     userAvatarUrl={avatarUrl}

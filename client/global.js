@@ -11,6 +11,6 @@
  */
 
 module.exports = {
-    activeServerSubdomain: false,
+    activeServerSubdomain: true,
     APPNAME : 'easychat'
 };

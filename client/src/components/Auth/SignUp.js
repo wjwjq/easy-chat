@@ -9,16 +9,8 @@ import { signUp, getValid } from '../../redux/actions/AuthActions';
 import { connect } from 'react-redux';
 import Loading from '../share/Loading/';
 
-// import Form from '../share/Form/';
-// import FormItem from '../share/Form/FormItem';
-
-import asyncComponent from '../../routes/asyncComponent';
-const Form = asyncComponent(() =>
-    System.import('../share/Form/').then((module) => module.default)
-);
-const FormItem = asyncComponent(() =>
-    System.import('../share/Form/FormItem').then((module) => module.default)
-);
+import Form from '../share/Form/';
+import FormItem from '../share/Form/Item';
 
 
 @connect((store) => {

@@ -10,7 +10,6 @@
 |  nickname     |  String         |                |
 |  order        |  String         |                |
 |  remark       |  String         |                |
-|  telephone    |  String         |                |
 |  userId       |  String         |                |
 |  password     |  String         |                |
 |  username     |  String         |                |

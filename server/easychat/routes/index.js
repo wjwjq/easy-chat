@@ -24,9 +24,9 @@ module.exports = function (app) {
     //获取某个用户是否存在
     app.get('/api/users/:id/logout', tokenManager.removeToken, users.logout);
     app.get('/api/users/:id', tokenManager.verifyToken, users.show);
-    app.post('/api/friends/:id', tokenManager.verifyToken, users.post);
-    app.put('/api/friends/:id', tokenManager.verifyToken, users.put);
-    app.delete('/api/friends/:id', tokenManager.verifyToken, users.delete);
+    app.post('/api/users/:id', tokenManager.verifyToken, users.post);
+    app.put('/api/users/:id', tokenManager.verifyToken, users.put);
+    app.delete('/api/users/:id', tokenManager.verifyToken, users.delete);
     app.get('/api/users', tokenManager.verifyToken, users.index);
 
     //messages

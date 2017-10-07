@@ -81,7 +81,6 @@ exports.verifyToken = (req, res, next) => {
                 })
                 .then((data) => {
                     if (data.token === token) {
-                        console.info(1);
                         req.body.user = { username: decoded.username };
                         next();
                     } else {

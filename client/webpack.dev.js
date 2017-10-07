@@ -11,7 +11,7 @@ const getLocalIPv4 = () => {
     for (let key in interfaces) {
         for (let i = 0; i < interfaces[key].length; i++) {
             details = interfaces[key][i];
-            if (details.family === 'IPv4' && (key === 'eth0' || key === '以太网')) {
+            if (details.family === 'IPv4' && (key === 'en0' || key === 'eth0' || key === '以太网')) {
                 return details.address;
             }
         }
@@ -59,12 +59,12 @@ module.exports = Merge(commonConfig, {
     devServer: {
         proxy: { // proxy URLs to backend development server
             '/api': {
-                target: 'http://localhost:3000',
+                target: `http://${ getLocalIPv4() }:3000`,
                 changeOrigin: true
                 // pathRewrite: { '^/api': '' }
             },
             '/images':{
-                target: 'http://localhost:3000',
+                target: `http://${ getLocalIPv4() }:3000`,
                 changeOrigin: true
             }
         },
