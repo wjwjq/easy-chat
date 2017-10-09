@@ -79,10 +79,10 @@ async function validVerifyCode(username, code) {
 
 /**
  * 查询用户是否存在
- *  说明： 如果funcType=== signup, 那么表示当前查询操作为注册发出,此时若无此用户,将返回成功
- *        如果funcType 为其它值，那么将返回查询成功的用户信息
+ *  说明： 如果type === signup, 那么表示当前查询操作为注册发出,此时若无此用户,将返回成功
+ *        如果type 为其它值，那么将返回查询成功的用户信息
  * @param options{
- *     type {String}功能
+ *     type {String} 功能
  *     username {String}  用户名
  *     [populate={}] {any}  过滤参数
  * }
@@ -345,6 +345,11 @@ exports.valid = function (req, res) {
                     return res.json({
                         'status': 204,
                         'message': '手机号已存在, 请更换手机号'
+                    });
+                case USER_NOT_EXISTED: 
+                    return res.json({
+                        'status': 401,
+                        'message': '手机号不存在'
                     });
                 case SAVE_CODE_FAIL: 
                     return res.json({

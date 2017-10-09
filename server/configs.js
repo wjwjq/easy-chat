@@ -22,5 +22,11 @@ module.exports = {
         password: '123456',
         host: '127.0.0.1',
         port: '27017'
+    },
+    sms: {
+        accessKeyId: 'yourAccessKeyId',
+        accessKeySecret: 'yourAccessKeySecret',
+        signName: 'yourSignName',
+        templateCode: 'yourTemplateCode'
     }
 };
