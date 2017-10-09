@@ -13,6 +13,7 @@ module.exports = function (app) {
     app.post('/api/auth/signin', tokenManager.autoSignin, auth.signin);
     app.post('/api/auth/signup', auth.signup);
     app.post('/api/auth/valid', auth.valid);
+    app.get('/api/auth/query', users.show);
 
     //friends
     app.get('/api/friends/:id', tokenManager.verifyToken, friends.show);

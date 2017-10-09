@@ -6,21 +6,20 @@ exports.index = (req, res) => {
 
 exports.show = (req, res) => {
     const { username } = req.body;
-    Users.findOne({ username }, function (err, data) {
+    Users.findOne({ username }, (err, data) => {
         if (err) {
             console.info(err);
         }
         if (data) {
-            res.json({
+            return res.json({
                 'status': 204,
                 'message': '用户名已被注册'
             });
-        } else {
-            res.json({
-                'status': 200,
-                'message': '用户名可以使用'
-            });
         }
+        res.json({
+            'status': 200,
+            'message': '用户名可以使用'
+        });
     });
 };
 

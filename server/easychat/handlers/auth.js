@@ -77,13 +77,30 @@ async function validVerifyCode(username, code) {
     return r;
 }
 
-//查询用户
-function queryUser(username, populate = {}) {
+/**
+ * 查询用户是否存在
+ *  说明： 如果funcType=== signup, 那么表示当前查询操作为注册发出,此时若无此用户,将返回成功
+ *        如果funcType 为其它值，那么将返回查询成功的用户信息
+ * @param options{
+ *     type {String}功能
+ *     username {String}  用户名
+ *     [populate={}] {any}  过滤参数
+ * }
+ * @returns 
+ */
+function queryUser(options) {
+    const { type, username, populate = {} } = options;
     return new Promise((resolve, reject) => {
         Users.findOne({
             username
         }, populate)
             .then((user) => {
+                if (type && type.toUpperCase() === 'SIGNUP') {
+                    if (!user) {
+                        return resolve();
+                    }
+                    return reject(USER_ALREADY_EXISTED);
+                }
                 if (!user) {
                     return reject(USER_NOT_EXISTED);
                 }
@@ -91,6 +108,9 @@ function queryUser(username, populate = {}) {
             })
             .catch((err) => {
                 console.info('query user err: ', err);
+                if (funcType && funcType.toUpperCase() === 'SIGNUP') {
+                    return resolve(USER_NOT_EXISTED);
+                }
                 reject(USER_NOT_EXISTED);
             });
     });
@@ -151,16 +171,20 @@ exports.signin = function (req, res) {
     validVerifyCode(username, valid)
         .then(() => {
             //查询用户
-            return queryUser(username, {
-                'address': 1,
-                'avatarUrl': 1,
-                'gender': 1,
-                'nickname': 1,
-                'order': 1,
-                'remark': 1,
-                'username': 1,
-                'password': 1
-            });
+            const query = {
+                username,
+                populate: {
+                    'address': 1,
+                    'avatarUrl': 1,
+                    'gender': 1,
+                    'nickname': 1,
+                    'order': 1,
+                    'remark': 1,
+                    'username': 1,
+                    'password': 1
+                }
+            };
+            return queryUser(query);
         })
         .then((user) => {
             //密码验证
@@ -281,7 +305,8 @@ exports.signup = function (req, res) {
 //验证码
 exports.valid = function (req, res) {
     const {
-        username
+        username,
+        type
     } = req.body;
     if (!username) {
         return res.json({
@@ -290,11 +315,14 @@ exports.valid = function (req, res) {
         });
     }
     const code = Math.random().toString().slice(-4);
-    sendSMS({
-        phoneNumber: username,
-        code
-    })
-        .then((result) => {
+    //查询用户是否存在
+    queryUser({ type, username })
+        .then(() => {
+            return sendSMS({
+                phoneNumber: username,
+                code
+            });
+        }).then((result) => {
             console.info(result);
             if (result.Code.toUpperCase() !== 'OK') {
                 throw new Error('发送验证码失败');
@@ -313,6 +341,11 @@ exports.valid = function (req, res) {
         })
         .catch((err) => {
             switch (err) {
+                case USER_ALREADY_EXISTED: 
+                    return res.json({
+                        'status': 204,
+                        'message': '手机号已存在, 请更换手机号'
+                    });
                 case SAVE_CODE_FAIL: 
                     return res.json({
                         'status': 500,
