@@ -7,7 +7,7 @@ export function socketConnect(url, path, accessToken) {
         transportOptions: {
             polling: {
                 extraHeaders: {
-                    'access_token': accessToken
+                    'x-access-token': accessToken
                 }
             }
         }
@@ -29,4 +29,8 @@ export function onReceiveMessage(cb) {
         // console.info(err);
         setTimeout(() => onReceiveMessage(cb), 2000);
     }
+}
+
+export function disconnect() {
+    socket.emit('disconnecting');
 }

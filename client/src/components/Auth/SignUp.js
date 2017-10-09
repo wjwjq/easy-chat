@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import pathConfigs from '../../routes/path';
 import { encrypt } from '../../configs/utils';
 
-import { signUp, getValid } from '../../redux/actions/AuthActions';
+import { signUp, getValid, clearAuthMessage } from '../../redux/actions/AuthActions';
 import { connect } from 'react-redux';
 import Loading from '../share/Loading/';
 
@@ -19,44 +19,71 @@ import FormItem from '../share/Form/Item';
     };
 },{
     signUp,
-    getValid
+    getValid,
+    resetMsg: clearAuthMessage
 })
 export default class SignUp extends Component {
 
     constructor(props) {
         super(props);
-
+        
         this.handleGetValid = this.handleGetValid.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        
+        this.state = {
+            time: 3
+        };
     }
 
-    handleGetValid() {
+    handleGetValid(data) {
         const { getValid } = this.props;
-        getValid('signUp');
+        getValid(data.username, 'signup');
     }
     
     handleSubmit(result) {
         const { signUp } = this.props;
-        for (let key in result) {
-            if (key === 'password') {
-                result[key] =  encrypt(result[key]);
-            }
-        }
+        result['password'] =  encrypt(result['password']);
         signUp(result);
     }
- 
+
     componentWillReceiveProps(nextProps) {
-        nextProps.isRegistered && nextProps.history.push('signin');
+        if (nextProps.isRegistered) {
+            let { time } = this.state;
+            const timer = setInterval(() => {
+                if (time <= 1) {
+                    clearInterval(timer);
+                    nextProps.history.push('signin');
+                    return;
+                }
+                this.setState({
+                    time: --time
+                });
+            }, 1000);
+        }
+    }
+    
+    componentWillUnmount() {
+        this.props.resetMsg();
     }
 
     render() {
-        const { isRegistering, registryMsg } = this.props;
-        
+        const { isRegistering, registryMsg, isRegistered, verifyCodeMsg } = this.props;
+        const { time } = this.state;
         return (
             <div className="signup">
                 {isRegistering && <Loading/>}
                 <Form onSubmit={this.handleSubmit} >
-                    <div className="form-tips">{registryMsg}</div>
+                    <div className="form-tips">
+                        {
+                            isRegistered 
+                                ? <span style={{ color: '#239B37' }}>{`${registryMsg}, ${time}秒后自动前往登录`}</span> 
+                                : registryMsg
+                                    ? registryMsg 
+                                    : verifyCodeMsg 
+                                        ? verifyCodeMsg 
+                                        : '' 
+                        }
+                    </div>
                     <FormItem 
                         text="手机号" 
                         placeholder="请输入手机号" 

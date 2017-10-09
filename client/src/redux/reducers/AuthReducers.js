@@ -8,7 +8,11 @@ const initalState = {
 
     isRegistering: false,
     isRegistered: false,
-    registryMsg: ''
+    registryMsg: '',
+
+    verifyCodeMsg: '',
+    isUserExisted: false,
+    checkUsernameMsg: ''
 };
 
 import {
@@ -19,8 +23,10 @@ import {
     SIGN_UP_REJECTED,
     SIGN_UP_FULFILLED,
     AUTH_FAIL,
+    GET_VALID,
     GET_VALID_REJECTED,
-    GET_VALID_FULFILLED
+    GET_VALID_FULFILLED,
+    CLEAR_AUTH_MESSAGE
 } from '../constant/';
 
 export default function reducers(state = initalState, action) {
@@ -46,9 +52,10 @@ export default function reducers(state = initalState, action) {
                 isLogined: true,
                 isLogining: false,
                 user: action.payload.user,
-                loginMsg: action.payload.message
+                loginMsg: action.payload.message,
+                verifyCodeMsg: ''
             };
-
+        
             //注册
         case SIGN_UP:
             return {
@@ -69,30 +76,43 @@ export default function reducers(state = initalState, action) {
                 ...state,
                 isRegistering: false,
                 isRegistered: true,
-                registryMsg: action.payload
+                registryMsg: action.payload,
+                loginMsg: '',
+                verifyCodeMsg: ''
             };
-
+   
             //自动登录失败
         case AUTH_FAIL:
             return {
                 ...state,
                 loginMsg: action.payload
             };
-
             //获取验证码
+        case GET_VALID:
+            return {
+                ...state,
+                verifyCodeMsg: ''
+            };
         case GET_VALID_REJECTED:
             return {
                 ...state,
-                error: action.payload
+                verifyCodeMsg: action.payload
             };
         case GET_VALID_FULFILLED:
             return {
                 ...state,
-                valid: action.payload
+                verifyCodeMsg: action.payload
+            };
+
+        //清空Msg
+        case CLEAR_AUTH_MESSAGE: 
+            return {
+                ...state,
+                verifyCodeMsg: '',
+                registryMsg: '',
+                loginMsg: ''
             };
         default:
             return state;
-
-
     }
 }

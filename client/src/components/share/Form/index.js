@@ -170,7 +170,9 @@ export default class Form extends Component {
     //聚焦
     handleSubmit() {
         const { data } = this.state;
+        console.info(data);
         const result = this.validateAllAndformatData(data, true);
+ 
         result.allPassed && this.props.onSubmit(result.serilizeData);
     }
     

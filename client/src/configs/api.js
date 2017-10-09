@@ -5,7 +5,9 @@ export default  {
     auth: {
         signup: baseUrl + `/auth/signup`,
         signin: baseUrl + `/auth/signin`,
-        valid: baseUrl + `/auth/valid`
+        valid: baseUrl + `/auth/valid`,
+        query: baseUrl + `/auth/users`
     },
+    user: baseUrl + `/users`,
     chat: baseUrl + '/chat'
 };

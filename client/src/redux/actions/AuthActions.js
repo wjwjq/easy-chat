@@ -2,7 +2,7 @@ import axios from 'axios';
 import { push } from 'react-router-redux';
 import pathConfigs  from '../../routes/path';
 import api from '../../configs/api';
-import { socketConnect } from '../../handlers/chat';
+import { socketConnect, disconnect } from '../../handlers/chat';
 import { fetchFriends } from './FriendActions';
 import { fetchMessages } from './MessageActions';
 import { isTokenExpired, setToken, getToken, clearToken } from '../../handlers/token';
@@ -16,8 +16,10 @@ import {
     SIGN_UP_FULFILLED,
     LOG_OUT,
     AUTH_FAIL,
+    GET_VALID,
     GET_VALID_REJECTED,
-    GET_VALID_FULFILLED
+    GET_VALID_FULFILLED,
+    CLEAR_AUTH_MESSAGE
 } from '../constant/';
 
 //登录
@@ -120,9 +122,11 @@ export function logout() {
         axios.defaults.headers.common['x-access-token'] = '';
         dispatch({ type: LOG_OUT });
         dispatch(push(pathConfigs.signin));
+        disconnect();
     };
 }
 
+//认证失败
 export function authFail(message) {
     return (dispatch) => {
         dispatch(logout());
@@ -133,18 +137,29 @@ export function authFail(message) {
     };
 }
 
-//获取验证码
-export function getValid(username) {
+/**
+ * 获取验证码
+ * 
+ * @export
+ * @param {any} username 必选: 用户名
+ * @param {string} type  可选：若为signup 则后端再获取验证码之前会验证用户名是否存在 
+ * @returns 
+ */
+export function getValid(username, type) {
     return  (dispatch)  => {
+        dispatch({
+            type: GET_VALID
+        });
         axios
             .post(api.auth.valid, {
-                username
+                username,
+                type
             })
             .then((res) => {
                 if (res.data.status === 200) {
                     dispatch({
                         type: GET_VALID_FULFILLED,
-                        payload: res.data.valid
+                        payload: res.data.message
                     });
                 } else {
                     dispatch({
@@ -159,5 +174,12 @@ export function getValid(username) {
                     payload: err.message
                 });
             });
+    };
+}
+
+
+export function clearAuthMessage() {
+    return {
+        type: CLEAR_AUTH_MESSAGE
     };
 }

@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 import pathConfigs from '../../routes/path';
 import { encrypt } from '../../configs/utils';
-import { signIn, getValid } from '../../redux/actions/AuthActions';
+import { signIn, getValid, clearAuthMessage } from '../../redux/actions/AuthActions';
 import { isTokenExpired } from '../../handlers/token';
 
 import Loading from '../share/Loading/';
@@ -20,7 +20,8 @@ import './style.less';
     };
 },{
     signIn,
-    getValid
+    getValid,
+    resetMsg: clearAuthMessage
 })
 export default class SignIn extends Component {
 
@@ -48,24 +49,24 @@ export default class SignIn extends Component {
         !nextProps.isLogining && nextProps.isLogined && nextProps.history.push(pathConfigs.root);
     }
 
-    handleGetValid() {
+    handleGetValid(data) {
         const { getValid } = this.props;
-        getValid('signin');
+        getValid(data.username);
     }
  
     handleSubmit(result) {
         const { signIn } = this.props;
-        for (let key in result) {
-            if (key === 'password') {
-                result[key] =  encrypt(result[key]);
-            }
-        }
+        result['password'] =  encrypt(result['password']);
         signIn(result);
+    }
+
+    componentWillUnmount() {
+        this.props.resetMsg();
     }
 
     render() {
         const { hasAccessToken } = this.state;
-        const { isLogined, isLogining, loginMsg, signIn } = this.props;
+        const { isLogined, isLogining, loginMsg, signIn, verifyCodeMsg } = this.props;
      
         if (hasAccessToken && !isLogined) {
             !isLogining && signIn();
@@ -75,7 +76,17 @@ export default class SignIn extends Component {
                 <div className="signin">
                     {isLogining && <Loading/>}
                     <Form onSubmit={this.handleSubmit} >
-                        <div className="form-tips">{loginMsg}</div>
+                        <div className="form-tips">
+                            {
+                                isLogined 
+                                    ? <span style={{ color: '#239B37' }}>{loginMsg}</span> 
+                                    : loginMsg
+                                        ? loginMsg 
+                                        : verifyCodeMsg 
+                                            ? verifyCodeMsg 
+                                            : '' 
+                            }
+                        </div>
                         <FormItem 
                             text="手机号" 
                             placeholder="请输入手机号" 

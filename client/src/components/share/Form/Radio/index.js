@@ -26,7 +26,7 @@ export default class Radio extends Component {
         const target = e.target;
         let name = target.name;
         let value = target.value;
-        let regPass =false;
+        let regPass = true;
         this.props.onChange({
             [name]: { value, regPass }
         });
