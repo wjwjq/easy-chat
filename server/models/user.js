@@ -8,10 +8,19 @@ const UserSchema = new mongose.Schema({
     'nickname': String,
     'order': String,
     'remark': String,
-    'userId': String,
     'password': String,
     'friends': [String],
-    'recentContact':[String],
+    'latestMessages': [
+        {
+            'friendId': String,
+            'data': {
+                'from': String,
+                'to': String,
+                'content': String,
+                'publishTime': String
+            }
+        }
+    ],
     'username': {
         type: String,
         unique: true,

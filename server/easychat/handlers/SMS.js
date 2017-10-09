@@ -1,5 +1,5 @@
 const SMSClient = require('@alicloud/sms-sdk');
-const SMSConfig = require('./SMSConfig');
+const SMSConfig = require('../../SMSConfig');
 // ACCESS_KEY_ID/ACCESS_KEY_SECRET 根据实际申请的账号信息进行替换
 const accessKeyId = SMSConfig.accessKeyId; //'yourAccessKeyId'
 const secretAccessKey = SMSConfig.accessKeySecret; //'yourAccessKeySecret'
@@ -7,21 +7,27 @@ const secretAccessKey = SMSConfig.accessKeySecret; //'yourAccessKeySecret'
 //初始化sms_client
 let smsClient = new SMSClient({ accessKeyId, secretAccessKey });
 
-//发送短信
-smsClient.sendSMS({
-    PhoneNumbers: '18990655830',
-    SignName: SMSConfig.signName,
-    TemplateCode: SMSConfig.templateCode,
-    TemplateParam: '{"code":"12345","product":"云通信"}'
-}).then(function (res) {
-    let { Code }=res;
-    if (Code === 'OK') {
-        //处理返回参数
-        console.info(res);
+
+async function sendSMS(options) {
+    console.info(options);
+    const { phoneNumber , code } = options;
+    let result;
+    try {
+        result = await smsClient.sendSMS({
+            PhoneNumbers: phoneNumber,
+            SignName: SMSConfig.signName,
+            TemplateCode: SMSConfig.templateCode,
+            TemplateParam: `{"code": ${code},"product":"云通信"}`
+        });
+    } catch (err) {
+        console.info('send code err: ', err);
+        return Promise.reject('SEND_CODE_FAIL');
     }
-}, function (err) {
-    console.info(err);
-});
+    return result;
+}
+
+//发送短信
+exports.sendSMS = sendSMS;
 
 return;
 //短信回执报告

@@ -1,39 +1,98 @@
-/*todo: 1. 身份验证
- *      2. 身份回话保存 1 TO 1 单一转发
- *      3. 验证好友当前是否在线, 在线转发消息，否则缓存消息，带好友上线后拉去
- **/
+const tokenManager = require('../../middlewares/tokenManager');
+const Chatroom = require('../../models/chatroom');
+const User = require('../../models/user');
+
 const chat = (io) => {
-    const user = new Set();
+
+    //token authentication middleware
     io.use((socket, next) => {
-        let accessToken = socket.handshake.headers['access_token'];
-        console.info('access_token is: ', accessToken);
-        console.info('socket id', socket.id);
-        return next();
-        // if (isValid(clientId)) {
-        //     return next();
-        // }
-        return next(new Error('authentication error'));
-    });
-    io.on('connection',  (socket) => {
-        console.info('client connecting');
-        const currSocketId = socket.id;
-        user.add(currSocketId);
-        //接受消息
-        socket.on('postMessage',  (data) => {
-            //消息转发
-            user.forEach((id) => {
-                if (id !== currSocketId) {
-                    socket.to(id).emit('receiveMessage', data); 
+        let accessToken = tokenManager.parseToken(socket.handshake);
+       
+        const failVerify =  () => {
+            console.info('auth fail');
+            return next(new Error('chating authentication error'));
+        };
+       
+        const sccussVerify = (username) => {
+            Chatroom.remove({
+                username: username
+            });
+            const chatroom = new Chatroom({
+                username,
+                socketId: socket.id
+            });
+            chatroom.save((err) => {
+                if (err) {
+                    console.info('chating session save failed');
+                    return next(new Error('chating session save failed'));
                 }
+            });
+            socket.handshake.user = username;
+            next();
+        };
+        tokenManager.verify(accessToken, failVerify, sccussVerify);
+    });
+
+    //建立连接
+    io.on('connection', (socket) => {
+        console.info('client connecting');
+
+        const currUsername = socket.handshake.user;
+
+        //接受消息
+        socket.on('postMessage', (chunk) => {
+            console.info('chunk ', chunk);
+            const friendId = chunk.data.to;
+            //消息转发
+            Chatroom.findOne({
+                username: friendId
+            }).then((onlineUser) => {
+                //用户在线
+                if (onlineUser.socketId) {
+                    console.info(`user is online`, onlineUser.socketId);
+                    socket.to(onlineUser.socketId).emit('receiveMessage', chunk);
+                }
+            }).catch((err) => {
+                if (err) {
+                    //聊天对象当前不在线, 将消息更新到该对象的最新聊天记录中，便于用户上线时获取
+                    console.info(`user is offline`);
+                    User.update({
+                        username: friendId
+                    }, {
+                        $push: {
+                            latestMessages: chunk
+                        }
+                    }).then((data) => {
+                        console.info('data', data);
+                    }).catch((err) => {
+                        console.info('update err', err);
+                    });
+                }
+
             });
         });
 
+        //添加好友通知
+        socket.on('addFriend', (chunk) => {
+            // const friendId = chunk.friendId;
+            // User.findOne({
+            //     username: friendId
+            // })
+            // socket.to(onlineUser.socketId).emit('receiveMessage', chunk);
+        });
+
+        // socket.emit('authentication_fail', (reason) => {
+        // });
+      
         socket.on('disconnecting', (reason) => {
-            console.info('client disconnected');
-            console.info('reason', reason);
-            user.delete(currSocketId);
+            Chatroom.remove({
+                username: currUsername
+            }, (err) => {
+                if (err) console.info('diconnect Error ', err);
+                console.info('client disconnected', reason);
+            });
         });
     });
-}; 
+};
 
 module.exports = chat;

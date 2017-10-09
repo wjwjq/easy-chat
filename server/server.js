@@ -93,7 +93,7 @@ app.get('/', (req, res) => {
     res.render('index');
 });
 
-var server = require('http').Server(app);
+var server = http.Server(app);
 const io = require('socket.io')(server, {
     path: '/api/chat',
     serveClient: false,

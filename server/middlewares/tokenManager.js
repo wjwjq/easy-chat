@@ -4,59 +4,85 @@ const Users = require('../models/user');
 const jwt = require('jsonwebtoken');
 const credentials = require('../credentials');
 
-const parseToken = (req) => (req.body && req.body.access_token) || (req.query && req.query.access_token) || (req.headers['x-access-token']);
-
 //认证失败状态吗
 const FAIL_RESPONSE = {
-    'status': 401, 
+    'status': 401,
     'message': '身份验证失败，请重新登录'
+};
+
+exports.parseToken = parseToken = (req) => (req.body && req.body.access_token) || (req.query && req.query.access_token) || (req.headers['x-access-token']);
+
+
+
+exports.verify = verify = (token, failCallback, successCallback) => {
+    if (typeof failCallback !== 'function') {
+        throw new Error(`second params 'failCallback' is required and must be a function`);
+    }
+    if (typeof successCallback !== 'function') {
+        throw new Error(`third params 'successCallback' is required and must be a function`);
+    }
+    if (!token) {
+        throw new Error(`first params 'token' is required`);
+    }
+
+    jwt.verify(token, credentials.token.secret, (err, decoded) => {
+        if (err) {
+            //已过期
+            failCallback();
+            return;
+        }
+        //去数据库查找token  是否存在
+        Token
+            .findOne({
+                username: decoded.username
+            }).then((data) => {
+                if (data.token !== token) {
+                    failCallback();
+                    return;
+                }
+                successCallback(decoded.username);
+            }).catch((err) => {
+                if (err) {
+                    failCallback();
+                }
+            });
+    });
 };
 
 exports.autoSignin = (req, res, next) => {
     const token = parseToken(req);
     if (token) {
-        jwt.verify(token, credentials.token.secret, (err, decoded) => {
-            if (err) {
-                //已经过期
-                console.info('error from autoSignin', err);
-                return res.json(FAIL_RESPONSE);
-            }
-            //去数据库查找token  是否存在
-            Token
+        verify(token, () => {
+            res.json(FAIL_RESPONSE);
+        }, (username) => {
+            Users
                 .findOne({
-                    username: decoded.username
+                    username
+                }, {
+                    '_id': 0,
+                    'password': 0
                 })
-                .then((data) => {
-                    if (data.token === token) {
-                        Users
-                            .findOne({
-                                username: decoded.username
-                            }, {
-                                '_id': 0,
-                                'password': 0
-                            })
-                            .then((user) => {
-                                // setTimeout( () => {
-                                return res.json({
-                                    'status': 200,
-                                    'message': '登录成功',
-                                    user
-                                });
-                                // }, 1000);
-                            })
-                            .catch((err) => {
-                                if (err) {
-                                    console.info('error form autosigin token find', err);
-                                }
-                            });
-
-                    } else {
-                        res.json(FAIL_RESPONSE);
+                .then((user) => {
+                    if (user) {
+                        return res.json({
+                            'status': 200,
+                            'message': '登录成功',
+                            user
+                        });
                     }
-                }).catch((err) => {
+                    res.json({
+                        'status': 401,
+                        'message': '用户名不存在'
+                    });
+                })
+                .catch((err) => {
                     if (err) {
-                        return res.json(FAIL_RESPONSE);
+                        console.info('error form autosigin token find', err);
                     }
+                    return res.json({
+                        'status': 401,
+                        'message': '用户名不存在'
+                    });
                 });
         });
     } else {
@@ -67,33 +93,16 @@ exports.autoSignin = (req, res, next) => {
 exports.verifyToken = (req, res, next) => {
     const token = parseToken(req);
     if (token) {
-        jwt.verify(token, credentials.token.secret, (err, decoded) => {
-            if (err) {
-                //已过期
-                console.info('error form verifyToken first error');
-                return res.json(FAIL_RESPONSE);
-            }
-
-            //去数据库查找token  是否存在
-            Token
-                .findOne({
-                    username: decoded.username
-                })
-                .then((data) => {
-                    if (data.token === token) {
-                        req.body.user = { username: decoded.username };
-                        next();
-                    } else {
-                        res.json(FAIL_RESPONSE);
-                    }
-                }).catch((err) => {
-                    if (err) {
-                        return res.json(FAIL_RESPONSE);
-                    }
-                });
+        verify(token, () => {
+            res.json(FAIL_RESPONSE);
+        }, (username) => {
+            req.body.user = {
+                username
+            };
+            next();
         });
     } else {
-        return res.json(FAIL_RESPONSE);
+        res.json(FAIL_RESPONSE);
     }
 };
 
@@ -120,6 +129,7 @@ exports.generatorToken = (username, password) => {
         expires
     };
 };
+
 exports.removeToken = removeToken = (username) => {
     Token.remove({
         username

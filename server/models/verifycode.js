@@ -7,7 +7,7 @@ const verifyCodeSchema = new mongoose.Schema({
         required: true
     },
     code: String,
-    expires: new Date.now() / 1000
+    expires: String
 });
 
 module.exports = mongoose.model('VerifyCode', verifyCodeSchema);
