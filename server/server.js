@@ -105,7 +105,6 @@ const io = require('socket.io')(server, {
 const chat = require('./easychat/handlers/chat');
 chat(io);
 
-
 // 404 Error Middleware
 app.use(function (req, res, next) {
     var err = new Error('Not Found');
@@ -129,9 +128,6 @@ function startServer() {
     server.listen(app.get('port'), function () {
         console.info(`Server started in ${ app.get('env') }, mode on http://localhost:${ app.get('port') }; press Ctrl-C to terminate.`);
     });
-    // server = http.createServer(app).listen(app.get('port'), function () {
-    //     console.info(`Server started in ${app.get('env')}  mode on http://localhost:${app.get('port')}; press Ctrl-C to terminate.`);
-    // });
 }
 
 if (require.main === module) {

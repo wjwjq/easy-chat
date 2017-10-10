@@ -9,7 +9,6 @@ let smsClient = new SMSClient({ accessKeyId, secretAccessKey });
 
 
 async function sendSMS(options) {
-    console.info(options);
     const { phoneNumber , code } = options;
     let result;
     try {

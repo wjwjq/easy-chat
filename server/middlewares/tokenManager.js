@@ -12,8 +12,6 @@ const FAIL_RESPONSE = {
 
 exports.parseToken = parseToken = (req) => (req.body && req.body.access_token) || (req.query && req.query.access_token) || (req.headers['x-access-token']);
 
-
-
 exports.verify = verify = (token, failCallback, successCallback) => {
     if (typeof failCallback !== 'function') {
         throw new Error(`second params 'failCallback' is required and must be a function`);

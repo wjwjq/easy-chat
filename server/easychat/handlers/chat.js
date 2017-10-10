@@ -3,7 +3,6 @@ const Chatroom = require('../../models/chatroom');
 const User = require('../../models/user');
 
 const chat = (io) => {
-
     //token authentication middleware
     io.use((socket, next) => {
         let accessToken = tokenManager.parseToken(socket.handshake);
@@ -14,19 +13,11 @@ const chat = (io) => {
         };
        
         const sccussVerify = (username) => {
-            Chatroom.remove({
-                username: username
-            });
-            const chatroom = new Chatroom({
+            const doc = {
                 username,
                 socketId: socket.id
-            });
-            chatroom.save((err) => {
-                if (err) {
-                    console.info('chating session save failed');
-                    return next(new Error('chating session save failed'));
-                }
-            });
+            };
+            Chatroom.update({ username }, doc, { upsert: true }, (err) => console.info('socket save token err', err));
             socket.handshake.user = username;
             next();
         };

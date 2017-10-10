@@ -18,24 +18,30 @@ const USER_ALREADY_EXISTED = 'USER_ALREADY_EXISTED';
 const USER_AUTH_FAIL = 'USER_AUTH_FAIL';
 const USER_AUTH_SUCCESS = 'USER_AUTH_SUCCESS';
 
+
+//移除存储的验证码
+function removeVerifyCode(username) {
+    VerifyCode.remove({
+        username
+    }, function (err) {
+        console.info('remove VerifyCode err', err);
+    });
+}
+
 //保存验证码
 function saveVerifyCode(username, code) {
     return new Promise((resolve, reject) => {
-        VerifyCode.remove({
-            username
-        });
-        const verify = new VerifyCode({
-            username,
-            code,
-            expires: Date.now() / 1000 + 60 * 5
-        });
-        verify.save((err) => {
+        const condition = { username };
+        const doc = { username, code, expires: Date.now() / 1000 + 60 * 30 };
+        const valid = { upsert: true };
+        const callback = (err) => {
             if (err) {
                 console.info('save code err', err);
                 return reject(SAVE_CODE_FAIL);
             }
             resolve(SAVE_CODE_SUCCESS);
-        });
+        };
+        VerifyCode.update(condition, doc, valid, callback);
     });
 }
 
@@ -47,11 +53,12 @@ function getVerifyCode(username) {
                 username
             })
             .then((doc) => {
-                if (doc.expires < Date.now() / 1000)
+                console.info('doc', doc);
+                if (doc['expires'] < Date.now() / 1000)
                     return reject(CODE_EXPIRED);
                 resolve(doc.code);
             })
-            .catch(() => reject(CODE_NOT_FIND));
+            .catch((err) =>   { console.info(err);reject(CODE_NOT_FIND) ; });
     });
 }
 
@@ -77,6 +84,8 @@ async function validVerifyCode(username, code) {
     return r;
 }
 
+
+
 /**
  * 查询用户是否存在
  *  说明： 如果type === signup, 那么表示当前查询操作为注册发出,此时若无此用户,将返回成功
@@ -89,7 +98,11 @@ async function validVerifyCode(username, code) {
  * @returns 
  */
 function queryUser(options) {
-    const { type, username, populate = {} } = options;
+    const {
+        type,
+        username,
+        populate = {}
+    } = options;
     return new Promise((resolve, reject) => {
         Users.findOne({
             username
@@ -117,16 +130,20 @@ function queryUser(options) {
 }
 
 //比较密码
-function comparePassword(user) {
+function comparePassword(user, password) {
     return new Promise((resolve, reject) => {
         user.comparePassword(password, function (isMatch) {
             if (!isMatch) {
                 return reject(USER_AUTH_FAIL);
             }
+            console.info(user.username);
             //生成token
-            const token = generatorToken(username, password);
+            const token = generatorToken(user.username, password);
             delete user._doc.password;
-            resolve(user, token);
+            resolve({
+                user,
+                token
+            });
         });
     });
 }
@@ -143,6 +160,7 @@ function createUser(userParams) {
         });
     });
 }
+
 
 //登录
 exports.signin = function (req, res) {
@@ -167,10 +185,17 @@ exports.signin = function (req, res) {
         });
     }
 
-    //验证码验证
-    validVerifyCode(username, valid)
+
+    //查询用户是否存在
+    queryUser({
+        username
+    })
         .then(() => {
-            //查询用户
+            //验证验证码是否正确
+            return validVerifyCode(username, valid);
+        })
+        .then(() => {
+            //查询用户信息
             const query = {
                 username,
                 populate: {
@@ -188,17 +213,14 @@ exports.signin = function (req, res) {
         })
         .then((user) => {
             //密码验证
-            return comparePassword(user);
+            return comparePassword(user, password);
         })
-        .then((user, token) => {
-            VerifyCode.remove({
-                username
-            });
+        .then((data) => {
+            removeVerifyCode(username);
             res.json({
                 'status': 200,
                 'message': '登录成功',
-                user,
-                token
+                ...data
             });
         })
         .catch((err) => {
@@ -209,17 +231,17 @@ exports.signin = function (req, res) {
                         'status': 401,
                         'message': '验证码已过期'
                     });
-                case CODE_NOT_FIND: 
+                case CODE_NOT_FIND:
                     return res.json({
                         'status': 401,
                         'message': '验证码不存在'
                     });
-                case CODE_NOT_EQUAL: 
+                case CODE_NOT_EQUAL:
                     return res.json({
                         'status': 401,
                         'message': '验证码错误'
                     });
-                case USER_NOT_EXISTED: 
+                case USER_NOT_EXISTED:
                     return res.json({
                         'status': 401,
                         'message': '用户名不存在'
@@ -244,7 +266,7 @@ exports.signup = function (req, res) {
         nickname,
         gender
     } = req.body;
-    
+
     //手机号格式验证
     if (!validFunc.phoneNumber(username)) {
         return res.json({
@@ -252,8 +274,12 @@ exports.signup = function (req, res) {
             'message': '手机号格式错误'
         });
     }
-    
-    validVerifyCode(username, valid)
+    queryUser({
+        username,
+        type: 'signup'
+    }).then(() => {
+        return validVerifyCode(username, valid);
+    })
         .then(() => {
             //创建用户
             return createUser({
@@ -264,9 +290,6 @@ exports.signup = function (req, res) {
             });
         })
         .then(() => {
-            VerifyCode.remove({
-                username
-            });
             //注册成功
             res.json({
                 'status': 200,
@@ -281,17 +304,17 @@ exports.signup = function (req, res) {
                         'status': 401,
                         'message': '验证码已过期'
                     });
-                case CODE_NOT_FIND: 
-                    return res.json({
-                        'status': 401,
-                        'message': '验证码不存在'
-                    });
-                case CODE_NOT_EQUAL: 
+                case CODE_NOT_FIND:
                     return res.json({
                         'status': 401,
                         'message': '验证码错误'
                     });
-                case USER_ALREADY_EXISTED: 
+                case CODE_NOT_EQUAL:
+                    return res.json({
+                        'status': 401,
+                        'message': '验证码错误'
+                    });
+                case USER_ALREADY_EXISTED:
                     return res.json({
                         'status': 401,
                         'message': '用户名已存在'
@@ -316,7 +339,10 @@ exports.valid = function (req, res) {
     }
     const code = Math.random().toString().slice(-4);
     //查询用户是否存在
-    queryUser({ type, username })
+    queryUser({
+        type,
+        username
+    })
         .then(() => {
             return sendSMS({
                 phoneNumber: username,
@@ -341,17 +367,17 @@ exports.valid = function (req, res) {
         })
         .catch((err) => {
             switch (err) {
-                case USER_ALREADY_EXISTED: 
+                case USER_ALREADY_EXISTED:
                     return res.json({
                         'status': 204,
                         'message': '手机号已存在, 请更换手机号'
                     });
-                case USER_NOT_EXISTED: 
+                case USER_NOT_EXISTED:
                     return res.json({
                         'status': 401,
-                        'message': '手机号不存在'
+                        'message': '无此手机号,请更换手机号或注册'
                     });
-                case SAVE_CODE_FAIL: 
+                case SAVE_CODE_FAIL:
                     return res.json({
                         'status': 500,
                         'message': '发送验证码失败,请稍后重试'
@@ -359,9 +385,9 @@ exports.valid = function (req, res) {
                 case SEND_CODE_FAIL:
                     return res.json({
                         'status': 500,
-                        'message': '调用短信接口失败,请稍后重试'
+                        'message': '服务器正忙,请稍后重试'
                     });
-                default: 
+                default:
                     console.info('err', err);
             }
         });
