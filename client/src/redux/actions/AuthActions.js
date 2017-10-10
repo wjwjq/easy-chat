@@ -71,6 +71,8 @@ export function signIn(userInfo) {
                 dispatch(fetchFriends());
                 dispatch(fetchMessages());
 
+                dispatch(push(pathConfigs.root));
+                
             })
             .catch((err) => {
                 dispatch({
@@ -93,7 +95,6 @@ export function signUp(userInfo) {
                 ...userInfo
             })
             .then((res) => {
-
                 if (res.data.status === 200) {
                     dispatch({
                         type: SIGN_UP_FULFILLED,
@@ -176,7 +177,6 @@ export function getValid(username, type) {
             });
     };
 }
-
 
 export function clearAuthMessage() {
     return {

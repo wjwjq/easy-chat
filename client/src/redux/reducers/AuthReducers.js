@@ -1,6 +1,5 @@
 const initalState = {
     user: {},
-    valid: {},
 
     isLogining: false,
     isLogined: false,
@@ -10,9 +9,7 @@ const initalState = {
     isRegistered: false,
     registryMsg: '',
 
-    verifyCodeMsg: '',
-    isUserExisted: false,
-    checkUsernameMsg: ''
+    verifyCodeMsg: ''
 };
 
 import {
@@ -36,7 +33,6 @@ export default function reducers(state = initalState, action) {
             return {
                 ...state,
                 isLogining: true,
-                isLogined: false,
                 loginMsg: ''
             };
         case SIGN_IN_REJECTED:

@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import pathConfigs from '../../routes/path';
 import { encrypt } from '../../configs/utils';
 
-import { signUp, getValid, clearAuthMessage } from '../../redux/actions/AuthActions';
+import { signUp, getValid, clearAuthMessage, signIn } from '../../redux/actions/AuthActions';
 import { connect } from 'react-redux';
 import Loading from '../share/Loading/';
 
@@ -18,6 +18,7 @@ import FormItem from '../share/Form/Item';
         ...store.user
     };
 },{
+    signIn,
     signUp,
     getValid,
     resetMsg: clearAuthMessage
@@ -31,7 +32,8 @@ export default class SignUp extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         
         this.state = {
-            time: 3
+            time: 2,
+            user: {}
         };
     }
 
@@ -44,15 +46,20 @@ export default class SignUp extends Component {
         const { signUp } = this.props;
         result['password'] =  encrypt(result['password']);
         signUp(result);
+        this.setState({
+            user: {
+                ...result
+            }
+        });
     }
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.isRegistered) {
-            let { time } = this.state;
+            let { time, user } = this.state;
             const timer = setInterval(() => {
                 if (time <= 1) {
                     clearInterval(timer);
-                    nextProps.history.push('signin');
+                    nextProps.signIn(user);
                     return;
                 }
                 this.setState({
@@ -76,11 +83,11 @@ export default class SignUp extends Component {
                     <div className="form-tips">
                         {
                             isRegistered 
-                                ? <span style={{ color: '#239B37' }}>{`${registryMsg}, ${time}秒后自动前往登录`}</span> 
-                                : registryMsg
-                                    ? registryMsg 
-                                    : verifyCodeMsg 
-                                        ? verifyCodeMsg 
+                                ? <span style={{ color: '#239B37' }}>{`${registryMsg}, ${time}秒后自动登录`}</span> 
+                                : verifyCodeMsg
+                                    ? verifyCodeMsg 
+                                    : registryMsg 
+                                        ?  registryMsg
                                         : '' 
                         }
                     </div>
@@ -131,7 +138,7 @@ export default class SignUp extends Component {
                         isRequired={true}
                         length={4}
                         validButtonText='获取验证码' 
-                        countTime={60}
+                        countTime={180}
                         associateName={['username', 'nickname', 'password', 'repeatPassword']}
                         getVerifyCodeFunc={this.handleGetValid}
                     />

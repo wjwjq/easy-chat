@@ -52,7 +52,7 @@ class Welcome extends Component {
             timer = setTimeout(() => {
                 onChange(false);
                 history.push(pathConfigs.root);
-            }, 1000);
+            }, 1500);
         }
         this.setState({
             timer
@@ -76,9 +76,15 @@ class Welcome extends Component {
         return (
             <div className="start-up">
                 <div className="start-up-stage">
-                    <header>EasyChat</header>
-                    <div className="start-up-annimate">
-                            这是启动页动画
+                    <div class='start-up-annimate'>
+                        <div>E</div>
+                        <div>A</div>
+                        <div>S</div>
+                        <div>Y</div>
+                        <div>C</div>
+                        <div>H</div>
+                        <div>A</div>
+                        <div>T</div>
                     </div>
                 </div>
                 { !hasAccessToken ? <SignButtons history={history} clickToChangeRoute={onChange}/> : '' }

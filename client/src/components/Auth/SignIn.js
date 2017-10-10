@@ -42,13 +42,6 @@ export default class SignIn extends Component {
         });
     }
     
-    componentDidMount() {
-    }
-
-    componentWillReceiveProps(nextProps) {
-        !nextProps.isLogining && nextProps.isLogined && nextProps.history.push(pathConfigs.root);
-    }
-
     handleGetValid(data) {
         const { getValid } = this.props;
         getValid(data.username);
@@ -67,7 +60,7 @@ export default class SignIn extends Component {
     render() {
         const { hasAccessToken } = this.state;
         const { isLogined, isLogining, loginMsg, signIn, verifyCodeMsg } = this.props;
-     
+        console.info('isLogining ', isLogining,  '; isLogined ', isLogined);
         if (hasAccessToken && !isLogined) {
             !isLogining && signIn();
             return null;
@@ -80,10 +73,10 @@ export default class SignIn extends Component {
                             {
                                 isLogined 
                                     ? <span style={{ color: '#239B37' }}>{loginMsg}</span> 
-                                    : loginMsg
-                                        ? loginMsg 
-                                        : verifyCodeMsg 
-                                            ? verifyCodeMsg 
+                                    : verifyCodeMsg
+                                        ? verifyCodeMsg 
+                                        : loginMsg 
+                                            ?  loginMsg
                                             : '' 
                             }
                         </div>
@@ -111,7 +104,7 @@ export default class SignIn extends Component {
                             isRequired={true}
                             length={4}
                             validButtonText='获取验证码' 
-                            countTime={60}
+                            countTime={180}
                             associateName={['username','password']}
                             getVerifyCodeFunc={this.handleGetValid}
                         />

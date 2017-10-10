@@ -12,7 +12,7 @@ export default class Validate extends Component {
 
     constructor(props) {
         super(props);
-        const { validButtonText, countTime } = this.props.validButtonText;
+        const { validButtonText, countTime } = this.props;
  
         this.handleFocus = this.handleFocus.bind(this);
         this.handleChange = this.handleChange.bind(this);
@@ -27,7 +27,7 @@ export default class Validate extends Component {
             regs: this.props.regs || [],
             buttonText: validButtonText || '获取验证码',
             buttonOriginText: validButtonText || '获取验证码',
-            countTime: countTime || 60,
+            countTime: countTime || 180,
             counterId: ''
         };
       
