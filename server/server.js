@@ -57,7 +57,6 @@ app.use(favicon(__dirname + '/public/images/favicon.ico'));
 //设置静态资源路径
 app.use(express.static(path.join(__dirname, 'public')));
 
-
 //配置子域 admin  
 //访问 admin.host.com
 var admin = express.Router();
@@ -94,16 +93,9 @@ app.get('/', (req, res) => {
 });
 
 var server = http.Server(app);
-const io = require('socket.io')(server, {
-    path: '/api/chat',
-    serveClient: false,
-    // below are engine.IO options
-    pingInterval: 10000,
-    pingTimeout: 5000,
-    cookie: false
-});
-const chat = require('./easychat/handlers/chat');
-chat(io);
+
+//注入server 到chat socket
+require('./easychat/controllers/chat')(server);
 
 // 404 Error Middleware
 app.use(function (req, res, next) {
@@ -133,5 +125,6 @@ function startServer() {
 if (require.main === module) {
     startServer();
 } else {
+    //导出 方便使用 cluster
     module.exports = startServer;
 }

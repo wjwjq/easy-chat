@@ -4,6 +4,9 @@ const SMSConfig = require('../../SMSConfig');
 const accessKeyId = SMSConfig.accessKeyId; //'yourAccessKeyId'
 const secretAccessKey = SMSConfig.accessKeySecret; //'yourAccessKeySecret'
 
+//引入状态常量
+const { SEND_CODE_FAIL } = require('../constant/status');
+
 //初始化sms_client
 let smsClient = new SMSClient({ accessKeyId, secretAccessKey });
 
@@ -20,7 +23,7 @@ async function sendSMS(options) {
         });
     } catch (err) {
         console.info('send code err: ', err);
-        return Promise.reject('SEND_CODE_FAIL');
+        return Promise.reject(SEND_CODE_FAIL);
     }
     return result;
 }
