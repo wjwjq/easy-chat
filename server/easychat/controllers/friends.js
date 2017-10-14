@@ -11,21 +11,20 @@ exports.index = (req, res) => {
         username
     };
     queryUser({ query })
-        .then((data) => {
-            try {
-                return getAllFriends(data.friends);
-            } catch (err) {
-                return Promise.reject(err); 
-            }
+        .then(data => {
+            const getFriends = getAllFriends(data.friends);
+            const getLatestFriendRequest = getAllFriends(data.latestFriendRequest);
+            return Promise.all([getFriends, getLatestFriendRequest]);
         })
-        .then((friends) => {
+        .then(data => {
             res.json({
                 'status': 200,
                 'message': '获取所有好友成功',
-                friends                        
+                friends: data[0],
+                latestFriendRequest: data[1]
             });
         })
-        .catch((err) => {
+        .catch(err => {
             switch (err) {
                 case GET_ALL_FRIENDS_FAIL: 
                     return res.json({
@@ -33,6 +32,7 @@ exports.index = (req, res) => {
                         'message': '获取好友失败'
                     });
                 default: 
+                    console.info('get all friends list error', err);
                     res.json({
                         'status': 204,
                         'message': '获取好友失败'
@@ -58,14 +58,14 @@ exports.show = (req, res) => {
 
     //查询用户
     queryUser({ query, populate })
-        .then((friend) => {
+        .then(friend => {
             res.json({
                 'status': 200,
                 'message': '查询用户信息成功',
                 friend
             });
         })
-        .catch((err) => {
+        .catch(err => {
             switch (err) {
                 case USER_NOT_EXISTED: 
                     return res.json({
@@ -100,8 +100,7 @@ exports.post = (req, res) => {
         }
     };
     updateUser({ query, populate })
-        .then((status) => {
-            console.info('add friend status', status);
+        .then(() => {
             const query = {
                 username: friendId
             };
@@ -109,14 +108,14 @@ exports.post = (req, res) => {
             //查询指定好友数据
             return queryUser({ query, populate });
         })
-        .then((friend) => {
+        .then(friend => {
             res.json({
                 'status': 200,
                 'message': '添加好友成功',
                 friend
             });
         })
-        .catch((err) => {
+        .catch(err => {
             switch (err) {
                 case USER_NOT_EXISTED: 
                     return res.json({
@@ -159,11 +158,14 @@ exports.delete = (req, res) => {
     }; 
     updateUser({ query, populate })
         .then(() => {
+            return updateUser({ query: { username: friendId }, populate: {  $pull: { friends:  username } } });
+        })
+        .then(() => {
             res.json({
                 'status': 200,
                 'message': '删除好友成功'
             });
-        }).catch((err) => {
+        }).catch(err => {
             switch (err) {
                 case USER_UPDATE_FAIL: 
                     return res.json({

@@ -27,7 +27,7 @@ exports.saveVerifyCode = function (username, code) {
         const condition = { username };
         const doc = { username, code, expires: Date.now() / 1000 + 60 * 30 };
         const valid = { upsert: true };
-        const callback = (err) => {
+        const callback = err => {
             if (err) {
                 console.info('save code err', err);
                 return reject(SAVE_CODE_FAIL);
@@ -45,7 +45,7 @@ function getVerifyCode(username) {
             .findOne({
                 username
             })
-            .then((doc) => {
+            .then(doc => {
                 try {
                     if (doc['expires'] < Date.now() / 1000)
                         return reject(CODE_EXPIRED);

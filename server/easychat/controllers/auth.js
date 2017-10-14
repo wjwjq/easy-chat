@@ -63,11 +63,11 @@ exports.signin = function (req, res) {
             const populate =  { latestFriendRequest: 0, latestMessages: 0 , friends: 0 };
             return queryUser({ query, populate });
         })
-        .then((user) => {
+        .then(user => {
             //密码验证
             return comparePassword(user, password);
         })
-        .then((data) => {
+        .then(data => {
             removeVerifyCode(username);
             res.json({
                 'status': 200,
@@ -75,7 +75,7 @@ exports.signin = function (req, res) {
                 ...data
             });
         })
-        .catch((err) => {
+        .catch(err => {
             //错误处理
             switch (err) {
                 case CODE_EXPIRED:
@@ -153,7 +153,7 @@ exports.signup = function (req, res) {
                 'message': '注册成功'
             });
         })
-        .catch((err) => {
+        .catch(err => {
             //错误处理
             switch (err) {
                 case CODE_EXPIRED:
@@ -209,7 +209,7 @@ exports.valid = function (req, res) {
             //存储验证码
             return saveVerifyCode(username, code);
         })
-        .then((status) => {
+        .then(status => {
             //存储验证码成功
             if (status === SAVE_CODE_SUCCESS) {
                 //发送验证码
@@ -218,7 +218,7 @@ exports.valid = function (req, res) {
                     code
                 });
             }
-        }).then((result) => {
+        }).then(result => {
             //发送验证码失败
             if (result.Code.toUpperCase() !== 'OK') {
                 removeVerifyCode(username);
@@ -230,7 +230,7 @@ exports.valid = function (req, res) {
                 'message': '验证码已发送,请注意查收手机短信'
             });
         })
-        .catch((err) => {
+        .catch(err => {
             switch (err) {
                 case USER_ALREADY_EXISTED:
                     return res.json({

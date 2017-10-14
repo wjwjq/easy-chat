@@ -18,7 +18,7 @@ const FAIL_RESPONSE = {
 };
 
 //解析查找token
-exports.parseToken = parseToken = (req) => {
+exports.parseToken = parseToken = req => {
     return new Promise((resolve, reject) => {
         const accessToken = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
         if (accessToken) {
@@ -30,7 +30,7 @@ exports.parseToken = parseToken = (req) => {
 };
 
 //解析验证token
-exports.verify = verify = (token) => {
+exports.verify = verify = token => {
     return new Promise((resolve, reject) => {
         //验证token
         jwt.verify(token, credentials.token.secret, (err, decoded) => {
@@ -42,12 +42,12 @@ exports.verify = verify = (token) => {
             Token
                 .findOne({
                     username: decoded.username
-                }).then((data) => {
+                }).then(data => {
                     if (data.token !== token) {
                         return reject(TOKEN_AUTHENTICATION_FAIL);
                     }
                     resolve(decoded.username);
-                }).catch((err) => {
+                }).catch(err => {
                     console.info('find token error ', err);
                     return reject(TOKEN_AUTHENTICATION_FAIL);
                 });
@@ -58,8 +58,8 @@ exports.verify = verify = (token) => {
 //自动登录
 exports.autoSignIn = (req, res, next) => {
     parseToken(req)
-        .then((token) => verify(token))
-        .then((username) => {
+        .then(token => verify(token))
+        .then(username => {
             const query = {
                 username
             };
@@ -69,13 +69,13 @@ exports.autoSignIn = (req, res, next) => {
                 populate
             });
         })
-        .then((user) => {
+        .then(user => {
             res.json({
                 'status': 200,
                 'message': '登录成功',
                 user
             });
-        }).catch((err) => {
+        }).catch(err => {
             switch (err) {
                 case TOKEN_NOT_EXISTED:
                     return next();
@@ -100,11 +100,11 @@ exports.autoSignIn = (req, res, next) => {
 //验证token中间件
 exports.verifyToken = (req, res, next) => {
     parseToken(req)
-        .then((token) => verify(token))
-        .then((username) => {
+        .then(token => verify(token))
+        .then(username => {
             req.body.user = { username };
             next();
-        }).catch((err) => {
+        }).catch(err => {
             switch (err) {
                 case TOKEN_NOT_EXISTED:
                     return res.json(FAIL_RESPONSE);
@@ -135,7 +135,7 @@ exports.generateToken = (username, password) => {
         username
     }, doc, {
         upsert: true
-    }, (err) => {
+    }, err => {
         if (err) {
             console.info(`error from add newToken`, err);
         }
@@ -148,10 +148,10 @@ exports.generateToken = (username, password) => {
 };
 
 //删除token
-exports.removeToken = (username) => {
+exports.removeToken = username => {
     Token.remove({
         username
-    }, (err) => {
+    }, err => {
         if (err) {
             console.info('error from remove token', err);
         }

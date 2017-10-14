@@ -80,7 +80,7 @@ exports.Users = Users;
 exports.createUser = function (userParams) {
     return new Promise((resolve, reject) => {
         const user = new Users(userParams);
-        user.save((err) => {
+        user.save(err => {
             if (err) {
                 return reject(USER_ALREADY_EXISTED);
             }
@@ -106,7 +106,7 @@ exports.queryUser = function ({ type, query, populate, valid }) {
     return new Promise((resolve, reject) => {
         Users
             .findOne(query, populate, valid)
-            .then((user) => {
+            .then(user => {
                 if (type && type.toUpperCase() === 'SIGNUP') {
                     if (!user) {
                         return resolve();
@@ -118,7 +118,7 @@ exports.queryUser = function ({ type, query, populate, valid }) {
                 }
                 resolve(user);
             })
-            .catch((err) => {
+            .catch(err => {
                 console.info('query user err: ', err);
                 if (type && type.toUpperCase() === 'SIGNUP') {
                     return resolve();
@@ -129,15 +129,15 @@ exports.queryUser = function ({ type, query, populate, valid }) {
 };
 
 //更新操作
-exports.updateUser = function ( { query, populate = {}, valid={} }) {
+exports.updateUser = function ( { query, populate, valid }) {
     return new Promise((resolve, reject) => {
         Users
             .update(query, populate, valid)
-            .then((res) => {
+            .then(res => {
                 console.info('user updated res: ', res);
                 resolve(USER_UPDATE_SUCCESS);
             })
-            .catch((err) => {
+            .catch(err => {
                 console.info('user updated error: ', err);
                 reject(USER_UPDATE_FAIL);
             });

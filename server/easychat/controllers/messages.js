@@ -15,25 +15,26 @@ exports.index = (req, res) => {
     };
 
     queryUser({ query, populate })
-        .then((doc) => {
+        .then(doc => {
             const { latestMessages } = doc;
             return dealLatestMessage(latestMessages);
         })
-        .then((messages) => {
+        .then(messages => {
             //清空latestMessages数据
             Users.update({
                 username
             },{
                 $set: { latestMessages: [] }
-            },(err) => {
+            },err => {
                 console.info('delete latest msessage err', err);
             });
 
             res.json({
                 'status': 200,
+                'message': '获取好友最新消息记录成功',
                 messages
             });
-        }).catch((err) => {
+        }).catch(err => {
             if (err) {
                 res.json({
                     'status': 204,
@@ -82,7 +83,7 @@ exports.delete = (req, res) => {
 
 //处理最新消息记录
 function dealLatestMessage(latestMessages = []) {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
         let messages = {};
         if (latestMessages) {
             for (let i = 0; i < latestMessages.length; i++) {

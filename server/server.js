@@ -98,14 +98,14 @@ var server = http.Server(app);
 require('./easychat/controllers/chat')(server);
 
 // 404 Error Middleware
-app.use(function (req, res, next) {
+app.use((req, res, next) => {
     var err = new Error('Not Found');
     err.status = 404;
     next(err);
 });
 
 // 500 Error Middleware
-app.use(function (err, req, res) {
+app.use((err, req, res) => {
     // set locals, only providing error in development
     res.locals.message = err.message;
     res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -121,6 +121,7 @@ function startServer() {
         console.info(`Server started in ${ app.get('env') }, mode on http://localhost:${ app.get('port') }; press Ctrl-C to terminate.`);
     });
 }
+
 
 if (require.main === module) {
     startServer();
