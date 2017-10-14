@@ -78,17 +78,27 @@ export default class Validate extends Component {
     handleBlur(e) {
         this.validate(e.target);
     }
-
+    //重置状态
+    resetState() {
+        this.setState({
+            canTriggerAgain: true,
+            buttonText: this.state.buttonOriginText,
+            counterId: ''
+        });
+    }
+    //清空计时器
+    clearCounter() {
+        const { counterId } = this.state;
+        if (counterId) {
+            clearInterval(counterId);
+        }
+    }
     counter() {
         let { countTime, counterId } = this.state;
         counterId = setInterval(() => {
-            if (countTime < 0) {
-                this.setState({
-                    canTriggerAgain: true,
-                    buttonText: this.state.buttonOriginText,
-                    counterId
-                });
+            if (countTime <= 0 || this.props.reset) {
                 clearInterval(counterId);
+                this.resetState();
                 return;
             }
             this.setState({
@@ -107,17 +117,15 @@ export default class Validate extends Component {
                 getVerifyCodeFunc(postData.serilizeData);
                 this.counter();
                 this.setState({
-                    canTriggerAgain: false
+                    canTriggerAgain: false,
+                    value: ''
                 });
             }
         }
     }
     
     componentWillUnmount() {
-        const { counterId } = this.state;
-        if (counterId) {
-            clearInterval(counterId);
-        }
+        this.clearCounter();
     }
 
     render() {

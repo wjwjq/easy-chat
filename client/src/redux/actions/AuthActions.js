@@ -2,7 +2,7 @@ import axios from 'axios';
 import { push } from 'react-router-redux';
 import pathConfigs  from '../../routes/path';
 import api from '../../configs/api';
-import { socketConnect, disconnect } from '../../handlers/chat';
+import { connectSocket, disconnectSocket } from '../../handlers/chat';
 import { fetchFriends } from './FriendActions';
 import { fetchMessages } from './MessageActions';
 import { isTokenExpired, setToken, getToken, clearToken } from '../../handlers/token';
@@ -14,7 +14,7 @@ import {
     SIGN_UP,
     SIGN_UP_REJECTED,
     SIGN_UP_FULFILLED,
-    LOG_OUT,
+    SIGN_OUT,
     AUTH_FAIL,
     GET_VALID,
     GET_VALID_REJECTED,
@@ -25,7 +25,7 @@ import {
 //登录
 export function signIn(userInfo) {
 
-    return (dispatch) => {
+    return dispatch => {
         dispatch({
             type: SIGN_IN
         });
@@ -35,7 +35,7 @@ export function signIn(userInfo) {
                 ...userInfo,
                 'access_token':  isTokenExpired()  ?  getToken() :  ''
             })
-            .then((res) => {
+            .then(res => {
                 if (res.data.status === 401) {
                     clearToken();
                     return dispatch({
@@ -56,7 +56,12 @@ export function signIn(userInfo) {
                 const accessToken = token ? token.token : getToken();
                 axios.defaults.headers.common['x-access-token'] = accessToken;
                 //socket 链接携带cookie
-                socketConnect('', api.chat, accessToken);
+                connectSocket({
+                    url: '', 
+                    path: api.chat, 
+                    accessToken, 
+                    dispatch
+                });
 
                 dispatch({
                     type: SIGN_IN_FULFILLED,
@@ -70,11 +75,11 @@ export function signIn(userInfo) {
                 //抓取用户好友
                 dispatch(fetchFriends());
                 dispatch(fetchMessages());
-
+                
                 dispatch(push(pathConfigs.root));
                 
             })
-            .catch((err) => {
+            .catch(err => {
                 dispatch({
                     type: SIGN_IN_REJECTED,
                     payload: err.message
@@ -85,7 +90,7 @@ export function signIn(userInfo) {
 
 //注册
 export function signUp(userInfo) {
-    return (dispatch) => {
+    return dispatch => {
         dispatch({
             type: SIGN_UP
         });
@@ -94,7 +99,7 @@ export function signUp(userInfo) {
             .post(api.auth.signup, {
                 ...userInfo
             })
-            .then((res) => {
+            .then(res => {
                 if (res.data.status === 200) {
                     dispatch({
                         type: SIGN_UP_FULFILLED,
@@ -107,7 +112,7 @@ export function signUp(userInfo) {
                     });
                 }
             })
-            .catch((err) => {
+            .catch(err => {
                 dispatch({
                     type: SIGN_UP_REJECTED,
                     payload: err.message
@@ -117,20 +122,21 @@ export function signUp(userInfo) {
 }
 
 //注销
-export function logout() {
-    return (dispatch) => {
+export function signOut() {
+    return dispatch => {
         clearToken();
         axios.defaults.headers.common['x-access-token'] = '';
-        dispatch({ type: LOG_OUT });
+        disconnectSocket();
+        dispatch({ type: SIGN_OUT });
         dispatch(push(pathConfigs.signin));
-        disconnect();
     };
 }
 
 //认证失败
 export function authFail(message) {
-    return (dispatch) => {
-        dispatch(logout());
+    console.info(message);
+    return dispatch => {
+        dispatch(signOut());
         dispatch({
             type: AUTH_FAIL,
             payload: message
@@ -147,7 +153,7 @@ export function authFail(message) {
  * @returns 
  */
 export function getValid(username, type) {
-    return  (dispatch)  => {
+    return  dispatch  => {
         dispatch({
             type: GET_VALID
         });
@@ -156,7 +162,7 @@ export function getValid(username, type) {
                 username,
                 type
             })
-            .then((res) => {
+            .then(res => {
                 if (res.data.status === 200) {
                     dispatch({
                         type: GET_VALID_FULFILLED,
@@ -165,11 +171,14 @@ export function getValid(username, type) {
                 } else {
                     dispatch({
                         type: GET_VALID_REJECTED,
-                        payload: res.data.message
+                        payload: {
+                            message: res.data.message,
+                            reset: res.data.status === 401
+                        }
                     });
                 }
             })
-            .catch((err) => {
+            .catch(err => {
                 dispatch({
                     type: GET_VALID_REJECTED,
                     payload: err.message
@@ -183,3 +192,28 @@ export function clearAuthMessage() {
         type: CLEAR_AUTH_MESSAGE
     };
 }
+
+
+// function fetchResource(url) {
+//     return new Promise((resolve ,reject) => {
+//         axios
+//             .get(url)
+//             .then((res) => {
+//                 resolve(res);
+//             })
+//             .catch(reject);
+//     });
+// }
+
+// async function fetchAllResources() {
+//     // let r;
+//     // try {
+//     //     r = await fetchResource(api.friends);
+//     //     r = await fetchResource(api.messages);
+//     // } catch (err) {
+//     //     return Promise.reject(err);
+//     // }
+//     // return r;
+//     return Promise.all([fetchResource(api.friends), fetchResource(api.messages)]);
+// }
+

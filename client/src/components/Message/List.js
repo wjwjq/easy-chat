@@ -8,7 +8,7 @@ import SlideToDelete from '../share/SlideToDelete/';
 import { deleteMessage } from '../../redux/actions/MessageActions';
 
 
-@connect((store) => {
+@connect(store => {
     return {
         messages: store.messages.messages
     };
@@ -28,7 +28,7 @@ export default class MessageList extends Component {
         return (
             <div className="messages-list">
                 { 
-                    Object.keys(messages).map((key) => {
+                    Object.keys(messages).map(key => {
                         return  <SlideToDelete 
                             key={key} 
                             onDelete={this.handleDelete.bind(this, key)}

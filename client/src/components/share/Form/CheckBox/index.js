@@ -32,7 +32,7 @@ export default class Checkbox extends Component {
                 <div className="input-wrapper">
                     <span>{text}</span>
                     {
-                        values.length && values.map((value) => 
+                        values.length && values.map(value => 
                             <label>
                                 <input type='radio' name={name} value={value} onChange={this.handleChange} checked={selectOption === value || defaultValue === value}/>
                                 {value}

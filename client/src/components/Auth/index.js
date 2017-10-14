@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import AuthView from '../../views/Auth';
 import Loading from '../share/Loading/';
 
-const authenticate = (WrappedComponent) => {
+const authenticate = WrappedComponent => {
     class AuthenticateComponent extends Component {
         static propTypes = {
             isLogined: PropTypes.bool.isRequired
@@ -15,7 +15,6 @@ const authenticate = (WrappedComponent) => {
         }
         render() {
             const { isLogined, isLogining } = this.props;
-            console.info('isLogined', isLogined);
             if (isLogining) {
                 return <Loading />;
             }
@@ -27,7 +26,7 @@ const authenticate = (WrappedComponent) => {
         }
     }
 
-    return connect((store) => ({ ...store.user }))(AuthenticateComponent);
+    return connect(store => ({ ...store.user }))(AuthenticateComponent);
 };
 
 export default authenticate;

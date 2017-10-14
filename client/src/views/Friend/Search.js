@@ -6,20 +6,18 @@ import SearchResult from '../../components/search/Result/';
 
 import { queryFriend, addFriend } from '../../redux/actions/FriendActions';
 
-
-
-@connect((store) => {
+@connect(store => {
     return {
         friends: store.friends.friends, 
         querying: store.friends.querying, 
         queryed: store.friends.queryed, 
         result: store.friends.result, 
         queryMsg: store.friends.queryMsg,
-        userId : store.user.user.username
+        userId: store.user.user.username,
+        addMsg: store.friends.addMsg
     };
 },{
-    queryFriend,
-    addFriend
+    queryFriend
 })
 export default class SearchFriendView extends Component {
     constructor(props) {
@@ -56,12 +54,11 @@ export default class SearchFriendView extends Component {
     }
 
     handleAdd(friendId) {
-        const { addFriend } = this.props;
         addFriend(friendId);
     }
 
     render() {
-        const { querying, queryed, result, queryMsg } = this.props;
+        const { querying, queryed, result, queryMsg, addMsg } = this.props;
         const { queryError } = this.state;
         return (
             <div className="search-view">
@@ -79,6 +76,7 @@ export default class SearchFriendView extends Component {
                         { querying ? <div>搜索中</div> : '' }
                         { queryError ? <p>{queryError}</p> : '' }
                         { !queryError && queryMsg ? <div>{queryMsg}</div> : '' }
+                        { addMsg && <p>{addMsg}</p>}
                     </div>
                 </div>
             </div>

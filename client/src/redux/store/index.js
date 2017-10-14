@@ -10,6 +10,8 @@ import { routerReducer, routerMiddleware } from 'react-router-redux';
 //引入自建reducers
 import reducers from '../reducers/'; 
 
+import { SIGN_OUT } from '../constant/';
+
 export const history = createBrowserHistory();
 
 const historyMiddleware = routerMiddleware(history);
@@ -41,7 +43,7 @@ const appReducer =  combineReducers({
 const initialState = appReducer({}, {});
   
 const rootReducer = (state, action) => {
-    if (action.type === 'LOG_OUT') {
+    if (action.type === SIGN_OUT) {
         state = initialState;
     }
   

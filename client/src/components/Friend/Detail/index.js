@@ -5,9 +5,9 @@ import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import './Detail.less';
-import pathConfigs from '../../routes/path';
-import Card from '../share/Card/';
-import { deleteFriend } from '../../redux/actions/FriendActions';
+import Card from '../../share/Card/';
+import pathConfigs from '../../../routes/path';
+import { deleteFriend } from '../../../redux/actions/FriendActions';
 
 
 class FriendDetail extends PureComponent {
@@ -22,9 +22,7 @@ class FriendDetail extends PureComponent {
     }
 
     handleDelete(friendId) {
-        const { history, deleteFriend } = this.props;
         deleteFriend(friendId);
-        history.push(pathConfigs.root);
     }
     render() {
         const { avatarUrl, nickname, remark, address, gender,  username, userId } = this.props;
@@ -61,4 +59,4 @@ class FriendDetail extends PureComponent {
 
 }
 
-export default withRouter(connect((store) => ({ userId: store.user.user.username }), { deleteFriend })(FriendDetail));
+export default withRouter(connect(store => ({ userId: store.user.user.username }))(FriendDetail));

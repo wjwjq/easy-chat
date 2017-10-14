@@ -3,9 +3,9 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import { logout } from '../../redux/actions/AuthActions';
+import { signOut } from '../../redux/actions/AuthActions';
 
-class Logout extends Component {
+class SignOut extends Component {
     constructor(props) {
         super(props);
         this.handleLogout = this.handleLogout.bind(this);
@@ -13,7 +13,7 @@ class Logout extends Component {
     
     handleLogout() {
         const { dispatch } = this.props;
-        dispatch(logout());
+        dispatch(signOut());
     }
 
     render() {
@@ -22,4 +22,4 @@ class Logout extends Component {
     }
 }
 
-export default  withRouter(connect((store) => ({ ...store.user }))(Logout));
+export default  withRouter(connect(store => ({ ...store.user }))(SignOut));

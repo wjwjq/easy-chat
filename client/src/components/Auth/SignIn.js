@@ -14,7 +14,7 @@ import FormItem from '../share/Form/Item';
 
 import './style.less';
 
-@connect((store) => {
+@connect(store => {
     return { 
         ...store.user
     };
@@ -48,8 +48,9 @@ export default class SignIn extends Component {
     }
  
     handleSubmit(result) {
-        const { signIn } = this.props;
+        const { signIn, resetMsg } = this.props;
         result['password'] =  encrypt(result['password']);
+        resetMsg();
         signIn(result);
     }
 
@@ -59,8 +60,7 @@ export default class SignIn extends Component {
 
     render() {
         const { hasAccessToken } = this.state;
-        const { isLogined, isLogining, loginMsg, signIn, verifyCodeMsg } = this.props;
-        console.info('isLogining ', isLogining,  '; isLogined ', isLogined);
+        const { isLogined, isLogining, loginMsg, signIn, verifyCodeMsg, validButtonReset } = this.props;
         if (hasAccessToken && !isLogined) {
             !isLogining && signIn();
             return null;
@@ -98,17 +98,18 @@ export default class SignIn extends Component {
                         />
                         <FormItem 
                             text="验证码" 
-                            placeholder="4位验证码"
+                            placeholder="6位验证码"
                             type="validate"
                             name="valid"
                             isRequired={true}
-                            length={4}
+                            length={6}
                             validButtonText='获取验证码' 
                             countTime={180}
                             associateName={['username','password']}
                             getVerifyCodeFunc={this.handleGetValid}
+                            reset={validButtonReset}
                         />
-                        <FormItem  text="登录" type='submit' />
+                        <FormItem  text="登录" type='submit' reset={!isLogining} />
                     </Form>
                     <p className="auth-link">没有账号？<Link to={pathConfigs.signup}>去注册</Link></p>
                 </div>

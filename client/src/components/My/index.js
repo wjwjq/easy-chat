@@ -5,11 +5,11 @@ import pathConfigs from '../../routes/path';
 
 import Card from '../share/Card/';
 
-import Logout from  '../Auth/Logout';
+import SignOut from  '../Auth/SignOut';
 
 import './index.less';
 
-@connect((store) => {
+@connect(store => {
     return {
         user: store.user.user
     };
@@ -58,7 +58,7 @@ export default  class My extends PureComponent {
                         </Link>
                     </li>
                     <li className="user-line">
-                        <Logout><span>注销登录</span></Logout>
+                        <SignOut><span>注销登录</span></SignOut>
                     </li>
                 </ul>
             </div>

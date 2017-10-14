@@ -2,8 +2,8 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
-import pathConfigs from '../../routes/path';
-import Card from '../share/Card/';
+import pathConfigs from '../../../routes/path';
+import Card from '../../share/Card/';
 
 export default class FriendItem extends PureComponent {
     

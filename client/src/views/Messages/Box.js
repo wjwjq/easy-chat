@@ -6,14 +6,6 @@ import _ from 'lodash';
 import Header from '../../components/Header/';
 import MessageBox from '../../components/Message/Box';
 
-// import asyncComponent from '../../routes/asyncComponent';
-// const Header = asyncComponent(() =>
-//     System.import('../../components/Header/').then((module) => module.default)
-// );
-// const MessageBox = asyncComponent(() =>
-//     System.import('../../components/Message/Box').then((module) => module.default)
-// );
-
 @connect((store, ownProps) => {
     return {
         friend: _.find(store.friends.friends, { username: ownProps.match.params.id }) 

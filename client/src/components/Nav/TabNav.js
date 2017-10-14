@@ -12,7 +12,7 @@ export default class TabNav extends Component {
     getNavs() {
         const { navs, activeIndex, onTabClick } = this.props;
 
-        return navs.map((item) => {
+        return navs.map(item => {
             const order = parseInt(item.props.order, 10);
             const { icons } = item.props;
             const isActive = activeIndex === order;

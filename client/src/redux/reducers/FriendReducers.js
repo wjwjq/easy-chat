@@ -5,6 +5,7 @@ import {
     QUERY_FRIEND,
     QUERY_FRIEND_REJECTED,
     QUERY_FRIEND_FULFILLED,
+    ADD_FRIEND,
     ADD_FRIEND_REJECTED,
     ADD_FRIEND_FULFILLED,
     UPDATE_FRIEND_REJECTED,
@@ -26,12 +27,50 @@ const initialState = {
     
     adding: false, //添加好友
     added: false, 
+    addMsg: '',
 
     updating: false, //更新
     updated: false,
 
     deleting: false,//删除
-    deleted: false
+    deleted: false,
+
+    latestFriendRequest: []
+};
+
+const dealAddFriendsState = (state, action) => {
+    let friends = [];
+    let latestFriendRequest = [];
+    if (action.payload.friendId) {
+        latestFriendRequest = state.latestFriendRequest.filter(item => {
+            if (item.username === action.payload.friendId) {
+                friends.push(item);
+            } else {
+                return item;
+            }
+        });
+    } else {
+        friends.push(action.payload.friend);
+    }
+    return {
+        friends: state.friends.concat(friends),
+        latestFriendRequest
+    };
+};
+
+const dealAddFriendsReplayState = (state, action) => {
+    let latestFriendRequest;
+    let addMsg = '';
+    if (action.payload.friend) {
+        latestFriendRequest = state.latestFriendRequest.concat([action.payload.friend]);
+    } else {
+        latestFriendRequest = state.latestFriendRequest;
+    }
+    addMsg = action.payload.message;
+    return {
+        latestFriendRequest,
+        addMsg
+    };
 };
 
 export default function reducers(state = initialState, action) {
@@ -59,7 +98,7 @@ export default function reducers(state = initialState, action) {
                 fetching: false,
                 fetched: true,
                 error: '',
-                friends: action.payload
+                ...action.payload
             };
 
         //查询某个用户信息
@@ -87,41 +126,49 @@ export default function reducers(state = initialState, action) {
             };
 
         //添加好友
+        case ADD_FRIEND: 
+            return {
+                ...state,
+                result: '',
+                ...dealAddFriendsReplayState(state, action)
+            };
         case ADD_FRIEND_REJECTED:
             return {
                 ...state,
                 adding: false,
                 added: false,
-                error: action.payload
+                latestFriendRequest: state.latestFriendRequest.filter(item => item.username !== action.payload.friendId),
+                addMsg: action.payload.message
             };
         case ADD_FRIEND_FULFILLED:
             return {
                 ...state,
                 adding: false,
                 added: true,
-                friends: state.friends.concat(action.payload.friend),
-                result: ''
+                addMsg: action.payload.message,
+                ...dealAddFriendsState(state, action)
             };
 
-        //更新信息好友
+        //更新信息好友1
         case UPDATE_FRIEND_REJECTED:
             return {
                 ...state,
                 updating: false,
                 updated: false,
-                error: action.payload
+                updateMsg: action.payload.message
             };
         case UPDATE_FRIEND_FULFILLED:
             return {
                 ...state,
                 updating: false,
                 updated: true,
-                friends: state.friends.map((friend) => {
+                friends: state.friends.map(friend => {
                     if (friend.username === action.payload.friendId) {
                         return Object.assign({}, friend, action.payload);
                     }
                     return friend;
-                })
+                }),
+                updateMsg: action.payload.message
             };
 
         //删除好友
@@ -130,14 +177,14 @@ export default function reducers(state = initialState, action) {
                 ...state,
                 deleting: false,
                 deleted: false,
-                error: action.payload
+                deleletMsg: action.payload.message
             };
         case DELETE_FRIEND_FULFILLED:
             return {
                 ...state,
                 deleting: false,
                 deleted: true,
-                friends: state.friends.filter((friend) => friend.username !== action.payload.friendId),
+                friends: state.friends.filter(friend => friend.username !== action.payload.friendId),
                 deleletMsg: action.payload.message
             };
 

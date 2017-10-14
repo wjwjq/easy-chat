@@ -27,7 +27,6 @@ export default class Form extends Component {
         this.state = {
             data: {}
         };
-   
     }
 
     
@@ -99,7 +98,7 @@ export default class Form extends Component {
         const { children } = this.props;
         let data = {};
         
-        children.map((child) => {
+        children.map(child => {
             const { name, type, defaultValue, defaultValues } = child.props;
             switch (type) {
                 case 'radio':
@@ -170,9 +169,7 @@ export default class Form extends Component {
     //聚焦
     handleSubmit() {
         const { data } = this.state;
-        console.info(data);
         const result = this.validateAllAndformatData(data, true);
- 
         result.allPassed && this.props.onSubmit(result.serilizeData);
     }
     

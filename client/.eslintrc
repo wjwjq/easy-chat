@@ -1,7 +1,6 @@
 {
   "plugins": [
     "react",
-    "eslint-plugin-promise",
     "eslint-plugin-react"
   ],
   "parserOptions": {

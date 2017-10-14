@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { receiveMessage } from '../redux/actions/MessageActions';
-import { onReceiveMessage } from '../handlers/chat';
+
 
 import Welcome from '../components/Welcome/';
 class Home extends Component {
@@ -20,10 +19,7 @@ class Home extends Component {
             isShow
         });
     }
-    componentDidMount() {
-        const { receiveMessage } = this.props;
-        onReceiveMessage((data) => receiveMessage(data));
-    }
+    
     render() {
         const { children } = this.props;
         const { isShow } = this.state;
@@ -33,8 +29,4 @@ class Home extends Component {
     }
 }
 
-export default withRouter(connect((store) => ({ 
-    isLogined: store.user.isLogined 
-}),{
-    receiveMessage
-})(Home));
+export default withRouter(connect(store => ({ isLogined: store.user.isLogined }))(Home));

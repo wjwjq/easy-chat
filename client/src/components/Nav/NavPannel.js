@@ -1,6 +1,6 @@
 import React from 'react';
 
-const NavPannel = (props) => {
+const NavPannel = props => {
     return (
         <div>
             {props.children}

@@ -13,7 +13,7 @@ import Form from '../share/Form/';
 import FormItem from '../share/Form/Item';
 
 
-@connect((store) => {
+@connect(store => {
     return {
         ...store.user
     };
@@ -43,8 +43,10 @@ export default class SignUp extends Component {
     }
     
     handleSubmit(result) {
-        const { signUp } = this.props;
+        const { signUp, resetMsg } = this.props;
         result['password'] =  encrypt(result['password']);
+        result['repeatPassword'] =  encrypt(result['repeatPassword']);
+        resetMsg();
         signUp(result);
         this.setState({
             user: {
@@ -74,7 +76,7 @@ export default class SignUp extends Component {
     }
 
     render() {
-        const { isRegistering, registryMsg, isRegistered, verifyCodeMsg } = this.props;
+        const { isRegistering, registryMsg, isRegistered, verifyCodeMsg, validButtonReset } = this.props;
         const { time } = this.state;
         return (
             <div className="signup">
@@ -132,17 +134,18 @@ export default class SignUp extends Component {
                     />
                     <FormItem 
                         text="验证码" 
-                        placeholder="4位验证码" 
+                        placeholder="6位验证码" 
                         type="validate"
                         name="valid"
                         isRequired={true}
-                        length={4}
+                        length={6}
                         validButtonText='获取验证码' 
                         countTime={180}
                         associateName={['username', 'nickname', 'password', 'repeatPassword']}
                         getVerifyCodeFunc={this.handleGetValid}
+                        reset={validButtonReset}
                     />
-                    <FormItem  text="注册" type='submit' />
+                    <FormItem  text="注册" type='submit' reset={!isRegistering}/>
                 </Form>
                 <p className="auth-link">已有账号？<Link to={pathConfigs.signin}>去登录</Link></p>
             </div>

@@ -9,7 +9,8 @@ const initalState = {
     isRegistered: false,
     registryMsg: '',
 
-    verifyCodeMsg: ''
+    verifyCodeMsg: '',
+    validButtonReset: false
 };
 
 import {
@@ -33,6 +34,7 @@ export default function reducers(state = initalState, action) {
             return {
                 ...state,
                 isLogining: true,
+                isRegistered: false,
                 loginMsg: ''
             };
         case SIGN_IN_REJECTED:
@@ -87,16 +89,19 @@ export default function reducers(state = initalState, action) {
         case GET_VALID:
             return {
                 ...state,
+                validButtonReset: false,
                 verifyCodeMsg: ''
             };
         case GET_VALID_REJECTED:
             return {
                 ...state,
-                verifyCodeMsg: action.payload
+                verifyCodeMsg: action.payload.message,
+                validButtonReset: action.payload.reset
             };
         case GET_VALID_FULFILLED:
             return {
                 ...state,
+                validButtonReset: false,
                 verifyCodeMsg: action.payload
             };
 

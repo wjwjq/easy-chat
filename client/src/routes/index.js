@@ -13,39 +13,44 @@ import AuthView from '../views/Auth';
 
 //搜索视图
 const SearchFriendView = asyncComponent(() =>
-    System.import('../views//Friend/Search').then((module) => module.default)
+    System.import('../views//Friend/Search').then(module => module.default)
 );
 //消息视图
 const MessageBoxView = asyncComponent(() =>
-    System.import('../views/Messages/Box').then((module) => module.default)
+    System.import('../views/Messages/Box').then(module => module.default)
 );
 
 //好友视图
 const FriendDetailView = asyncComponent(() =>
-    System.import('../views/Friend/Detail').then((module) => module.default)
+    System.import('../views/Friend/Detail').then(module => module.default)
 );
 
 //My
 const AcountAndSecurity = asyncComponent(() =>
-    System.import('../components/My/AcountAndSecurity').then((module) => module.default)
+    System.import('../components/My/AcountAndSecurity').then(module => module.default)
 );
 const BlackList = asyncComponent(() =>
-    System.import('../components/My/BlackList').then((module) => module.default)
+    System.import('../components/My/BlackList').then(module => module.default)
 );
 
 const Help = asyncComponent(() =>
-    System.import('../components/My/Help').then((module) => module.default)
+    System.import('../components/My/Help').then(module => module.default)
 );
 
 const About = asyncComponent(() =>
-    System.import('../components/My/About').then((module) => module.default)
+    System.import('../components/My/About').then(module => module.default)
 );
 const MyDetail = asyncComponent(() =>
-    System.import('../components/My/Detail').then((module) => module.default)
+    System.import('../components/My/Detail').then(module => module.default)
 );
 
+const FriendRequestView = asyncComponent(() =>
+    System.import('../views/Friend/Request').then(module => module.default)
+);
+
+
 const PageNotFound = asyncComponent(() =>
-    System.import('../components/share/PageNotFound').then((module) => module.default)
+    System.import('../components/share/PageNotFound').then(module => module.default)
 );
 
 const Routes = () => {
@@ -53,6 +58,7 @@ const Routes = () => {
         <Home >
             <Switch >
                 <Route path={`${pathConfigs.messages}/:id`} component={MessageBoxView} />
+                <Route path={pathConfigs.friendsRequest} component={FriendRequestView} />
                 <Route path={`${pathConfigs.friends}/:id`} component={FriendDetailView} />
                 <Route path={pathConfigs.add} component={SearchFriendView} />
                 <Route path={pathConfigs.myDetail} component={MyDetail} />

@@ -14,6 +14,7 @@ if (global.activeServerSubdomain) {
         myBlacklist: '/my/blacklist',
         myHelp: '/my/help',
         myAbout: '/my/about',
+        friendsRequest: `/friends/requests`,
         root: '/'
     };
 } else {
@@ -32,6 +33,7 @@ if (global.activeServerSubdomain) {
         myBlacklist: `${BASEROUTE}/my/blacklist`,
         myHelp: `${BASEROUTE}/my/help`,
         myAbout: `${BASEROUTE}/my/about`,
+        friendsRequest: `${BASEROUTE}/friends/requests`,
         root: `${BASEROUTE}/`
     };
     

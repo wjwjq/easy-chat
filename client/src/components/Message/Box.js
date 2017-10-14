@@ -9,7 +9,7 @@ import './Box.less';
 
 import { addMessage } from '../../redux/actions/MessageActions';
 
-@connect((store) => {
+@connect(store => {
     return {
         messages: store.messages.messages,
         user: store.user.user

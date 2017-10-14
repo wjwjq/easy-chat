@@ -13,7 +13,7 @@ export const SIGN_UP_REJECTED = 'SIGN_UP_REJECTED';
 export const SIGN_UP_FULFILLED = 'SIGN_UP_FULFILLED';
 
 //注销
-export const LOG_OUT = 'LOG_OUT';
+export const SIGN_OUT = 'SIGN_OUT';
 
 //自动登录失败
 export const AUTH_FAIL = 'AUTH_FAIL';
@@ -46,6 +46,7 @@ export const QUERY_FRIEND_REJECTED = 'QUERY_FRIEND_REJECTED';
 export const QUERY_FRIEND_FULFILLED = 'QUERY_FRIEND_FULFILLED';
 
 //添加好友
+export const ADD_FRIEND = 'ADD_FRIEND';
 export const ADD_FRIEND_REJECTED = 'ADD_FRIEND_REJECTED';
 export const ADD_FRIEND_FULFILLED = 'ADD_FRIEND_FULFILLED';
 

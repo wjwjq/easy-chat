@@ -144,7 +144,7 @@ class Sha256 {
 
         function hexBytesToString(hexStr) { // convert string of hex numbers to a string of chars (eg '616263' -> 'abc').
             const str = hexStr.replace(' ', ''); // allow space-separated groups
-            return str ==='' ? '' : str.match(/.{2}/g).map((byte) => String.fromCharCode(parseInt(byte, 16))).join('');
+            return str ==='' ? '' : str.match(/.{2}/g).map(byte => String.fromCharCode(parseInt(byte, 16))).join('');
         }
     }
 

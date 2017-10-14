@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import pathConfigs from '../../routes/path';
 import config from '../../configs/config';
 
-const Passage = (props) => {
+const Passage = props => {
     const { id, role, avatarUrl, content } = props;
     const msgClasses = classnames({
         msg: true,

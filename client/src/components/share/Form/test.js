@@ -11,7 +11,7 @@ export default class TestForm extends Component {
     }
     
     handleSubmit(formData) {
-        console.info('submit');
+        console.info(formData);
     }
 
     render() {

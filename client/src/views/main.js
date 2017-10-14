@@ -3,26 +3,26 @@ import { connect } from 'react-redux';
 import asyncComponent from '../routes/asyncComponent';
 
 const Nav = asyncComponent(() =>
-    System.import('../components/Nav/Nav').then((module) => module.default)
+    System.import('../components/Nav/Nav').then(module => module.default)
 );
 const NavPannel = asyncComponent(() =>
-    System.import('../components/Nav/NavPannel').then((module) => module.default)
+    System.import('../components/Nav/NavPannel').then(module => module.default)
 );
 const MessageView = asyncComponent(() =>
-    System.import('./Messages/').then((module) => module.default)
+    System.import('./Messages/').then(module => module.default)
 );
 const FriendView = asyncComponent(() =>
-    System.import('./Friend/').then((module) => module.default)
+    System.import('./Friend/').then(module => module.default)
 );
 const MyView = asyncComponent(() =>
-    System.import('./My/').then((module) => module.default)
+    System.import('./My/').then(module => module.default)
 );
 
 import { leaveNav } from '../redux/actions/NavActions';
 import authenticate from '../components/Auth/';
 
 @authenticate
-@connect((store) => {
+@connect(store => {
     return {
         ...store.nav
     };

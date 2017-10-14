@@ -93,4 +93,4 @@ class Welcome extends Component {
     }
 }
 
-export default withRouter(connect((store) => ({ ...store.user }))(Welcome));
+export default withRouter(connect(store => ({ ...store.user }))(Welcome));

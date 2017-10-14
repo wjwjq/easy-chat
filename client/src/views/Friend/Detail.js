@@ -3,15 +3,7 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 
 import Header from '../../components/Header/';
-import FriendDetail from '../../components/Friend/Detail';
-
-// import asyncComponent from '../../routes/asyncComponent';
-// const Header = asyncComponent(() =>
-//     System.import('../../components/Header/').then((module) => module.default)
-// );
-// const FriendDetail = asyncComponent(() =>
-//     System.import('../../components/Friend/Detail').then((module) => module.default)
-// );
+import FriendDetail from '../../components/Friend/Detail/';
 
 @connect((store, ownProps) => {
     return {

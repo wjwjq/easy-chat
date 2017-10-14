@@ -12,7 +12,7 @@ export default function asyncComponent(getComponent) {
     
         componentWillMount() {
             if (!this.state.Component) {
-                getComponent().then((Component) => {
+                getComponent().then(Component => {
                     this.setState({ Component });
                 });
             }

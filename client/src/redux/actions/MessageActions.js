@@ -3,7 +3,7 @@ import api  from '../../configs/api';
 
 import { authFail } from './AuthActions';
 
-import { onPostMessage } from '../../handlers/chat';
+import { emitPostMessage } from '../../handlers/chat';
 import { setMessages } from '../../handlers/messages';
 
 import {
@@ -19,13 +19,13 @@ import {
 
 //抓取所有信息列表
 export function fetchMessages() {
-    return (dispatch) => {
+    return dispatch => {
         dispatch({
             type: FETCH_MESSAGES
         });
         axios
             .get(api.messages)
-            .then((res) => {
+            .then(res => {
                 if (res.data.status === 401) {
                     dispatch(authFail(res.data.message));
                     return; 
@@ -44,7 +44,7 @@ export function fetchMessages() {
                     });
                 }
             })
-            .catch((err) =>
+            .catch(err =>
                 dispatch({
                     type: FETCH_MESSAGES_REJECTED,
                     payload: err.message
@@ -65,7 +65,7 @@ export function addMessage(msg) {
             friendId: msg.data.from,
             data: msg.data
         };
-        onPostMessage(postMsg);
+        emitPostMessage(postMsg);
     }
     return {
         type: POST_MESSAGE_FULFILLED,
@@ -82,10 +82,10 @@ export function receiveMessage(msg) {
 
 //删除信息
 export function deleteMessage(friendId) {
-    return (dispatch) => {
+    return dispatch => {
         axios
             .delete(`${api.messages}/${friendId}`)
-            .then((res) => {
+            .then(res => {
                 if (res.data.status === 401) {
                     dispatch(authFail(res.data.message));
                     return; 
@@ -102,7 +102,7 @@ export function deleteMessage(friendId) {
                     });
                 }
             })
-            .catch((err) => dispatch({
+            .catch(err => dispatch({
                 type: DELETE_MESSAGE_REJECTED,
                 payload: err.message
             }));

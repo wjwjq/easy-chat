@@ -1,6 +1,6 @@
 import React from 'react';
 
-const FormItem = (props) => {
+const FormItem = props => {
     return <div> {props.children}</div>;
 };
 export default FormItem;

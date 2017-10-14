@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import FriendItem from './Item';
+import FriendItem from '../Item/';
 import './List.less';
 
-@connect((store) => {
+@connect(store => {
     return {
         friends: store.friends.friends
     };
@@ -51,11 +51,11 @@ export default class FriendList extends Component {
         const sortedFriends = this.friendsSort(friends);
         return (
             <div className="friend-list">
-                {Object.keys(sortedFriends).map( (key) => {
+                {Object.keys(sortedFriends).map( key => {
                     return (<div key={key} className="friend-list-block">
                         <p  id={key} className="friend-list-order">{key}</p>
                         <ul className="friend-card-list">
-                            {sortedFriends[key] && sortedFriends[key].map((item) => <FriendItem key={item.username} {...item}/>)}
+                            {sortedFriends[key] && sortedFriends[key].map(item => <FriendItem key={item.username} {...item}/>)}
                         </ul>
                     </div>);
                 })}

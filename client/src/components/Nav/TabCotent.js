@@ -11,7 +11,7 @@ export default class TabContent extends Component {
     getContent() {
         const { contents } = this.props;
 
-        return contents.map((item) => {
+        return contents.map(item => {
 
             const order = parseInt(item.props.order, 10);
             
@@ -24,7 +24,7 @@ export default class TabContent extends Component {
     render() {
         const { width } = this.props;
         const { activeIndex } = this.props;
-        const getBox = (left) => {
+        const getBox = left => {
             return (
                 <div className="nav-content-move-box" style={
                     {
