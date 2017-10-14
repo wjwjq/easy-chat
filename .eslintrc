@@ -78,6 +78,6 @@
     }],
     "no-extra-semi": ["error"],
     "arrow-spacing": ["warn"],
-    "arrow-parens": ["warn"]
+    "arrow-parens": ["warn","as-needed"]
   }
 }
