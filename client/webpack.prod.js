@@ -65,7 +65,7 @@ module.exports = Merge(commonConfig, {
         }),
         //生成文件顶部加入注释
         new webpack.BannerPlugin({
-            banner: 'This file is created by eagleagle, ' + new Date(),
+            banner: 'This file is created by wjwjq, ' + new Date(),
             raw: false,
             entryOnly: true
         }),

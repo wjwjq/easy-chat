@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-
+import Notification from '../components/Notification/';
 
 import Welcome from '../components/Welcome/';
 class Home extends Component {
@@ -25,8 +24,9 @@ class Home extends Component {
         const { isShow } = this.state;
         return (<div className="home">
             {isShow ? <Welcome onChange={this.handleShow} /> : children}
+            <Notification />
         </div>);
     }
 }
 
-export default withRouter(connect(store => ({ isLogined: store.user.isLogined }))(Home));
+export default connect(store => ({ isLogined: store.user.isLogined }))(Home);

@@ -14,8 +14,8 @@ export default class FriendRequesNotificationItem extends Component {
     render() {
         const { user } = this.props;
         return (
-            <div className="friend-add-request-notification-item">
-                <div className="friend-add-request-notification-item-user">
+            <div className="friend-add-request-list-item">
+                <div className="friend-add-request-list-item-user">
                     <Card 
                         classPrefix="user-info" 
                         nicknameShow={true}
@@ -24,7 +24,7 @@ export default class FriendRequesNotificationItem extends Component {
                         userInfo={user}
                     />    
                 </div>
-                <div className="friend-add-request-notification-item-handlers">
+                <div className="friend-add-request-list-item-handlers">
                     <button class="btn btn-green" onClick={this.dealRequest.bind(this, 'agree', user.username)}>同意</button>
                     <button class="btn btn-red" onClick={this.dealRequest.bind(this, 'refuse', user.username)}>拒绝</button>
                 </div>

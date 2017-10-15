@@ -207,3 +207,11 @@ export function updateFriend(userId, data) {
             }));
     };
 }
+
+export function clearNotificationMsg() {
+    return dispatch => {
+        dispatch({
+            type: 'CLEAR_NOTIFICATION_MSG'
+        });
+    };
+}

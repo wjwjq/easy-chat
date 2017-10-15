@@ -10,7 +10,7 @@ import './style';
         addMsg: store.friends.addMsg
     };
 })
-export default class FriendRequesNotificationList extends Component {
+export default class FriendRequestList extends Component {
 
     constructor(props) {
         super(props);
@@ -21,7 +21,7 @@ export default class FriendRequesNotificationList extends Component {
         const { latestFriendRequest, addMsg } = this.props;
         console.info('latestFriendRequest', latestFriendRequest);
         return (
-            <div className='friend-add-request-notification'>
+            <div className='friend-add-request-list'>
                 {addMsg && <p style={{ textAlign: 'center', lineHeight: '.8rem', fontSize: '.12rem' }}>{addMsg}</p> }
                 {
                     latestFriendRequest && latestFriendRequest.map((user, idx) => {

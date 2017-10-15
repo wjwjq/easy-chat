@@ -1,6 +1,5 @@
 //登出
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { signOut } from '../../redux/actions/AuthActions';
@@ -22,4 +21,4 @@ class SignOut extends Component {
     }
 }
 
-export default  withRouter(connect(store => ({ ...store.user }))(SignOut));
+export default  connect(store => ({ ...store.user }))(SignOut);

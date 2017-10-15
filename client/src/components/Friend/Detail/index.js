@@ -1,16 +1,12 @@
 //好友详情
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { withRouter, Link } from 'react-router-dom';
-import { connect } from 'react-redux';
 
 import './Detail.less';
 import Card from '../../share/Card/';
-import pathConfigs from '../../../routes/path';
-import { deleteFriend } from '../../../redux/actions/FriendActions';
 
 
-class FriendDetail extends PureComponent {
+export default class FriendDetail extends PureComponent {
     
     static propTypes = {
         avatarUrl: PropTypes.string,
@@ -21,13 +17,10 @@ class FriendDetail extends PureComponent {
         address: PropTypes.string
     }
 
-    handleDelete(friendId) {
-        deleteFriend(friendId);
-    }
     render() {
-        const { avatarUrl, nickname, remark, address, gender,  username, userId } = this.props;
+        const { avatarUrl, nickname, remark, address, gender,  username } = this.props;
         return (
-            <ul className="detail-info">
+            <div className="detail-info">
                 <Card
                     classPrefix="user-info"
                     genderShow={true}
@@ -35,7 +28,7 @@ class FriendDetail extends PureComponent {
                     nicknameShow={true}
                     userInfo={{ avatarUrl, nickname, remark, gender, username }}
                 /> 
-                <li className="user-info-contact">
+                <div className="user-info-contact">
                     <p>
                         <span>电话</span>
                         <i><a href={`tel:${username}`}>{username}</a></i>
@@ -44,19 +37,8 @@ class FriendDetail extends PureComponent {
                         <span>地区</span>
                         <i>{address}</i>
                     </p>
-                </li>
-                <li className="btn-group">
-                    <Link to={`${pathConfigs.messages}/${username}`} className="btn btn-green">发消息</Link>
-                    {
-                        username !== userId 
-                            ? <span className="btn btn-red" onClick={this.handleDelete.bind(this, username)}>删除好友</span>
-                            : ''
-                    }
-                </li>
-            </ul>
+                </div>
+            </div>
         );
     }
-
 }
-
-export default withRouter(connect(store => ({ userId: store.user.user.username }))(FriendDetail));

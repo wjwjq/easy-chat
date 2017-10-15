@@ -1,9 +1,7 @@
 import React from 'react';
 import { createPortal } from 'react-dom';
-
 import './style.less';
-
-export default class Tips extends React.Component {
+export default class Dialog extends React.Component {
     constructor() {
         super(...arguments);
 
@@ -14,7 +12,7 @@ export default class Tips extends React.Component {
 
     render() {
         return createPortal(
-            <div class="tips">
+            <div class="dialog">
                 {this.props.children}
             </div>,
             this.node

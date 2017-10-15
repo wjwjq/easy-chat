@@ -35,12 +35,35 @@ const initialState = {
     deleting: false,//删除
     deleted: false,
 
-    latestFriendRequest: []
+    latestFriendRequest: [],
+    receiveANewFriendRequest: false,
+    receiveAConfirmFriendRequest: false
 };
 
+//添加好友或收到回复是state处理
+const dealAddFriendsReplayState = (state, action) => {
+    let latestFriendRequest;
+    let addMsg = '';
+    let receiveANewFriendRequest = false;
+    if (action.payload.friend) {
+        latestFriendRequest = state.latestFriendRequest.concat([action.payload.friend]);
+        receiveANewFriendRequest = true; 
+    } else {
+        latestFriendRequest = state.latestFriendRequest;
+    }
+    addMsg = action.payload.message;
+    return {
+        latestFriendRequest,
+        receiveANewFriendRequest,
+        addMsg
+    };
+};
+
+//添加好友或收到回复是state处理
 const dealAddFriendsState = (state, action) => {
     let friends = [];
     let latestFriendRequest = [];
+    let receiveAConfirmFriendRequest = false;
     if (action.payload.friendId) {
         latestFriendRequest = state.latestFriendRequest.filter(item => {
             if (item.username === action.payload.friendId) {
@@ -51,25 +74,12 @@ const dealAddFriendsState = (state, action) => {
         });
     } else {
         friends.push(action.payload.friend);
+        receiveAConfirmFriendRequest = true;
     }
     return {
         friends: state.friends.concat(friends),
+        receiveAConfirmFriendRequest,
         latestFriendRequest
-    };
-};
-
-const dealAddFriendsReplayState = (state, action) => {
-    let latestFriendRequest;
-    let addMsg = '';
-    if (action.payload.friend) {
-        latestFriendRequest = state.latestFriendRequest.concat([action.payload.friend]);
-    } else {
-        latestFriendRequest = state.latestFriendRequest;
-    }
-    addMsg = action.payload.message;
-    return {
-        latestFriendRequest,
-        addMsg
     };
 };
 
@@ -186,6 +196,14 @@ export default function reducers(state = initialState, action) {
                 deleted: true,
                 friends: state.friends.filter(friend => friend.username !== action.payload.friendId),
                 deleletMsg: action.payload.message
+            };
+
+        //清空通知消息
+        case 'CLEAR_NOTIFICATION_MSG':
+            return {
+                ...state,
+                receiveANewFriendRequest: false,
+                receiveAConfirmFriendRequest: false
             };
 
         default:
