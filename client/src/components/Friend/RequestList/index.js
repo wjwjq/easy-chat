@@ -18,11 +18,10 @@ export default class FriendRequestList extends Component {
     }
 
     render() {
-        const { latestFriendRequest, addMsg } = this.props;
+        const { latestFriendRequest } = this.props;
         console.info('latestFriendRequest', latestFriendRequest);
         return (
             <div className='friend-add-request-list'>
-                {addMsg && <p style={{ textAlign: 'center', lineHeight: '.8rem', fontSize: '.12rem' }}>{addMsg}</p> }
                 {
                     latestFriendRequest && latestFriendRequest.map((user, idx) => {
                         return (

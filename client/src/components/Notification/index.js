@@ -5,8 +5,10 @@ import { clearNotificationMsg } from '../../redux/actions/FriendActions';
 
 @connect(store => {
     return {
-        receiveANewFriendRequest: store.friends.receiveANewFriendRequest,
-        receiveAConfirmFriendRequest: store.friends.receiveAConfirmFriendRequest
+        sendFriendRequestSuccessMsg: store.friends.sendFriendRequestSuccessMsg,
+        receiveANewFriendRequestMsg: store.friends.receiveANewFriendRequestMsg,
+        receiveRefuseAddFriendRequestMsg: store.friends.receiveRefuseAddFriendRequestMsg,
+        receiveAConfirmFriendRequestMsg: store.friends.receiveAConfirmFriendRequestMsg
     };
 },{
     clearNotificationMsg
@@ -27,7 +29,7 @@ export default class Notification extends Component {
                 text: ''
             });
             this.props.clearNotificationMsg();
-        }, 3000);
+        }, 1800);
     }
 
     show(text) {
@@ -39,10 +41,21 @@ export default class Notification extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if ( nextProps.receiveANewFriendRequest ) {
-            this.show('收到新的好友请求');
-        } else if ( nextProps.receiveAConfirmFriendRequest ) {
-            this.show('成功添加好友');
+        const { 
+            sendFriendRequestSuccessMsg,  
+            receiveANewFriendRequestMsg, 
+            receiveAConfirmFriendRequestMsg,
+            receiveRefuseAddFriendRequestMsg 
+        } = nextProps;
+        
+        if ( sendFriendRequestSuccessMsg ) {
+            this.show(sendFriendRequestSuccessMsg);
+        } else if ( receiveANewFriendRequestMsg  ) {
+            this.show(receiveANewFriendRequestMsg);
+        }  else if ( receiveAConfirmFriendRequestMsg ) {
+            this.show(receiveAConfirmFriendRequestMsg);
+        } else if (receiveRefuseAddFriendRequestMsg ) {
+            this.show(receiveRefuseAddFriendRequestMsg);
         }
     }
 

@@ -26,8 +26,7 @@ const initialState = {
     result: '', //查询用户返回的结果
     
     adding: false, //添加好友
-    added: false, 
-    addMsg: '',
+    added: false,
 
     updating: false, //更新
     updated: false,
@@ -36,49 +35,65 @@ const initialState = {
     deleted: false,
 
     latestFriendRequest: [],
-    receiveANewFriendRequest: false,
-    receiveAConfirmFriendRequest: false
+    sendFriendRequestSuccessMsg: '',
+    receiveANewFriendRequestMsg: '',
+    receiveAConfirmFriendRequestMsg: '',
+    receiveRefuseAddFriendRequestMsg: ''
 };
 
 //添加好友或收到回复是state处理
 const dealAddFriendsReplayState = (state, action) => {
     let latestFriendRequest;
-    let addMsg = '';
-    let receiveANewFriendRequest = false;
-    if (action.payload.friend) {
-        latestFriendRequest = state.latestFriendRequest.concat([action.payload.friend]);
-        receiveANewFriendRequest = true; 
+    let receiveANewFriendRequestMsg = false;
+    let sendFriendRequestSuccessMsg = '';
+    const { message, friend } = action.payload;
+    if (friend) {
+        latestFriendRequest = state.latestFriendRequest.concat([friend]);
+        receiveANewFriendRequestMsg = message; 
     } else {
         latestFriendRequest = state.latestFriendRequest;
+        sendFriendRequestSuccessMsg = message;
     }
-    addMsg = action.payload.message;
     return {
         latestFriendRequest,
-        receiveANewFriendRequest,
-        addMsg
+        receiveANewFriendRequestMsg,
+        sendFriendRequestSuccessMsg
     };
 };
 
-//添加好友或收到回复是state处理
-const dealAddFriendsState = (state, action) => {
+//收到拒绝时state处理
+const dealAddFriendFailState = (state, action) => {
+    let latestFriendRequest;
+    let receiveRefuseAddFriendRequestMsg;
+    const { message, friendId } = action.payload;
+    latestFriendRequest = state.latestFriendRequest.filter(item => item.username !== friendId);
+    receiveRefuseAddFriendRequestMsg = message; 
+    return {
+        latestFriendRequest,
+        receiveRefuseAddFriendRequestMsg
+    };
+};
+
+//收到回复时state处理
+const dealAddFriendsSuccessState = (state, action) => {
     let friends = [];
-    let latestFriendRequest = [];
-    let receiveAConfirmFriendRequest = false;
-    if (action.payload.friendId) {
+    let latestFriendRequest;
+    const { message, friendId, friend } = action.payload;
+    if (friendId) {
         latestFriendRequest = state.latestFriendRequest.filter(item => {
-            if (item.username === action.payload.friendId) {
+            if (item.username === friendId) {
                 friends.push(item);
             } else {
                 return item;
             }
         });
     } else {
-        friends.push(action.payload.friend);
-        receiveAConfirmFriendRequest = true;
+        latestFriendRequest = state.latestFriendRequest;
+        friends.push(friend);
     }
     return {
         friends: state.friends.concat(friends),
-        receiveAConfirmFriendRequest,
+        receiveAConfirmFriendRequestMsg: message,
         latestFriendRequest
     };
 };
@@ -147,8 +162,7 @@ export default function reducers(state = initialState, action) {
                 ...state,
                 adding: false,
                 added: false,
-                latestFriendRequest: state.latestFriendRequest.filter(item => item.username !== action.payload.friendId),
-                addMsg: action.payload.message
+                ...dealAddFriendFailState(state, action) 
             };
         case ADD_FRIEND_FULFILLED:
             return {
@@ -156,7 +170,7 @@ export default function reducers(state = initialState, action) {
                 adding: false,
                 added: true,
                 addMsg: action.payload.message,
-                ...dealAddFriendsState(state, action)
+                ...dealAddFriendsSuccessState(state, action)
             };
 
         //更新信息好友1
@@ -202,8 +216,10 @@ export default function reducers(state = initialState, action) {
         case 'CLEAR_NOTIFICATION_MSG':
             return {
                 ...state,
-                receiveANewFriendRequest: false,
-                receiveAConfirmFriendRequest: false
+                sendFriendRequestSuccessMsg: '',
+                receiveANewFriendRequestMsg: '',
+                receiveAConfirmFriendRequestMsg: '',
+                receiveRefuseAddFriendRequestMsg: ''
             };
 
         default:
