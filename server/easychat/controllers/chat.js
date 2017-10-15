@@ -84,7 +84,8 @@ function authenticate(socket, next) {
         .then(token => {
             return verify(token);
         })
-        .then(username => {
+        .then(user => {
+            const { username } =user;
             const doc = {
                 username,
                 socketId: socket.id

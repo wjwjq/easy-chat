@@ -1,6 +1,9 @@
 const Token = require('../models//token');
 
-const queryUser = require('../models/user').queryUser;
+const {
+    comparePassword,
+    queryUser
+} = require('../models/user');
 
 const jwt = require('jsonwebtoken');
 const credentials = require('../../credentials');
@@ -9,7 +12,8 @@ const {
     TOKEN_EXPIRED,
     TOKEN_NOT_EXISTED,
     TOKEN_AUTHENTICATION_FAIL,
-    USER_NOT_EXISTED
+    USER_NOT_EXISTED,
+    USER_AUTH_FAIL
 } = require('../constant/status');
 
 const FAIL_RESPONSE = {
@@ -47,7 +51,10 @@ exports.verify = verify = token => {
                     if (data.token !== token) {
                         return reject(TOKEN_AUTHENTICATION_FAIL);
                     }
-                    resolve(decoded.username);
+                    resolve({
+                        username: decoded.username,
+                        password: decoded.password
+                    });
                 })
                 .catch(err => {
                     console.info('find token error ', err);
@@ -59,23 +66,32 @@ exports.verify = verify = token => {
 
 //自动登录
 exports.autoSignIn = (req, res, next) => {
+    let decodedPassword = '';
     parseToken(req)
         .then(token => verify(token))
-        .then(username => {
+        .then(loginInfo => {
+            decodedPassword = loginInfo.password;
             const query = {
-                username
+                username: loginInfo.username
             };
-            const populate =  { password: 0, latestFriendRequest: 0, latestMessages: 0 , friends: 0 };
+            const populate = {
+                latestFriendRequest: 0,
+                latestMessages: 0,
+                friends: 0
+            };
             return queryUser({
                 query,
                 populate
             });
         })
         .then(user => {
+            //密码验证
+            return comparePassword(user, decodedPassword);
+        }).then(data => {
             res.json({
                 'status': 200,
                 'message': '登录成功',
-                user
+                ...data
             });
         }).catch(err => {
             switch (err) {
@@ -93,6 +109,11 @@ exports.autoSignIn = (req, res, next) => {
                     });
                 case TOKEN_AUTHENTICATION_FAIL:
                     return res.json(FAIL_RESPONSE);
+                case USER_AUTH_FAIL:
+                    return res.json({
+                        'status': 401,
+                        'message': '账号或密码不正确'
+                    });
                 default:
                     console.info('auto Sign In fail error ', err);
             }
@@ -103,8 +124,10 @@ exports.autoSignIn = (req, res, next) => {
 exports.verifyToken = (req, res, next) => {
     parseToken(req)
         .then(token => verify(token))
-        .then(username => {
-            req.body.user = { username };
+        .then(user => {
+            req.body.user = {
+                username: user.username
+            };
             next();
         }).catch(err => {
             switch (err) {
@@ -143,10 +166,7 @@ exports.generateToken = (username, password) => {
         }
     });
 
-    return {
-        token,
-        expires
-    };
+    return token;
 };
 
 //删除token

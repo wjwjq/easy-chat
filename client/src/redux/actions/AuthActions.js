@@ -5,7 +5,7 @@ import api from '../../configs/api';
 import { connectSocket, disconnectSocket } from '../../handlers/chat';
 import { fetchFriends } from './FriendActions';
 import { fetchMessages } from './MessageActions';
-import { isTokenExpired, setToken, getToken, clearToken } from '../../handlers/token';
+import { setToken, getToken, clearToken } from '../../handlers/token';
 
 import {
     SIGN_IN,
@@ -33,7 +33,7 @@ export function signIn(userInfo) {
         axios
             .post(api.auth.signin, {
                 ...userInfo,
-                'access_token':  isTokenExpired()  ?  getToken() :  ''
+                'access_token':   getToken()
             })
             .then(res => {
                 if (res.data.status === 401) {
@@ -53,7 +53,7 @@ export function signIn(userInfo) {
 
                 const token = res.data.token;
                 token && setToken(token);
-                const accessToken = token ? token.token : getToken();
+                const accessToken = token;
                 axios.defaults.headers.common['x-access-token'] = accessToken;
                 //socket 链接携带cookie
                 connectSocket({

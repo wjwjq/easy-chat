@@ -48,13 +48,13 @@ export default class Notification extends Component {
             receiveRefuseAddFriendRequestMsg 
         } = nextProps;
         
-        if ( sendFriendRequestSuccessMsg ) {
+        if (sendFriendRequestSuccessMsg) {
             this.show(sendFriendRequestSuccessMsg);
-        } else if ( receiveANewFriendRequestMsg  ) {
+        } else if (receiveANewFriendRequestMsg) {
             this.show(receiveANewFriendRequestMsg);
-        }  else if ( receiveAConfirmFriendRequestMsg ) {
+        }  else if (receiveAConfirmFriendRequestMsg) {
             this.show(receiveAConfirmFriendRequestMsg);
-        } else if (receiveRefuseAddFriendRequestMsg ) {
+        } else if (receiveRefuseAddFriendRequestMsg) {
             this.show(receiveRefuseAddFriendRequestMsg);
         }
     }

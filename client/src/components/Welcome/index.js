@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 import { connect }  from 'react-redux';
 import './Welcome.less';
 import pathConfigs from '../../routes/path';
-import { isTokenExpired } from '../../handlers/token';
+import { getToken } from '../../handlers/token';
 
 class SignButtons extends  PureComponent {
     constructor(props) {
@@ -34,14 +34,13 @@ class Welcome extends Component {
         
         this.state = {
             timer: null,
-            hasAccessToken: false
+            hasAccessToken: null
         };
     }   
     
     componentWillMount() {
-        const hasAccessToken = isTokenExpired();
         this.setState({
-            hasAccessToken
+            hasAccessToken:  getToken()
         });
     }
     

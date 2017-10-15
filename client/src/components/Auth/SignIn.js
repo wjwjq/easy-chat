@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import pathConfigs from '../../routes/path';
 import { encrypt } from '../../configs/utils';
 import { signIn, getValid, clearAuthMessage } from '../../redux/actions/AuthActions';
-import { isTokenExpired } from '../../handlers/token';
+import { getToken } from '../../handlers/token';
 
 import Loading from '../share/Loading/';
 import Form from '../share/Form/';
@@ -38,7 +38,7 @@ export default class SignIn extends Component {
 
     componentWillMount() {
         this.setState({
-            hasAccessToken: isTokenExpired()
+            hasAccessToken: getToken()
         });
     }
     

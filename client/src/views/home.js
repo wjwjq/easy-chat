@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Notification from '../components/Notification/';
-
 import Welcome from '../components/Welcome/';
+import asyncComponent from '../routes/asyncComponent';
+const Notification = asyncComponent(() =>
+    System.import('../components/Notification/').then(module => module.default)
+);
+
 class Home extends Component {
     
     constructor(props) {
