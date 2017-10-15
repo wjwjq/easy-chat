@@ -34,7 +34,7 @@ const initialState = {
     deleting: false,//删除
     deleted: false,
 
-    latestFriendRequest: [],
+    latestFriendRequest: [], //最新好友请求
     sendFriendRequestSuccessMsg: '',
     receiveANewFriendRequestMsg: '',
     receiveAConfirmFriendRequestMsg: '',
@@ -53,16 +53,17 @@ const CheckIsExistedLatesetFriendRequest = (state, friend) => {
     return false;
 };
 
-//添加好友或收到回复是state处理
+//添加好友或收到回复时state处理
 const dealAddFriendsReplayState = (state, action) => {
     let latestFriendRequest;
-    let receiveANewFriendRequestMsg = false;
+    let receiveANewFriendRequestMsg = '';
     let sendFriendRequestSuccessMsg = '';
     const { message, friend } = action.payload;
+    //收到回复
     if (friend) {
         latestFriendRequest = !CheckIsExistedLatesetFriendRequest(state, friend) ? state.latestFriendRequest.concat([friend]) : state.latestFriendRequest;
         receiveANewFriendRequestMsg = message;
-    } else {
+    } else { //添加
         latestFriendRequest = state.latestFriendRequest;
         sendFriendRequestSuccessMsg = message;
     }
@@ -76,22 +77,20 @@ const dealAddFriendsReplayState = (state, action) => {
 //收到拒绝时state处理
 const dealAddFriendFailState = (state, action) => {
     let latestFriendRequest;
-    let receiveRefuseAddFriendRequestMsg;
     const { message, friendId } = action.payload;
     latestFriendRequest = state.latestFriendRequest.filter(item => item.username !== friendId);
-    receiveRefuseAddFriendRequestMsg = message; 
     return {
         latestFriendRequest,
-        receiveRefuseAddFriendRequestMsg
+        receiveRefuseAddFriendRequestMsg: message
     };
 };
 
-//收到回复时state处理
+//收到同意时state处理
 const dealAddFriendsSuccessState = (state, action) => {
     let friends = [];
     let latestFriendRequest;
     const { message, friendId, friend } = action.payload;
-    if (friendId) {
+    if (friendId) { //同意
         latestFriendRequest = state.latestFriendRequest.filter(item => {
             if (item.username === friendId) {
                 friends.push(item);
@@ -99,7 +98,7 @@ const dealAddFriendsSuccessState = (state, action) => {
                 return item;
             }
         });
-    } else {
+    } else { //收到同意回复
         latestFriendRequest = state.latestFriendRequest;
         friends.push(friend);
     }
