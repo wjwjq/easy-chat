@@ -182,14 +182,14 @@ function handleAddFriendRequest(socket, currUsername, chunk) {
             //返回成功to添加方
             socket.emit(RECEIVE_ADD_FRIEND_REQUEST, {
                 'status': 200,
-                'message': '添加好友发送成功'
+                'message': '好友请求发送成功'
             });
         })
         .catch(err => {
             console.info('ADD_FRIEND_REQUEST error', err);
             socket.emit(RECEIVE_ADD_FRIEND_REQUEST, {
                 'status': 200,
-                'message': '添加好友好友发送失败'
+                'message': '好友请求发送失败'
             });
         });
 }
@@ -226,13 +226,13 @@ function haddleConfirmAddFriendRequest(socket, currUsername, chunk) {
             //2. 如果对方在线, 返回用户信息给请求方
             socket.emit(RECEIVE_CONFIRM_ADD_FRIEND_REQUEST, {
                 status: 200,
-                message: '添加好友成功',
+                message: '好友添加成功',
                 friendId
             });
             socket.to(targetSocketId).emit(RECEIVE_CONFIRM_ADD_FRIEND_REQUEST, {
                 status: 200,
                 friend: data,
-                message: '添加好友成功'
+                message: '好友添加成功'
             });
             updateUser({
                 query: {
@@ -264,7 +264,7 @@ function haddleRefuseAddFriendRequest(socket, currUsername, chunk) {
             socket.emit(RECEIVE_REFUSE_ADD_FRIEND_REQUEST, {
                 status: 200,
                 friendId,
-                message: '成功拒绝好友添加请求'
+                message: '好友请求拒绝成功'
             });
             socket.to(socketId).emit(RECEIVE_REFUSE_ADD_FRIEND_REQUEST, {
                 status: 200,
