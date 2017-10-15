@@ -41,6 +41,18 @@ const initialState = {
     receiveRefuseAddFriendRequestMsg: ''
 };
 
+//检查LatesetFriendRequest 是否已经存在相同请求
+const CheckIsExistedLatesetFriendRequest = (state, friend) => {
+    let latestFriendRequest =  state.latestFriendRequest;
+    const len = latestFriendRequest.length;
+    for (let i = 0; i< len;i++) {
+        if (latestFriendRequest[i].username === friend.username) {
+            return true;
+        }
+    }
+    return false;
+};
+
 //添加好友或收到回复是state处理
 const dealAddFriendsReplayState = (state, action) => {
     let latestFriendRequest;
@@ -48,8 +60,8 @@ const dealAddFriendsReplayState = (state, action) => {
     let sendFriendRequestSuccessMsg = '';
     const { message, friend } = action.payload;
     if (friend) {
-        latestFriendRequest = state.latestFriendRequest.concat([friend]);
-        receiveANewFriendRequestMsg = message; 
+        latestFriendRequest = !CheckIsExistedLatesetFriendRequest(state, friend) ? state.latestFriendRequest.concat([friend]) : state.latestFriendRequest;
+        receiveANewFriendRequestMsg = message;
     } else {
         latestFriendRequest = state.latestFriendRequest;
         sendFriendRequestSuccessMsg = message;
@@ -98,6 +110,7 @@ const dealAddFriendsSuccessState = (state, action) => {
     };
 };
 
+//导出reducers
 export default function reducers(state = initialState, action) {
 
     switch (action.type) {
