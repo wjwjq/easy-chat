@@ -42,12 +42,14 @@ exports.verify = verify = token => {
             Token
                 .findOne({
                     username: decoded.username
-                }).then(data => {
+                })
+                .then(data => {
                     if (data.token !== token) {
                         return reject(TOKEN_AUTHENTICATION_FAIL);
                     }
                     resolve(decoded.username);
-                }).catch(err => {
+                })
+                .catch(err => {
                     console.info('find token error ', err);
                     return reject(TOKEN_AUTHENTICATION_FAIL);
                 });
